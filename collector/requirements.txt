@@ -1,0 +1,9 @@
+# 标讯助手 · 采集器依赖
+# 安装：pip install -r collector/requirements.txt
+# OCR 还需要系统级 tesseract（brew install tesseract tesseract-lang）
+
+# PDF 文本层提取（6.x 纯 Python 实现）
+pypdf>=6.0.0
+
+# OCR 扫描件 PDF 时的图片解码（可选，未装会跳过 OCR 不影响主流程）
+Pillow>=9.0.0

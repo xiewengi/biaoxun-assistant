@@ -1,0 +1,51 @@
+# ==================== macOS / IDE ====================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Office 临时文件（本地会生成，绝不能提交）
+~$*
+.~*
+*.tmp
+*.lock
+
+# ==================== Node ====================
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# ==================== Python ====================
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# 本地解压的 pypdf wheel（不是标准依赖声明，不能提交）
+pylibs/
+
+# ==================== Playwright ====================
+.pw-browsers/
+
+# ==================== collector 运行产物 ====================
+collector/logs/
+collector/_ocr/
+
+# launchd / crontab 本地私钥（路径可能暴露机器名）
+com.biaoxun.collect.plist.local
+
+# ==================== 本地记忆软链 ====================
+.memory
+
+# ==================== 调试输出（临时数据） ====================
+*.log
+*.out
+*.err
+
+# /tmp 落盘的 PDF
+/tmp/_cz_ann.pdf

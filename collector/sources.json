@@ -1,0 +1,352 @@
+[
+  {
+    "name": "潮州市公共资源交易中心",
+    "url": "https://www.czggzy.com:8088",
+    "domain": "www.czggzy.com",
+    "sourceCode": "czggzy",
+    "enabled": true
+  },
+  {
+    "name": "中洲宏腾工程管理有限公司",
+    "url": "http://www.gdhtgs.com/index.asp",
+    "domain": "www.gdhtgs.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东河海工程咨询有限公司",
+    "url": "http://www.gdhhgroup.com/",
+    "domain": "www.gdhhgroup.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "公诚管理咨询有限公司",
+    "url": "https://www.chengezhao.com/cms/",
+    "domain": "www.chengezhao.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "深圳公共资源交易中心",
+    "url": "https://gego.zhongcy.com/mall-view/",
+    "domain": "gego.zhongcy.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中烟电子采购平台",
+    "url": "https://cgjy.tobacco.com.cn/zchwzb/38135.jhtml",
+    "domain": "cgjy.tobacco.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "特采装备网",
+    "url": "https://www.tezhongzhuangbei.com/",
+    "domain": "www.tezhongzhuangbei.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "穗科建管",
+    "url": "http://www.gzsuike.com/Home/index.html",
+    "domain": "www.gzsuike.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "国家互联网基础资源大数据平台",
+    "url": "https://www.tendersinfo.cn/home",
+    "domain": "www.tendersinfo.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "招标采购投标服务平台",
+    "url": "https://www.gxxszb.com/",
+    "domain": "www.gxxszb.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "深圳能源电子招标投标平台",
+    "url": "https://zb.sec.com.cn/",
+    "domain": "zb.sec.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省机电设备招标中心有限公司",
+    "url": "https://www.gdebidding.com/",
+    "domain": "www.gdebidding.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国铁塔",
+    "url": "https://ebid.chinatowercom.cn/zgtt/",
+    "domain": "ebid.chinatowercom.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东志正招标有限公司",
+    "url": "https://www.zztender.com/",
+    "domain": "www.zztender.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国招标信息发布网",
+    "url": "http://www.cnzhaobiao.cn/",
+    "domain": "www.cnzhaobiao.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广州公共资源交易中心",
+    "url": "http://www.gzggzy.cn/jyywjsgcqtgczbgg/1053647.jhtml",
+    "domain": "www.gzggzy.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "潮州市饶平县人民政府网站",
+    "url": "https://www.raoping.gov.cn/",
+    "domain": "www.raoping.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "铁建云链",
+    "url": "https://www.crccep.cn/homeIndex",
+    "domain": "www.crccep.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省网上中介服务超市",
+    "url": "https://ygp.gdzwfw.gov.cn/zjfwcs/gd-zjcs-pub/home",
+    "domain": "ygp.gdzwfw.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广咨电子招投标电子平台",
+    "url": "https://www.gzebid.cn/#/",
+    "domain": "www.gzebid.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "竞采星",
+    "url": "https://www.easyjcx.com/#/",
+    "domain": "www.easyjcx.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省政府采购中心",
+    "url": "http://gpcgd.gd.gov.cn/",
+    "domain": "gpcgd.gd.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东政务服务网",
+    "url": "https://tzxm.gd.gov.cn/index.html",
+    "domain": "tzxm.gd.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "金采网",
+    "url": "http://www.cfcpn.com/jcw/index",
+    "domain": "www.cfcpn.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国政府采购网",
+    "url": "http://www.ccgp.gov.cn/index.shtml",
+    "domain": "www.ccgp.gov.cn",
+    "sourceCode": "ccgp",
+    "enabled": true
+  },
+  {
+    "name": "广东国科招标有限公司",
+    "url": "http://www.gzgkbidding.com/index.php?m=Home&c=Index&a=index",
+    "domain": "www.gzgkbidding.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "军队采购网",
+    "url": "https://www.plap.mil.cn/freecms/site/juncai/index.html",
+    "domain": "www.plap.mil.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "全国招标采购公共服务平台",
+    "url": "https://www.hnzbcgxxw.com/",
+    "domain": "www.hnzbcgxxw.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "深圳阳光采购平台",
+    "url": "https://www.szygcgpt.com/",
+    "domain": "www.szygcgpt.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "大唐电子商务平台",
+    "url": "https://www.cdt-ec.com/home/",
+    "domain": "www.cdt-ec.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "潮州市正得项目管理咨询有限公司",
+    "url": "http://www.czzhengde.com/index.asp",
+    "domain": "www.czzhengde.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省公共资源交易平台",
+    "url": "https://ygp.gdzwfw.gov.cn/#/44/index",
+    "domain": "ygp.gdzwfw.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省政府采购网",
+    "url": "https://gdgpo.czt.gd.gov.cn/",
+    "domain": "gdgpo.czt.gd.gov.cn",
+    "sourceCode": "gdgpo",
+    "enabled": true
+  },
+  {
+    "name": "全国公共资源交易平台",
+    "url": "https://www.ggzy.gov.cn/",
+    "domain": "www.ggzy.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "国义招标股份有限公司",
+    "url": "https://www.gmgitc.com/Index",
+    "domain": "www.gmgitc.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东华伦",
+    "url": "https://www.gdhualun.com.cn/",
+    "domain": "www.gdhualun.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "潮州市中正招投标代理有限公司",
+    "url": "https://www.czzhongzheng.com/sy",
+    "domain": "www.czzhongzheng.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省农村产权流转交易管理服务平台",
+    "url": "https://cqjy.gdagri.gov.cn/trade",
+    "domain": "cqjy.gdagri.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "南方电网电子采购交易平台",
+    "url": "https://ecsg.com.cn/cms//index.html",
+    "domain": "ecsg.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中通服供应链股份有限公司电子招标系统",
+    "url": "https://zb.chinaccsscm.cn/",
+    "domain": "zb.chinaccsscm.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国招标投标公共服务平台",
+    "url": "https://bulletin.cebpubservice.com/",
+    "domain": "bulletin.cebpubservice.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "人保E采",
+    "url": "https://ec.picc.com/cms/default/webfile/index.html",
+    "domain": "ec.picc.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "粤海水务阳光采购平台",
+    "url": "https://dzzc.guangdongwater.com/cms/index.html",
+    "domain": "dzzc.guangdongwater.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "潮州市中杰工程咨询有限公司",
+    "url": "https://www.czszjgczx.com/h-col-108.html",
+    "domain": "www.czszjgczx.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东子乔建设管理有限公司",
+    "url": "http://www.ziqiaojianshe.cn/",
+    "domain": "www.ziqiaojianshe.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东教采云零散采购竞价平台",
+    "url": "https://www.gdedulscg.cn/",
+    "domain": "www.gdedulscg.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省招标投标监管网",
+    "url": "http://zbtb.gd.gov.cn/#/index",
+    "domain": "zbtb.gd.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "智汇城市",
+    "url": "http://www.gdzhcity.com/",
+    "domain": "www.gdzhcity.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东南方数码科技股份有限公司",
+    "url": "https://o.southgis.com/",
+    "domain": "o.southgis.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国财经报",
+    "url": "https://www.cfen.com.cn/",
+    "domain": "www.cfen.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  }
+]
