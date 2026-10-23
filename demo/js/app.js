@@ -861,11 +861,16 @@ function renderReminders() {
               ${selectedCount === 0 ? 'disabled' : ''}>
         清除选择
       </button>
-      <button id="reminder-batch-assign"
-              class="px-4 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
-              ${selectedCount === 0 ? 'disabled' : ''}>
-        📋 批量分配（${selectedCount}）
-      </button>
+      ${state.currentUser && state.currentUser.group === '集团客户部'
+              ? `<button id="reminder-batch-assign"
+                  class="px-4 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                  ${selectedCount === 0 ? 'disabled' : ''}>
+                  📋 批量分配（${selectedCount}）
+                </button>`
+              : `<button id="reminder-batch-assign" disabled title="仅集团客户部可批量分配"
+                  class="px-4 py-1.5 text-xs bg-gray-300 text-white rounded-lg cursor-not-allowed">
+                  📋 批量分配（${selectedCount}）
+                </button>`}
     </div>
 
     <!-- 任务提醒表格（横拉 + 翻页，和招标公告页同结构） -->
