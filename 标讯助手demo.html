@@ -1257,6 +1257,13 @@ function confirmOpportunity() {
   const ann = state.announcements.find(x => x.id === annId);
   if (!ann) return;
 
+  // 先从 DOM 同步商机字段到 ann 对象（防止用户填了表单但对象没更新）
+  document.querySelectorAll('[data-opp-field]').forEach(el => {
+    const field = el.dataset.oppField;
+    ann[field] = el.value;
+    saveOpportunityField(annId, field, el.value);
+  });
+
   // 校验 4 个必填字段
   const missing = [];
   REQUIRED_OPP_FIELDS.forEach(f => {
@@ -2989,6 +2996,9 @@ function bindEvents() {
   document.querySelectorAll('#btn-confirm-opp').forEach(el => {
     el.onclick = () => confirmOpportunity();
   });
+
+  // 商机管理表单 · 字段变更同步到 ann 对象
+  bindOpportunityEvents();
 
   // 任务提醒页区县筛选
   const remDistrictFilter = document.getElementById('reminder-district-filter');
