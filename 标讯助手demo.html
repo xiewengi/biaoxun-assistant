@@ -1037,8 +1037,7 @@ const SOURCES_DATA = [
 ];
 
 </script>
-<script>
-// 标讯助手 Demo - 主应用逻辑
+<script>// 标讯助手 Demo - 主应用逻辑
 let state = {
   page: 'announcements',
   announcements: [],
@@ -1235,7 +1234,7 @@ function renderAnnouncementList() {
   const bidStatuses = ['意向', '挂网', '截止报名', '开标'];
 
   // 翻页逻辑
-  const total = state.filteredList.length;
+  const total = state.page === 'reminders' ? state.reminders.length : state.filteredList.length;
   const pageSize = state.pageSize === 0 ? total : state.pageSize;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const currentPage = Math.min(state.currentPage, totalPages);
@@ -1594,8 +1593,29 @@ function renderReminders() {
   const warn = state.reminders.filter(r => r.level === 'warn');
   const info = state.reminders.filter(r => r.level === 'info');
 
-  const list = state.reminders;
-  const allOnPageIds = list.map(r => r.id);
+  // 翻页（和招标公告页共享 state.pageSize / state.currentPage）
+  const total = state.reminders.length;
+  const pageSize = state.pageSize === 0 ? total : state.pageSize;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(state.currentPage, totalPages);
+  const startIdx = (currentPage - 1) * pageSize;
+  const pageData = state.pageSize === 0 ? state.reminders : state.reminders.slice(startIdx, startIdx + pageSize);
+
+  // 页码按钮
+  let pageButtons = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pageButtons.push(i);
+  } else {
+    pageButtons.push(1);
+    let s = Math.max(2, currentPage - 1);
+    let e = Math.min(totalPages - 1, currentPage + 1);
+    if (s > 2) pageButtons.push('...');
+    for (let i = s; i <= e; i++) pageButtons.push(i);
+    if (e < totalPages - 1) pageButtons.push('...');
+    pageButtons.push(totalPages);
+  }
+
+  const allOnPageIds = pageData.map(r => r.id);
   const selectedCount = [...state.selectedReminderIds].filter(id => allOnPageIds.includes(id)).length;
   const allCheckedOnPage = allOnPageIds.length > 0 && allOnPageIds.every(id => state.selectedReminderIds.has(id));
   const someCheckedOnPage = selectedCount > 0 && !allCheckedOnPage;
@@ -1638,65 +1658,100 @@ function renderReminders() {
       </button>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <table class="w-full text-sm">
-        <thead class="bg-gray-50 text-gray-500 text-xs">
-          <tr>
-            <th class="px-4 py-3 text-center font-medium w-10">
-              <input type="checkbox"
-                     id="reminder-select-all"
-                     class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                     ${allCheckedOnPage ? 'checked' : ''}
-                     ${someCheckedOnPage ? 'data-indeterminate="1"' : ''}>
-            </th>
-            <th class="px-4 py-3 text-left font-medium w-16">级别</th>
-            <th class="px-4 py-3 text-left font-medium w-24">任务类型</th>
-            <th class="px-4 py-3 text-left font-medium">公告标题 / 提醒内容</th>
-            <th class="px-4 py-3 text-left font-medium w-24">区县</th>
-            <th class="px-4 py-3 text-left font-medium w-20">当前进度</th>
-            <th class="px-4 py-3 text-left font-medium w-20">处理人</th>
-            <th class="px-4 py-3 text-left font-medium w-28">时间</th>
-            <th class="px-4 py-3 text-center font-medium w-40">操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${list.length === 0 ? `
-            <tr><td colspan="9" class="py-16 text-center text-gray-400">暂无任务提醒</td></tr>
-          ` : list.map(r => `
-            <tr class="border-t border-gray-50 hover:bg-gray-50 ${state.selectedReminderIds.has(r.id) ? 'bg-blue-50/40' : ''}">
-              <td class="px-4 py-3 text-center">
-                <input type="checkbox"
-                       class="reminder-row-check w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                       data-id="${r.id}"
-                       ${state.selectedReminderIds.has(r.id) ? 'checked' : ''}>
-              </td>
-              <td class="px-4 py-3">
-                ${r.level === 'urgent' ? '<span class="tag tag-red">紧急</span>' : r.level === 'warn' ? '<span class="tag tag-yellow">关注</span>' : '<span class="tag tag-blue">一般</span>'}
-              </td>
-              <td class="px-4 py-3 text-gray-600">${r.label}</td>
-              <td class="px-4 py-3">
-                <div class="font-medium text-gray-800 max-w-[380px] truncate" title="${r.annTitle || r.title}" data-detail="${r.targetId}">${r.annTitle || r.title}</div>
-                <div class="text-xs text-gray-400 mt-0.5">${r.title}</div>
-              </td>
-              <td class="px-4 py-3">${r.district ? `<span class="tag tag-blue">${r.district}</span>` : '<span class="text-gray-300">-</span>'}</td>
-              <td class="px-4 py-3">${renderProgressTag(r.annProgress || '待分配')}</td>
-              <td class="px-4 py-3 text-gray-700 whitespace-nowrap">${r.annCurrentHandler || '-'}</td>
-              <td class="px-4 py-3 text-gray-500">${r.time}</td>
-              <td class="px-4 py-3 text-center whitespace-nowrap">
-                <button class="text-blue-600 hover:underline text-xs mr-2" data-detail="${r.targetId}">查看公告</button>
-                ${r.type === 'admin-assign' || r.annProgress === '待分配' ?
-                  `<button class="text-blue-600 hover:underline text-xs" data-assign="${r.targetId}">分配</button>` : ''}
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
+    <!-- 任务提醒表格（横拉 + 翻页，和招标公告页同结构） -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" style="width:100%">
+      <div class="scrollbar-thin" style="border-radius:inherit;overflow-x:auto">
+        <div style="width:1220px;min-width:1220px;box-sizing:content-box">
+          <table class="text-sm border-separate" style="width:100%;border-spacing:0">
+            <thead class="text-gray-500 text-xs">
+              <tr>
+                <th class="px-2 py-3 text-center font-medium sticky left-0 z-20" style="background:#f9fafb;width:44px">
+                  <input type="checkbox" id="reminderSelectAll"
+                         class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                         ${allCheckedOnPage ? 'checked' : ''}
+                         ${someCheckedOnPage ? 'data-indeterminate="1"' : ''}>
+                </th>
+                <th class="px-3 py-3 text-left font-medium sticky left-0 z-10" style="background:#f9fafb;width:70px">级别</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:90px">任务类型</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:320px">公告标题 / 提醒内容</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:90px">区县</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:80px">当前进度</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:80px">处理人</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:100px">时间</th>
+                <th class="px-4 py-3 text-center font-medium sticky right-0 z-10" style="background:#f9fafb;width:150px">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${pageData.length === 0 ? `
+                <tr><td colspan="9" class="py-16 text-center text-gray-400">暂无任务提醒</td></tr>
+              ` : pageData.map(r => `
+                <tr class="ann-row border-t border-gray-50 hover:bg-gray-50 ${state.selectedReminderIds.has(r.id) ? 'bg-blue-50/40' : ''}">
+                  <td class="px-2 py-3 text-center sticky left-0 ann-row-first" style="background:#fff;width:44px">
+                    <input type="checkbox"
+                           class="reminder-row-check w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                           data-id="${r.id}"
+                           ${state.selectedReminderIds.has(r.id) ? 'checked' : ''}>
+                  </td>
+                  <td class="px-3 py-3 sticky left-0 ann-row-first" style="background:#fff;width:70px">
+                    ${r.level === 'urgent' ? '<span class="tag tag-red">紧急</span>' : r.level === 'warn' ? '<span class="tag tag-yellow">关注</span>' : '<span class="tag tag-blue">一般</span>'}
+                  </td>
+                  <td class="px-3 py-3 text-gray-600" style="width:90px">${r.label}</td>
+                  <td class="px-3 py-3" style="width:320px">
+                    <div class="font-medium text-gray-800 max-w-[400px] truncate cursor-pointer hover:text-blue-600" title="${r.annTitle || r.title}" data-detail="${r.targetId}">${r.annTitle || r.title}</div>
+                    <div class="text-xs text-gray-400 mt-0.5">${r.title}</div>
+                  </td>
+                  <td class="px-3 py-3" style="width:90px">${r.district ? `<span class="tag tag-blue">${r.district}</span>` : '<span class="text-gray-300">-</span>'}</td>
+                  <td class="px-3 py-3" style="width:80px">${renderProgressTag(r.annProgress || '待分配')}</td>
+                  <td class="px-3 py-3 text-gray-700 whitespace-nowrap" style="width:80px">${r.annCurrentHandler || '-'}</td>
+                  <td class="px-3 py-3 text-gray-500 whitespace-nowrap" style="width:100px">${r.time}</td>
+                  <td class="px-4 py-3 text-center whitespace-nowrap sticky right-0 ann-row-last" style="background:#fff;width:150px">
+                    <button class="text-blue-600 hover:underline text-xs mr-2" data-detail="${r.targetId}">查看公告</button>
+                    ${r.type === 'admin-assign' || r.annProgress === '待分配' ?
+                      `<button class="text-blue-600 hover:underline text-xs" data-assign="${r.targetId}">分配</button>` : ''}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分页 -->
+    <div class="flex items-center justify-between mt-4 text-sm text-gray-500">
+      <div class="flex items-center gap-3">
+        <span>共 <span class="font-semibold text-gray-700">${total}</span> 条</span>
+        <span class="text-gray-300">|</span>
+        <span>
+          每页
+          <select class="h-7 px-2 border border-gray-200 rounded text-sm mx-1" data-page-size>
+            <option value="10" ${state.pageSize===10?'selected':''}>10</option>
+            <option value="50" ${state.pageSize===50?'selected':''}>50</option>
+            <option value="100" ${state.pageSize===100?'selected':''}>100</option>
+            <option value="0" ${state.pageSize===0?'selected':''}>全部</option>
+          </select>
+          条
+        </span>
+        <span class="text-gray-300">|</span>
+        <span>第 ${total === 0 ? 0 : startIdx + 1} - ${Math.min(startIdx + pageSize, total)} 条</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="px-2.5 py-1 border rounded text-sm border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                data-page-btn="prev" ${currentPage===1?'disabled':''}>← 上一页</button>
+        ${pageButtons.map(b => b === '...'
+          ? `<span class="px-2 text-gray-400">…</span>`
+          : `<button class="min-w-[32px] px-2 py-1 border rounded text-sm ${b===currentPage?'bg-blue-600 text-white border-blue-600':'border-gray-200 text-gray-600 hover:bg-gray-50'}" 
+                     data-page-btn="${b}">${b}</button>`
+        ).join('')}
+        <button class="px-2.5 py-1 border rounded text-sm border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                data-page-btn="next" ${currentPage===totalPages?'disabled':''}>下一页 →</button>
+      </div>
     </div>
   `;
 }
 
 function patchReminderCheckboxIndeterminate() {
-  const box = document.getElementById('reminder-select-all');
+  const box = document.getElementById('reminderSelectAll');
   if (!box) return;
   if (box.dataset.indeterminate === '1') box.indeterminate = true;
   else box.indeterminate = false;
@@ -2317,6 +2372,7 @@ function bindEvents() {
   document.querySelectorAll('.sidebar-item').forEach(el => {
     el.onclick = () => {
       state.page = el.dataset.page;
+      state.currentPage = 1;
       state.detailId = null;
       state.modal = null;
       render();
@@ -2566,7 +2622,7 @@ function bindEvents() {
   // 翻页 - 页码按钮
   document.querySelectorAll('[data-page-btn]').forEach(el => {
     el.onclick = () => {
-      const total = state.filteredList.length;
+      const total = state.page === 'reminders' ? state.reminders.length : state.filteredList.length;
       const pageSize = state.pageSize === 0 ? total : state.pageSize;
       const totalPages = Math.max(1, Math.ceil(total / pageSize));
       const action = el.dataset.pageBtn;
@@ -2715,7 +2771,7 @@ function bindEvents() {
 
   // ========== 任务提醒页 · 选中集 / 批量分配 ==========
   // 全选
-  const raBox = document.getElementById('reminder-select-all');
+  const raBox = document.getElementById('reminderSelectAll');
   if (raBox) {
     raBox.onchange = () => {
       const allOnPageIds = state.reminders.map(r => r.id);
@@ -2806,8 +2862,7 @@ function bindEvents() {
 }
 
 
-init();
-</script>
+init();</script>
 
 </body>
 </html>
