@@ -1798,6 +1798,8 @@ function renderContacts(a) {
 function renderAnnouncementDetail() {
   const a = state.announcements.find(x => x.id === state.detailId);
   if (!a) { state.detailId = null; return renderAnnouncementList(); }
+  const isConfirmed = a.progress === '已确认';
+  const disabledAttr = isConfirmed ? 'disabled' : '';
   
   return `
     <div class="max-w-5xl mx-auto">
@@ -1817,10 +1819,13 @@ function renderAnnouncementDetail() {
               </div>
             </div>
             <div class="flex gap-2">
-              ${state.currentUser && state.currentUser.group === '集团客户部'
-                ? `<button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-assign="${a.id}">任务分配</button>`
-                : `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="仅集团客户部可分配">任务分配</button>`}
-              <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50" data-progress="${a.id}">进度更新</button>
+              ${isConfirmed
+                ? `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="商机已确认, 不可分配">任务分配</button>`
+                : (state.currentUser && state.currentUser.group === '集团客户部'
+                  ? `<button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-assign="${a.id}">任务分配</button>`
+                  : `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="仅集团客户部可分配">任务分配</button>`)}
+              <!-- 进度更新按钮暂时注释, 后续需要再启用 -->
+              <!-- <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50" data-progress="${a.id}">进度更新</button> -->
               ${a.progress === '已确认'
                 ? `<button class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm opacity-70 cursor-not-allowed" disabled>✓ 信息已确认</button>`
                 : `<button id="btn-confirm-opp" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">✅ 信息已确认</button>`}
@@ -1869,27 +1874,27 @@ function renderAnnouncementDetail() {
             <div class="text-gray-500 text-sm font-medium mb-3">🎯 商机管理</div>
             <div class="grid grid-cols-3 gap-x-2 gap-y-4 text-sm">
               <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">是否有效商机（有无信息化）</label>
-                <select data-opp-field="isValidOpportunity" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
+                <select data-opp-field="isValidOpportunity" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
                   <option value="">请选择</option>
                   <option value="是" ${a.isValidOpportunity === '是' ? 'selected' : ''}>是</option>
                   <option value="否" ${a.isValidOpportunity === '否' ? 'selected' : ''}>否</option>
                 </select>
               </div>
               <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">是否有运营商参与</label>
-                <select data-opp-field="hasOperatorInvolvement" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
+                <select data-opp-field="hasOperatorInvolvement" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
                   <option value="">请选择</option>
                   <option value="是" ${a.hasOperatorInvolvement === '是' ? 'selected' : ''}>是</option>
                   <option value="否" ${a.hasOperatorInvolvement === '否' ? 'selected' : ''}>否</option>
                 </select>
               </div>
               <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">商机编码</label>
-                <input data-opp-field="opportunityCode" value="${a.opportunityCode || ''}" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="由用户自由填写">
+                <input data-opp-field="opportunityCode" ${disabledAttr} value="${a.opportunityCode || ''}" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="由用户自由填写">
               </div>
               <div class="col-span-3 px-3">                <label class="text-gray-500 text-sm mb-2 block">商机了解情况</label>
-                <textarea data-opp-field="opportunityStatus" rows="4" class="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none h-28" placeholder="由用户自由填写"></textarea>
+                <textarea data-opp-field="opportunityStatus" ${disabledAttr} rows="4" class="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none h-28" placeholder="由用户自由填写"></textarea>
               </div>
               <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">是否应标</label>
-                <select data-opp-field="willBid" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
+                <select data-opp-field="willBid" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
                   <option value="">请选择</option>
                   <option value="准备应标" ${a.willBid === '准备应标' ? 'selected' : ''}>准备应标</option>
                   <option value="已经应标" ${a.willBid === '已经应标' ? 'selected' : ''}>已经应标</option>
@@ -1897,7 +1902,7 @@ function renderAnnouncementDetail() {
                 </select>
               </div>
               <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">挂树选择</label>
-                <select data-opp-field="treePlacement" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
+                <select data-opp-field="treePlacement" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
                   <option value="">请选择</option>
                 </select>
               </div>
