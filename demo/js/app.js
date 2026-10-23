@@ -553,17 +553,33 @@ function renderAnnouncementDetail() {
 
 // ---- 任务提醒 ----
 function renderReminders() {
-  const urgent = state.reminders.filter(r => r.level === 'urgent');
-  const warn = state.reminders.filter(r => r.level === 'warn');
-  const info = state.reminders.filter(r => r.level === 'info');
+  // 需求3：动态过滤——已分配（progress=已分配）的不再展示，只展示待分配
+  // 从 state.reminders 生成时带了 annProgress 字段，但批量分配后 state.reminders 里的旧数据
+  // 不会自动更新 annProgress，所以这里要重新查 state.announcements 的实时 progress
+  const liveReminders = state.reminders.filter(r => {
+    const ann = state.announcements.find(a => a.id === r.targetId);
+    // admin-assign 类（管理员分派类提醒）——只在 progress=待分配 时显示
+    if (r.type === 'admin-assign') {
+      return ann && ann.progress === '待分配';
+    }
+    // sales-follow 类（业务员跟进类提醒）——progress=已分配 后也不再需要提醒
+    if (r.type === 'sales-follow') {
+      return ann && ann.progress !== '已分配';
+    }
+    return true;
+  });
+
+  const urgent = liveReminders.filter(r => r.level === 'urgent');
+  const warn = liveReminders.filter(r => r.level === 'warn');
+  const info = liveReminders.filter(r => r.level === 'info');
 
   // 翻页（和招标公告页共享 state.pageSize / state.currentPage）
-  const total = state.reminders.length;
+  const total = liveReminders.length;
   const pageSize = state.pageSize === 0 ? total : state.pageSize;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const currentPage = Math.min(state.currentPage, totalPages);
   const startIdx = (currentPage - 1) * pageSize;
-  const pageData = state.pageSize === 0 ? state.reminders : state.reminders.slice(startIdx, startIdx + pageSize);
+  const pageData = state.pageSize === 0 ? liveReminders : liveReminders.slice(startIdx, startIdx + pageSize);
 
   // 页码按钮
   let pageButtons = [];
@@ -585,6 +601,7 @@ function renderReminders() {
   const someCheckedOnPage = selectedCount > 0 && !allCheckedOnPage;
 
   return `
+    <!-- 需求1：级别卡片暂时注释掉，后面需要再启用
     <div class="grid grid-cols-3 gap-4 mb-6">
       <div class="bg-white rounded-xl border border-gray-100 p-5">
         <div class="text-xs text-gray-500 mb-1">紧急</div>
@@ -602,6 +619,7 @@ function renderReminders() {
         <div class="text-xs text-gray-400 mt-1">按计划跟进</div>
       </div>
     </div>
+    -->
 
     <!-- 批量操作栏 -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 mb-3 flex items-center gap-3">
@@ -625,7 +643,7 @@ function renderReminders() {
     <!-- 任务提醒表格（横拉 + 翻页，和招标公告页同结构） -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" style="width:100%">
       <div class="scrollbar-thin" style="border-radius:inherit;overflow-x:auto">
-        <div style="width:1220px;min-width:1220px;box-sizing:content-box">
+        <div style="width:1150px;min-width:1150px;box-sizing:content-box">
           <table class="text-sm border-separate" style="width:100%;border-spacing:0">
             <thead class="text-gray-500 text-xs">
               <tr>
@@ -635,7 +653,7 @@ function renderReminders() {
                          ${allCheckedOnPage ? 'checked' : ''}
                          ${someCheckedOnPage ? 'data-indeterminate="1"' : ''}>
                 </th>
-                <th class="px-3 py-3 text-left font-medium sticky left-0 z-10" style="background:#f9fafb;width:70px">级别</th>
+                <!-- 需求1：级别列暂时注释 <th class="px-3 py-3 text-left font-medium sticky left-0 z-10" style="background:#f9fafb;width:70px">级别</th> -->
                 <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:90px">任务类型</th>
                 <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:320px">公告标题 / 提醒内容</th>
                 <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:90px">区县</th>
@@ -647,7 +665,7 @@ function renderReminders() {
             </thead>
             <tbody>
               ${pageData.length === 0 ? `
-                <tr><td colspan="9" class="py-16 text-center text-gray-400">暂无任务提醒</td></tr>
+                <tr><td colspan="8" class="py-16 text-center text-gray-400">暂无任务提醒</td></tr>
               ` : pageData.map(r => `
                 <tr class="ann-row border-t border-gray-50 hover:bg-gray-50 ${state.selectedReminderIds.has(r.id) ? 'bg-blue-50/40' : ''}">
                   <td class="px-2 py-3 text-center sticky left-0 ann-row-first" style="background:#fff;width:44px">
@@ -656,9 +674,11 @@ function renderReminders() {
                            data-id="${r.id}"
                            ${state.selectedReminderIds.has(r.id) ? 'checked' : ''}>
                   </td>
+                  <!-- 需求1：级别列暂时注释
                   <td class="px-3 py-3 sticky left-0 ann-row-first" style="background:#fff;width:70px">
                     ${r.level === 'urgent' ? '<span class="tag tag-red">紧急</span>' : r.level === 'warn' ? '<span class="tag tag-yellow">关注</span>' : '<span class="tag tag-blue">一般</span>'}
                   </td>
+                  -->
                   <td class="px-3 py-3 text-gray-600" style="width:90px">${r.label}</td>
                   <td class="px-3 py-3" style="width:320px">
                     <div class="font-medium text-gray-800 max-w-[400px] truncate cursor-pointer hover:text-blue-600" title="${r.annTitle || r.title}" data-detail="${r.targetId}">${r.annTitle || r.title}</div>
