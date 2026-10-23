@@ -192,12 +192,11 @@ function renderLoginPage() {
       <div class="login-card fade-in" style="width:420px">
         <!-- Logo + 标题 -->
         <div class="text-center mb-8">
-          <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg"
+          <div class="w-[200px] h-14 mx-auto rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-lg tracking-wider"
                style="background:linear-gradient(135deg,#3b82f6 0%,#1e40af 100%)">
-            标
+            标讯助手
           </div>
-          <div class="text-xl font-bold text-gray-900 mt-5 tracking-tight">标讯助手</div>
-          <div class="text-sm text-gray-500 mt-1.5">智能招标信息管理平台</div>
+          <div class="text-sm text-gray-500 mt-4">智能招标信息管理平台</div>
         </div>
 
         <!-- 登录表单 -->
