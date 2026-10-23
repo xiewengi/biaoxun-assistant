@@ -1594,9 +1594,9 @@ function renderAnnouncementDetail() {
 }
 
 // ---- 任务提醒 ----
-function renderReminders() {
-  // 需求3+区县筛选：动态过滤——已分配的不再展示 + 按区县过滤
-  const liveReminders = state.reminders.filter(r => {
+// 任务提醒页的"有效提醒"过滤：排除已分配 + 按区县筛选
+function getFilteredReminders() {
+  return state.reminders.filter(r => {
     const ann = state.announcements.find(a => a.id === r.targetId);
     // 进度过滤
     if (r.type === 'admin-assign') {
@@ -1605,10 +1605,14 @@ function renderReminders() {
     if (r.type === 'sales-follow') {
       if (!(ann && ann.progress !== '已分配')) return false;
     }
-    // 区县过滤（提醒页专属）
+    // 区县过滤
     if (state.reminderDistrictFilter && r.district !== state.reminderDistrictFilter) return false;
     return true;
   });
+}
+
+function renderReminders() {
+  const liveReminders = getFilteredReminders();
 
   const urgent = liveReminders.filter(r => r.level === 'urgent');
   const warn = liveReminders.filter(r => r.level === 'warn');
@@ -2829,11 +2833,17 @@ function bindEvents() {
   const raBox = document.getElementById('reminderSelectAll');
   if (raBox) {
     raBox.onchange = () => {
-      const allOnPageIds = state.reminders.map(r => r.id);
+      // 区县筛选 + 翻页后的当前页所有 id
+      const filtered = getFilteredReminders();
+      const pageSize = state.pageSize === 0 ? filtered.length : state.pageSize;
+      const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+      const currentPage = Math.min(state.currentPage, totalPages);
+      const startIdx = (currentPage - 1) * pageSize;
+      const pageIds = (state.pageSize === 0 ? filtered : filtered.slice(startIdx, startIdx + pageSize)).map(r => r.id);
       if (raBox.checked) {
-        allOnPageIds.forEach(id => state.selectedReminderIds.add(id));
+        pageIds.forEach(id => state.selectedReminderIds.add(id));
       } else {
-        allOnPageIds.forEach(id => state.selectedReminderIds.delete(id));
+        pageIds.forEach(id => state.selectedReminderIds.delete(id));
       }
       render();
     };
@@ -2883,8 +2893,9 @@ function bindEvents() {
       const note = noteEl ? noteEl.value : '';
       if (!group || !receiver) { alert('请选择小组和接收人'); return; }
 
+      const filteredRems = getFilteredReminders();
       const annIds = [...state.selectedReminderIds]
-        .map(rid => state.reminders.find(r => r.id === rid))
+        .map(rid => filteredRems.find(r => r.id === rid))
         .filter(Boolean)
         .map(r => r.targetId);
       const uniqueAnnIds = [...new Set(annIds)];
