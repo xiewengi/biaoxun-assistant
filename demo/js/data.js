@@ -568,14 +568,16 @@ const TEAM_GROUPS = [
   { id: 5, name: '饶平', region: '饶平', admin: '林旭勋', adminContact: '13923527333', adminAccount: 'linxuxun', createdAt: '2025-04-05', members: [], memberPinyin: [], memberContacts: [], position: '负责人' },
 ];
 
-// 进度选项（预制）——老大 2026-10-22 定案：只保留两种状态
-const PROGRESS_OPTIONS = ['待分配', '已分配'];
+// 进度选项（预制）——老大 2026-10-23 新增「已确认」状态
+const PROGRESS_OPTIONS = ['待分配', '已分配', '已确认'];
 
 // 任务提醒数据（根据公告数据动态生成）
 function generateReminders(announcements) {
   const reminders = [];
   let id = 1;
   announcements.forEach(a => {
+    // 已确认的公告不再生成任何提醒
+    if (a.progress === '已确认') return;
     // 管理员超时未分配提醒
     if (a.progress === '待分配' || !a.currentHandler) {
       reminders.push({

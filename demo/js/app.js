@@ -2,7 +2,30 @@
 
 // --- script[2] ---
 // 标讯助手 Demo - 主应用逻辑
+
+// 登录账号（由 TEAM_GROUPS 自动派生，统一密码 123456）
+const USERS = TEAM_GROUPS.map(g => ({
+  account: g.adminAccount,
+  name: g.admin,
+  phone: g.adminContact,
+  group: g.name,
+  groupId: g.id,
+  password: '123456'
+}));
+
+// 登录持久化 key
+const LS_USER = 'currentUser';
+
+// 商机管理必填字段（老大 2026-10-23 定案）
+const REQUIRED_OPP_FIELDS = [
+  { key: 'isValidOpportunity', label: '是否有效商机' },
+  { key: 'hasOperatorInvolvement', label: '是否有运营商参与' },
+  { key: 'opportunityCode', label: '商机编码' },
+  { key: 'willBid', label: '是否应标' },
+];
+
 let state = {
+  currentUser: null,      // { account, name, phone, group, groupId }
   page: 'announcements',
   announcements: [],
   siteResults: [],        // 真实站点采集结果
@@ -55,11 +78,53 @@ function bindOpportunityEvents() {
   });
 }
 
+// ============ 商机管理 · 信息已确认（校验 + 保存） ============
+function confirmOpportunity() {
+  const annId = state.detailId;
+  if (!annId) return;
+  const ann = state.announcements.find(x => x.id === annId);
+  if (!ann) return;
+
+  // 校验 4 个必填字段
+  const missing = [];
+  REQUIRED_OPP_FIELDS.forEach(f => {
+    const v = (ann[f.key] || '').trim();
+    if (!v) missing.push(f.label);
+  });
+  if (missing.length > 0) {
+    alert('请先完善以下必填项：\n  - ' + missing.join('\n  - '));
+    return;
+  }
+
+  // 保存为「已确认」
+  ann.progress = '已确认';
+  ann.progressRecords = ann.progressRecords || [];
+  ann.progressRecords.push({
+    progress: '已确认',
+    follower: state.currentUser ? state.currentUser.name : '当前用户',
+    followDate: new Date().toISOString().slice(0, 10),
+    note: '商机信息已完整确认'
+  });
+  saveOpportunityField(annId, 'progress', '已确认');
+  saveOpportunityField(annId, 'progressRecords', JSON.stringify(ann.progressRecords));
+
+  // 重新生成提醒（过滤掉已确认）
+  state.reminders = generateReminders(state.announcements);
+
+  alert('✅ 商机信息已确认！');
+  render();
+}
+
 async function init() {
   state.announcements = await loadAnnouncements();
   state.siteResults = await loadSiteResults();
   state.reminders = generateReminders(state.announcements);
   restoreOpportunities();
+  // 恢复登录态
+  try {
+    const saved = localStorage.getItem(LS_USER);
+    if (saved) state.currentUser = JSON.parse(saved);
+  } catch (e) {}
   applyFilters();
   render();
 }
@@ -87,6 +152,14 @@ function applyFilters() {
 // ============ 渲染主框架 ============
 function render() {
   const app = document.getElementById('app');
+
+  // 未登录 → 渲染独立登录页（不要主框架）
+  if (!state.currentUser) {
+    app.innerHTML = renderLoginPage();
+    bindLoginEvents();
+    return;
+  }
+
   app.innerHTML = `
     <div class="flex h-screen overflow-hidden">
       ${renderSidebar()}
@@ -103,6 +176,75 @@ function render() {
     ${state.modal === 'edit-group' ? renderEditGroupModal() : ''}
   `;
   bindEvents();
+}
+
+// ============ 登录页面 ============
+function renderLoginPage() {
+  return `
+    <div class="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div class="bg-white rounded-2xl shadow-xl p-8 w-[400px] fade-in">
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-sm">标</div>
+          <div class="text-2xl font-bold text-gray-800 mt-4">标讯助手</div>
+          <div class="text-sm text-gray-500 mt-1">账号登录</div>
+        </div>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">账号</label>
+            <input id="login-account" type="text" placeholder="请输入账号"
+                   class="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white"
+                   autocomplete="username">
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">密码</label>
+            <input id="login-password" type="password" placeholder="统一密码：123456"
+                   class="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white"
+                   autocomplete="current-password">
+          </div>
+          <button id="login-btn" class="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors">
+            登录
+          </button>
+        </div>
+        <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400 text-center">
+          演示账号：sheshujuan / lixiaoyi / huangxinchong / linxiaoyu2 / linxuxun<br>
+          统一密码：123456
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindLoginEvents() {
+  const btn = document.getElementById('login-btn');
+  if (!btn) return;
+  btn.onclick = doLogin;
+  document.querySelectorAll('#login-account, #login-password').forEach(el => {
+    el.onkeydown = (e) => { if (e.key === 'Enter') doLogin(); };
+  });
+}
+
+function doLogin() {
+  const account = document.getElementById('login-account').value.trim();
+  const password = document.getElementById('login-password').value.trim();
+  if (!account || !password) { alert('请输入账号和密码'); return; }
+  const u = USERS.find(x => x.account === account && x.password === password);
+  if (!u) { alert('账号或密码错误'); return; }
+  // 登录成功
+  const user = { account: u.account, name: u.name, phone: u.phone, group: u.group, groupId: u.groupId };
+  state.currentUser = user;
+  localStorage.setItem(LS_USER, JSON.stringify(user));
+  render();
+}
+
+function doLogout() {
+  if (!confirm('确认退出登录？')) return;
+  state.currentUser = null;
+  localStorage.removeItem(LS_USER);
+  state.selectedReminderIds.clear();
+  state.selectedAnnIds.clear();
+  state.detailId = null;
+  state.modal = null;
+  render();
 }
 
 function renderSidebar() {
@@ -165,7 +307,17 @@ function renderHeader() {
             🔄 刷新抓取
           </button>
         </div>
-      ` : `<div class="ml-auto text-sm text-gray-500">管理员：王经理</div>`}
+      ` : `<div class="ml-auto text-sm text-gray-500"></div>`}
+      <!-- 当前登录用户 -->
+      <div class="flex items-center gap-3 pl-3 ml-2 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-800">${state.currentUser ? state.currentUser.name : ''}</div>
+          <div class="text-xs text-gray-400">${state.currentUser ? state.currentUser.group : ''}</div>
+        </div>
+        <button id="btn-logout" class="text-xs text-gray-500 hover:text-red-600 px-2.5 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50">
+          退出
+        </button>
+      </div>
     </header>
   `;
 }
@@ -361,6 +513,7 @@ function renderProgressTag(p) {
   const map = {
     '待分配': 'tag-red',
     '已分配': 'tag-blue',
+    '已确认': 'tag-green',
   };
   return `<span class="tag ${map[p] || 'tag-gray'}">${p}</span>`;
 }
@@ -524,6 +677,16 @@ function renderAnnouncementDetail() {
                 </select>
               </div>
             </div>
+            <!-- 底部操作：已确认状态提示 + 保存按钮 -->
+            <div class="mt-4 flex items-center justify-between px-3">
+              ${a.progress === '已确认'
+                ? `<span class="text-xs text-green-600 font-medium">✅ 商机信息已确认</span>`
+                : `<span class="text-xs text-gray-400">* 商机管理 4 个必填项完成后可确认</span>`}
+              <button id="btn-confirm-opp"
+                class="px-4 py-2 text-sm rounded-lg text-white font-medium ${a.progress === '已确认' ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-600 hover:bg-blue-700'}">
+                ${a.progress === '已确认' ? '✓ 信息已确认' : '✅ 信息已确认'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -555,14 +718,19 @@ function renderAnnouncementDetail() {
 // ---- 任务提醒 ----
 // 任务提醒页的"有效提醒"过滤：排除已分配 + 按区县筛选
 function getFilteredReminders() {
+  const user = state.currentUser;
   return state.reminders.filter(r => {
     const ann = state.announcements.find(a => a.id === r.targetId);
+    // 已确认的公告 → 不再显示提醒
+    if (ann && ann.progress === '已确认') return false;
+    // 权限过滤：只看分配给当前登录人的
+    if (user && r.annCurrentHandler !== user.name) return false;
     // 进度过滤
     if (r.type === 'admin-assign') {
       if (!(ann && ann.progress === '待分配')) return false;
     }
     if (r.type === 'sales-follow') {
-      if (!(ann && ann.progress !== '已分配')) return false;
+      if (!(ann && ann.progress === '已分配')) return false;
     }
     // 区县过滤
     if (state.reminderDistrictFilter && r.district !== state.reminderDistrictFilter) return false;
@@ -1608,6 +1776,16 @@ function bindEvents() {
     el.onclick = () => {
       alert('模拟手动触发抓取：已启动定时任务1（真实环境会抓取 49 个网站）');
     };
+  });
+
+  // 退出登录
+  document.querySelectorAll('#btn-logout').forEach(el => {
+    el.onclick = () => doLogout();
+  });
+
+  // 商机管理 · 信息已确认
+  document.querySelectorAll('#btn-confirm-opp').forEach(el => {
+    el.onclick = () => confirmOpportunity();
   });
 
   // 任务提醒页区县筛选
