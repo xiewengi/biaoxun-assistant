@@ -73,6 +73,13 @@ BUSINESS_TAGS = [
 ]
 
 
+# ---------- 默认分派负责人（勿随意改动！）----------
+# 新入库公告的 currentHandler 默认值：集团客户部负责人
+# 对应前端 TEAM_GROUPS[0].admin（已固定排序第一）
+# 若团队管理改动，同步改这里，或改为运行时从 teams.json 读取。
+DEFAULT_HANDLER = "佘淑娟"
+
+
 def log(msg):
     print(f"[{dt.datetime.now().strftime('%H:%M:%S')}] {msg}", flush=True)
 
@@ -161,6 +168,169 @@ def guess_district(text):
             return d
     if "潮州市" in text or "潮州" in text:
         return "市区"  # 市本级/未标区县的归市区（对齐昨天口径）
+    return ""
+
+
+def _parse_contacts_from_content(text):
+    """从公告正文（去 HTML 标签后的纯文本）解析三方联系方式。
+
+    支持多种常见结构，广东政采网固定章节优先：
+      八、凡对本次采购提出询问，请按以下方式联系。
+        1.采购人信息  名 称:...  地 址:...  联系方式:...
+        2.采购代理机构信息  名 称:...  地 址:...  联系方式:...
+        3.项目联系方式  项目联系人:...  电 话:...
+
+    返回 dict {purchaser, agency, project}，每个子 dict 含 name/address/person/phone。
+    空字符串字段表示未解析到。
+    """
+    if not text:
+        return {"purchaser": {}, "agency": {}, "project": {}}
+
+    result = {
+        "purchaser": {"name": "", "address": "", "person": "", "phone": ""},
+        "agency":    {"name": "", "address": "", "person": "", "phone": ""},
+        "project":   {"person": "", "phone": ""},
+    }
+
+    # 定位联系方式章节：常见锚点关键词
+    anchors = [
+        "凡对本次采购提出询问",
+        "凡对本次采购提出询问，请按以下方式联系",
+        "凡对本次采购提出疑问",
+        "请按以下方式联系",
+    ]
+    anchor_pos = -1
+    for a in anchors:
+        p = text.find(a)
+        if p > 0:
+            anchor_pos = p
+            break
+
+    if anchor_pos > 0:
+        # 取章节块：从锚点后到 3000 字内 / 或到 "附件"/"合同"/"采购人最终" 等结束词
+        block_text = text[anchor_pos:anchor_pos + 3000]
+        for end_kw in ["相关附件", "附件", "合同", "中标", "成交", "资格预审"]:
+            ep = block_text.find(end_kw)
+            if ep > 500:
+                block_text = block_text[:ep]
+        parse_contact_block(block_text, result)
+    else:
+        # 没有固定联系方式章节，退用宽松正则扫全文
+        loose_parse_contacts(text, result)
+
+    return result
+
+
+def parse_contact_block(block_text, result):
+    """解析有明确 1./2./3. 编号的联系方式章节块。"""
+    # 按编号分块：1.采购人信息 ... 2.采购代理机构信息 ... 3.项目联系方式
+    # 先用正则把三个 section 切出来
+    sections = re.split(r'(?=\n?\s*[123]\.\s*(?:采购人信息|采购代理机构信息|采购人代理机构信息|项目联系))',
+                        block_text)
+    # 或者更宽松：以 \n 1. / \n 2. / \n 3. 开头切
+    if len(sections) < 2:
+        sections = re.split(r'(?:^|\n)\s*([123])[\.、]\s*(采购人信息|采购代理机构信息|项目联系)',
+                            block_text)
+        if len(sections) >= 4:
+            # re.split with capturing group 会把编号和标题单独作为元素，重新组装
+            rebuilt = []
+            i = 1
+            while i + 1 < len(sections):
+                rebuilt.append(sections[i+1].strip())
+                i += 2
+            sections = rebuilt
+
+    # 识别 section 类型并填充
+    for sec in sections:
+        sec = sec.strip()
+        if not sec: continue
+        label = ""
+        if "采购人信息" in sec and "代理" not in sec:
+            label = "purchaser"
+        elif "代理机构" in sec or ("采购人" in sec and "代理" in sec):
+            label = "agency"
+        elif "项目联系" in sec or "本项目" in sec:
+            label = "project"
+        else:
+            # 兜底：看标题前缀
+            title_match = re.match(r'\s*[123][\.、]?\s*(采购人信息|采购代理机构信息|项目联系)', sec)
+            if title_match:
+                t = title_match.group(1)
+                if "代理" in t: label = "agency"
+                elif "项目" in t: label = "project"
+                else: label = "purchaser"
+
+        if label == "purchaser":
+            _fill_org(result["purchaser"], sec)
+        elif label == "agency":
+            _fill_org(result["agency"], sec)
+        elif label == "project":
+            _fill_project(result["project"], sec)
+
+
+def _fill_org(target, text):
+    """从一段文本填充 name/address/person/phone。"""
+    target["name"]    = target["name"]    or _extract(text, r'名\s*称[：:]\s*([^\s，,。；;\n\r（()）]+)')
+    target["address"] = target["address"] or _extract(text, r'地\s*址[：:]\s*([^\s，,。；;\n\r]+)')
+    target["phone"]   = target["phone"]   or _extract(text, r'联系方式[：:]\s*([0-9\-+()（）、/]{6,30})')
+    if not target["phone"]:
+        target["phone"] = target["phone"] or _extract(text, r'电\s*话[：:]\s*([0-9\-+()（）、/]{6,30})')
+    target["person"]  = target["person"]  or _extract(text, r'联系人[：:]\s*([^\s，,。；;\n\r]{2,15})')
+
+
+def _fill_project(target, text):
+    """项目联系只有 person + phone。"""
+    target["person"] = target.get("person") or _extract(text, r'项目联系人[：:]\s*([^\s，,。；;\n\r]{2,15})')
+    target["phone"]  = target.get("phone")  or _extract(text, r'电\s*话[：:]\s*([0-9\-+()（）、/]{6,30})')
+    if not target["phone"]:
+        target["phone"] = target["phone"] or _extract(text, r'联系电话[：:]\s*([0-9\-+()（）、/]{6,30})')
+    if not target["person"]:
+        target["person"] = target.get("person") or _extract(text, r'联系人[：:]\s*([^\s，,。；;\n\r]{2,15})')
+
+
+def _extract(text, pattern):
+    """正则提取，match group(1) 去空格去尾部标点。"""
+    m = re.search(pattern, text)
+    if not m: return ""
+    v = m.group(1).strip().strip("：:，,。；;、")
+    return v
+
+
+def loose_parse_contacts(text, result):
+    """没找到固定章节时，用宽松正则扫全文——准确率低，有比没有好。"""
+    # 采购人：找"采购人"+"名称/联系电话"
+    if not result["purchaser"]["name"]:
+        m = re.search(r'采购人[^\n]{0,30}?名\s*称[：:]\s*([^\s，,。；;\n]{2,30})', text)
+        if m: result["purchaser"]["name"] = m.group(1).strip()
+    if not result["purchaser"]["phone"]:
+        m = re.search(r'采购人[^\n]{0,50}?联系电话[：:]\s*([0-9\-+()（）]{6,20})', text)
+        if m: result["purchaser"]["phone"] = m.group(1).strip()
+
+    # 代理
+    if not result["agency"]["name"]:
+        m = re.search(r'(?:招标|采购)?[代代]理机构[^\n]{0,30}?名\s*称[：:]\s*([^\s，,。；;\n]{2,30})', text)
+        if m: result["agency"]["name"] = m.group(1).strip()
+
+    # 项目
+    if not result["project"]["person"]:
+        m = re.search(r'(?:项目|本项目)?\s*联系人[：:]\s*([^\s，,。；;\n]{2,15})', text)
+        if m: result["project"]["person"] = m.group(1).strip()
+    if not result["project"]["phone"]:
+        m = re.search(r'(?:项目|本项目)?\s*联系电话[：:]\s*([0-9\-+()（）]{6,20})', text)
+        if m: result["project"]["phone"] = m.group(1).strip()
+
+
+def _extract_purchase_method(text):
+    """从公告正文（去HTML后）提取采购方式（公开招标/竞争性磋商/单一来源等）。"""
+    if not text: return ""
+    # 优先匹配"采购方式"标签
+    m = re.search(r"采购方式[：:]\s*([^\s，,。；;（()）]{2,15})", text)
+    if m:
+        return m.group(1).strip()
+    # 兜底：匹配"采购方式：公开招标"这种写法
+    m = re.search(r"采购方式[^\n]{0,20}?(公开招标|竞争性磋商|竞争性谈判|单一来源|询价|邀请招标|协议供货|框架协议|定点采购|公开征集)", text)
+    if m:
+        return m.group(1)
     return ""
 
 
@@ -462,10 +632,50 @@ def run_gdgpo(days, with_detail=True):
                 log(f"  详情失败 {row.get('id')}: {e}")
                 det = {}
             time.sleep(0.25)
-            content = strip_tags(det.get("content") or "")[:2000]
-            cp = det.get("contactPerson") or row.get("contactPerson") or ""
-            cn = det.get("contactNumber") or row.get("contactNumber") or ""
-            contact = " ".join(x for x in [cp, cn] if x)
+            raw_content = strip_tags(det.get("content") or "")
+            # 联系方式正则需要完整正文（章节在末尾），不能截短
+            _base = {
+                "purchaser": {"name": "", "address": "", "person": "", "phone": ""},
+                "agency":    {"name": "", "address": "", "person": "", "phone": ""},
+                "project":   {"person": "", "phone": ""},
+            }
+            if with_detail:
+                parsed = _parse_contacts_from_content(raw_content)
+                # 合并：parsed 覆盖 _base（空字符串保留默认值）
+                for k in _base:
+                    if isinstance(parsed.get(k), dict):
+                        _base[k].update(parsed[k])
+            contacts = _base
+            # content 截短只用于 summary/keyword 匹配，不影响 contact 解析
+            content = raw_content[:3000]
+            # API 字段只填正文没抠到的空字段（优先 det，兜底 row）
+            if with_detail:
+                def api(*keys):
+                    for k in keys:
+                        v = det.get(k) or row.get(k)
+                        if v: return str(v).strip()
+                    return ""
+                p = contacts["purchaser"]
+                p["name"]    = p["name"]    or api("purchaser")
+                p["address"] = p["address"] or api("purchaserAddr")
+                p["phone"]   = p["phone"]   or api("purchaserLinkPhone")
+                p["person"]  = p["person"]  or api("purchaserLinkMan")
+                a = contacts["agency"]
+                a["name"]    = a["name"]    or api("agency")
+                a["address"] = a["address"] or api("agentAddress")
+                a["phone"]   = a["phone"]   or api("agentLinkPhone")
+                a["person"]  = a["person"]  or api("agentLinkMan", "agentManageName", "agentPrincipalName")
+                prj = contacts["project"]
+                prj["phone"]  = prj.get("phone")  or api("contactNumber")
+                prj["person"] = prj.get("person") or api("contactPerson")
+            # 扁平 contact（旧逻辑兼容）
+            purchaser = contacts["purchaser"]
+            agency_info = contacts["agency"]
+            project = contacts["project"]
+            flat_contact = " ".join(x for x in [
+                purchaser.get("phone"), agency_info.get("phone"),
+                project.get("person"), project.get("phone"),
+            ] if x)
         blob = " ".join([title, buyer, row.get("agency") or "", row.get("catalogueNameList") or "", content])
         kws = match_keywords(blob)
         if not kws:
@@ -473,20 +683,30 @@ def run_gdgpo(days, with_detail=True):
         detail_url = f"{GD_BASE}/maincms-web/noticeGd?type=notice&id={row.get('id')}" \
                      f"&channel={row.get('channel') or ''}"
         budget = row.get("budget")
+        # 时间提取：先用 row（搜索接口），再 fallback 到 det（详情接口，已在 L467 拉取但之前没用），
+        # 最后 deadline 兜底用 openTenderTime —— 广东省政府采购网的采购公告/竞争性磋商公告通常
+        # 报名截止 = 开标时间，API 层面就没拆开，接口上 noticeEndTime/endTime 全是 None。
+        open_time = (row.get("openTenderTime") or (det.get("openTenderTime") if with_detail else "") or "—")[:10]
+        end_time = (row.get("noticeEndTime") or "" or
+                    (det.get("noticeEndTime") if with_detail else "") or
+                    (det.get("endTime") if with_detail else "") or "")[:10]
+        deadline = end_time or open_time  # 兜底：报名截止=开标时间
         rec = build_record(
             title=title,
             summary=(content[:300] or f"{buyer} {row.get('catalogueNameList') or ''}"),
             source_url=detail_url,
             pub_date=pub,
-            deadline=(row.get("noticeEndTime") or "—")[:10],
-            bid_open=(row.get("openTenderTime") or "—")[:10],
+            deadline=deadline or "—",
+            bid_open=open_time or "—",
             buyer=buyer,
             agency=row.get("agency") or "—",
             budget=(f"{float(budget):,.2f}元" if budget not in (None, "") else "—"),
             project_code=row.get("openTenderCode") or row.get("planCodes") or "—",
-            contact=contact or "—",
+            contact=(flat_contact if with_detail else "") or "—",
+            contacts=contacts if with_detail else {},
             ann_type=ann_type,
             extra_text=blob,
+            purchase_method=_extract_purchase_method(content),
         )
         if rec:
             rec["district"] = _gd_district(region, row.get("regionName") or "") or rec["district"]
@@ -558,8 +778,14 @@ def extract_project_name(title, summary):
 
 def build_record(title, summary, source_url, pub_date, deadline="", bid_open="",
                  buyer="", agency="", budget="", project_code="", contact="",
-                 ann_type="招标公告", fund_source="", extra_text=""):
-    """组装 demo 公告记录（字段见 PRD 招标公告展示）。返回 None 表示未通过过滤。"""
+                 contacts=None,
+                 ann_type="招标公告", fund_source="", extra_text="",
+                 purchase_method=""):
+    """组装 demo 公告记录（字段见 PRD 招标公告展示）。返回 None 表示未通过过滤。
+
+    contacts: 结构化联系方式对象 {purchaser:{name,address,person,phone},
+               agency:{...}, project:{...}}，前端详情页分三方展示。
+    """
     blob = " ".join([title, summary, buyer, agency, extra_text])
     if not city_filter(title, summary, buyer, extra_text):
         return None
@@ -584,11 +810,19 @@ def build_record(title, summary, source_url, pub_date, deadline="", bid_open="",
         bidOpenDate=bid_open or "—",
         summary=summary[:300] if summary else "—",
         contact=contact or "—",
+        contacts=contacts or {},
         sourceUrl=source_url,
         matchedKeywords=kws,
         businessTags=guess_business_tags(blob),
         region="潮州",
-        currentHandler="",
+        purchaseMethod=purchase_method or "—",
+        isValidOpportunity="",
+        hasOperatorInvolvement="",
+        opportunityCode="",
+        opportunityStatus="",
+        willBid="",
+        treePlacement="",
+        currentHandler=DEFAULT_HANDLER,
         createdAt=now,
         nextFollowUp=(dt.date.today() + dt.timedelta(days=2)).isoformat(),
         progress="待分配",
@@ -687,11 +921,12 @@ def cz_construction(days):
                     bidOpenDate=bid_open or "—",
                     summary=(text[:300] if text else strip_tags(blk)[:300]),
                     contact=_find_contact(text) or "—",
+                     contacts=_parse_contacts_from_content(text) if text else {},
                     sourceUrl=url,
                     matchedKeywords=kws,
                     businessTags=guess_business_tags(blob),
                     region="潮州",
-                    currentHandler="",
+                    currentHandler=DEFAULT_HANDLER,
                     createdAt=dt.date.today().isoformat(),
                     nextFollowUp=(dt.date.today() + dt.timedelta(days=2)).isoformat(),
                     progress="待分配",
@@ -741,6 +976,26 @@ def run_czggzy(days, use_pdf=True):
                 continue
         except ValueError:
             pass
+        # 联系方式：PDF 正文 → 三方结构化 contacts；fallback 到详情页字段
+        contacts = _parse_contacts_from_content(text) if text else {"purchaser": {}, "agency": {}, "project": {}}
+        # czggzy 详情页有 buyer（采购人），agency 固定是潮州市公共资源交易中心
+        if not contacts["purchaser"].get("name") and detail.get("buyer"):
+            contacts["purchaser"]["name"] = detail["buyer"]
+        if not contacts["agency"].get("name"):
+            contacts["agency"]["name"] = "潮州市公共资源交易中心"
+        # 扁平 contact 兜底（旧逻辑兼容）
+        flat_contact = _find_contact(text) or " ".join(x for x in [
+            contacts["project"].get("person"),
+            contacts["project"].get("phone"),
+            contacts["agency"].get("phone"),
+        ] if x)
+        # budget：HTML 抽不到时从 PDF 正文正则兜底（PDF 嵌页型公告 HTML 常缺 budget）
+        budget = detail["budget"]
+        if not budget and text:
+            bm = re.search(r"预算金额\s*[：:]\s*([0-9,，]+\.?[0-9]*元)", text)
+            if not bm: bm = re.search(r"最高限价[^\d]{0,20}([0-9,，]+\.?[0-9]*元)", text)
+            if not bm: bm = re.search(r"预算[^\d]{0,20}([0-9,，]+\.?[0-9]*元)", text)
+            if bm: budget = bm.group(1).replace("，", ",")
         rec = build_record(
             title=it["title"],
             summary=(text[:300] if text else it["list_text"][:300]),
@@ -750,9 +1005,10 @@ def run_czggzy(days, use_pdf=True):
             bid_open=detail["bid_open"][:10],
             buyer=detail["buyer"],
             agency="潮州市公共资源交易中心",
-            budget=detail["budget"],
+            budget=budget,
             project_code=it["project_code"],
-            contact=_find_contact(text),
+            contact=flat_contact,
+            contacts=contacts,
             ann_type="招标公告",
             extra_text=it["list_text"] + " " + text[:2000],
         )
@@ -828,11 +1084,149 @@ def inject_single_file(recs):
 
 SOURCES_JSON = os.path.join(BASE, "collector", "sources.json")
 
-# sourceCode → 实现函数 的 dispatch 表（generic 等适配器后续迭代）
+# ---------- Generic 站点适配器（Tier A/B 通用） ----------
+# 首页抓公告链接 → 详情页用通用正则抠字段 → 走 build_record 过滤
+ANN_LINK_HREF_RE = re.compile(r"""<a[^>]+href=["']([^"']+)["'][^>]*>([^<]{8,120})</a>""", re.I)
+ZB_KEYWORD_RE = re.compile(r"(招标|采购|公告|中标|询价|磋商|谈判|投标|资格预审|中标候选人|变更|更正|单一来源|废标|流标|成交|遴选|邀请招标|定点)", re.I)
+DATE_RE = re.compile(r"(\d{4}[-/年]\d{1,2}[-/月]\d{1,2}日?)\s*(\d{1,2}:\d{2})?")
+DATE_META_RE = re.compile(r"发布(?:时间|日期)[:：]?[^>]*>[^<]*<[^>]*>(\d{4}[-/年]\d{1,2}[-/月]\d{1,2})")
+
+def _guess_ann_type(title, html):
+    t = title or ""
+    # 先排除结果类公告（不进白名单），后面 build_record 的 type_allowed 会过滤
+    for bad in ["结果公告", "中标公告", "成交公告", "中标候选人公示", "候选人公示",
+                "更正公告", "变更公告", "废标公告", "流标公告", "终止公告",
+                "合同公告", "验收公告", "单一来源公示"]:
+        if bad in t: return bad  # type_allowed 返回 False，被自动剔除
+    for suffix in ["单一来源公示", "邀请公告", "变更公告", "更正公告", "废标公告", "流标公告"]:
+        if suffix in t: return suffix.replace("公示", "公告")
+    for suffix in ["竞争性磋商公告", "竞争性谈判公告", "询价公告", "资格预审公告", "中标公告", "成交公告"]:
+        if suffix in (title or ""): return suffix
+    if re.search(r"(公开)?招标公告", title or ""): return "招标公告"
+    if "采购" in (title or "") and "公告" in (title or ""): return "采购公告"
+    return "采购公告"
+
+def _parse_date(html):
+    m = DATE_META_RE.search(html or "")
+    raw = m.group(1) if m else ""
+    if not raw:
+        for m2 in DATE_RE.finditer(html or ""):
+            raw = m2.group(1); break
+        else: return ""
+    raw = raw.replace("年","-").replace("月","-").replace("日","").replace("/","-")
+    parts = [p for p in raw.split("-") if p]
+    if len(parts) >= 3:
+        try:
+            y, mo, d = int(parts[0]), int(parts[1]), int(parts[2])
+            if 2020 <= y <= 2040 and 1 <= mo <= 12 and 1 <= d <= 31:
+                return f"{y}-{mo:02d}-{d:02d}"
+        except: pass
+    return ""
+
+def _parse_deadline(html):
+    for pat in [
+        r"(?:投标截止|提交文件截止|截[止交]时间|报名截止)[^0-9]{0,10}(\d{4}[-/年]\d{1,2}[-/月]\d{1,2}日?\s*\d{1,2}:\d{2})",
+        r"(?:投标截止|报名截止)[^0-9]{0,10}(\d{4}[-/年]\d{1,2}[-/月]\d{1,2})",
+    ]:
+        m = re.search(pat, html or "")
+        if m: return m.group(1).replace("年","-").replace("月","-").replace("日","").replace("/","-")
+    return ""
+
+def _parse_detail_fields(html):
+    title_m = re.search(r"<title>([^<]{10,150})</title>", html or "", re.I)
+    title = title_m.group(1).strip() if title_m else ""
+    if " - " in title: title = title.rsplit(" - ", 1)[0].strip()
+    fields = dict(title=title, project_code="", buyer="", agency="", budget="",
+                  purchase_method="", ann_type="采购公告")
+    pc = re.search(r"(?:项目编号|招标编号|采购编号|项目代码)[：:]\s*([A-Z0-9\-【】\[\]()（）]{3,40})", html or "")
+    if pc: fields["project_code"] = pc.group(1)
+    b = re.search(r"(?:预算金额|最高限价|预算|采购预算|控制价)[^0-9]{0,15}([\d,]+(?:\.\d+)?)\s*元", html or "")
+    if not b:
+        b = re.search(r"<td[^>]*>[^<]*(?:预算|限价|控制价)[^<]*</td>\s*<td[^>]*>\s*([\d,]+(?:\.\d+)?)\s*元?", html or "", re.I)
+    if b: fields["budget"] = b.group(1).replace(",", "")
+    buy = re.search(r"(?:采购人|招标人|采购单位|业主|建设单位)[：:]\s*([^\s，,。；;（）()<]{2,40})", html or "")
+    if not buy: buy = re.search(r"<td[^>]*>[^<]*(?:采购人|招标人|业主)[^<]*</td>\s*<td[^>]*>([^<]{2,40})", html or "", re.I)
+    if buy: fields["buyer"] = buy.group(1).strip()
+    ag = re.search(r"(?:代理机构|招标代理|采购代理|招标机构)[：:]\s*([^\s，,。；;（）()<]{2,40})", html or "")
+    if not ag: ag = re.search(r"<td[^>]*>[^<]*(?:代理机构|招标代理)[^<]*</td>\s*<td[^>]*>([^<]{2,40})", html or "", re.I)
+    if ag: fields["agency"] = ag.group(1).strip()
+    fields["purchase_method"] = _extract_purchase_method(html or "") or ""
+    fields["ann_type"] = _guess_ann_type(title, html or "")
+    return fields
+
+def run_generic(site, days=30):
+    from urllib.parse import urljoin
+    url = site["url"].rstrip("/")
+    name = site["name"]
+    results = []
+    try:
+        data, ct = http_get(url, timeout=15)
+        html = data.decode("utf-8", errors="replace") if isinstance(data, bytes) else str(data)
+    except Exception as e:
+        log(f"  {name}: 首页请求失败 {type(e).__name__}")
+        return results
+    anchors = []
+    for m in ANN_LINK_HREF_RE.finditer(html):
+        href, txt = m.group(1), m.group(2).strip()
+        if not href.startswith("http"): href = urljoin(url + "/", href)
+        if any(x in href for x in [".jpg", ".png", ".gif", ".css", ".js", "#", "javascript:", "mailto:"]):
+            continue
+        if not ZB_KEYWORD_RE.search(txt): continue
+        anchors.append((href, txt))
+    if not anchors:
+        log(f"  {name}: 零候选链接（SPA 空壳或反爬，跳过）")
+        return results
+    log(f"  {name}: {len(anchors)} 条候选 → 遍历详情页...")
+    cutoff = dt.date.today() - dt.timedelta(days=days)
+    seen_urls = set()
+    for href, anchor_txt in anchors[:40]:
+        if href in seen_urls: continue
+        seen_urls.add(href)
+        try:
+            d2, ct2 = http_get(href, timeout=12)
+            h2 = d2.decode("utf-8", errors="replace") if isinstance(d2, bytes) else str(d2)
+        except Exception: continue
+        pub_date = _parse_date(h2)
+        if not pub_date: continue
+        try:
+            pd = dt.date.fromisoformat(pub_date)
+            if pd < cutoff: continue
+        except: pass
+        fields = _parse_detail_fields(h2)
+        if not fields["title"]: continue
+        rec = build_record(
+            title=fields["title"], summary=strip_tags(h2)[:800], source_url=href,
+            pub_date=pub_date, deadline=_parse_deadline(h2), bid_open="",
+            buyer=fields["buyer"], agency=fields["agency"],
+            budget=fields["budget"], project_code=fields["project_code"],
+            contact="", contacts=_parse_contacts_from_content(h2),
+            ann_type=fields["ann_type"], fund_source="",
+            extra_text=strip_tags(h2)[:5000],
+            purchase_method=fields["purchase_method"],
+        )
+        if rec: results.append(rec)
+    log(f"  {name}: {len(anchors)} 候选 → {len(results)} 条通过")
+    return results
+
+def run_all_generic(days=30):
+    sites = load_sources()
+    generic_sites = [s for s in sites if s.get("sourceCode", "generic") == "generic"]
+    log(f"Generic 适配器：{len(generic_sites)} 个站点待采（days={days}）")
+    all_recs = []
+    for site in generic_sites:
+        try:
+            recs = run_generic(site, days=days)
+            all_recs.extend(recs)
+        except Exception as e:
+            log(f"  {site['name']}: 异常 {type(e).__name__} {str(e)[:60]}")
+    log(f"Generic 合计: {len(all_recs)} 条（{len(generic_sites)} 站点汇总）")
+    return all_recs
+
 SOURCE_DISPATCH = {
-    "czggzy": lambda days, args: run_czggzy(days, use_pdf=not args.no_pdf),
-    "ccgp":   lambda days, args: run_ccgp(days),
-    "gdgpo":  lambda days, args: run_gdgpo(days, with_detail=not args.no_detail),
+    "czggzy":  lambda days, args: run_czggzy(days, use_pdf=not args.no_pdf),
+    "ccgp":    lambda days, args: run_ccgp(days),
+    "gdgpo":   lambda days, args: run_gdgpo(days, with_detail=not args.no_detail),
+    "generic": lambda days, args: run_all_generic(days),
 }
 
 
@@ -850,7 +1244,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--days", type=int, default=30, help="最近N天（默认30）")
     ap.add_argument("--source", default="all",
-                    help="指定单个源（czggzy/ccgp/gdgpo），或 all=按 sources.json 启用项自动跑")
+                    help="指定单个源（czggzy/ccgp/gdgpo/generic），或 all=按 sources.json 启用项自动跑（含 generic 47 站）")
     ap.add_argument("--no-pdf", action="store_true", help="跳过公告PDF正文解析")
     ap.add_argument("--no-detail", action="store_true", help="跳过政采网详情正文")
     ap.add_argument("--out", default="", help="仅输出到该路径（默认三处同步）")
@@ -867,11 +1261,11 @@ def main():
         seen = set()
         for s in sources:
             c = s.get("sourceCode", "generic")
-            if c == "generic" or c in seen:
+            if c in seen:
                 continue
             seen.add(c)
             codes.append(c)
-        log(f"从 sources.json 加载 {len(sources)} 个启用站点 → 可用实现源 {codes}（generic 暂跳过）")
+        log(f"从 sources.json 加载 {len(sources)} 个启用站点 → 待跑源 {codes}（generic={sum(1 for s in sources if s.get('sourceCode','generic')=='generic')} 个站点）")
 
     recs = []
     for code in codes:
@@ -890,9 +1284,29 @@ def main():
     if before != len(recs):
         log(f"类型白名单兜底：剔除中标/更正/合同等 {before - len(recs)} 条")
 
-    # 按标题+日期去重
-    uniq, seen = [], set()
+    # 去重：优先 projectCode（gdgpo 数据更全，优先保留），兜底 title+日期
+    code_best = {}  # projectCode -> 最佳记录（gdgpo 优先）
     for r in recs:
+        pc = r.get("projectCode") or ""
+        if pc not in ("", "—"):
+            old = code_best.get(pc)
+            if old is None:
+                code_best[pc] = r
+            else:
+                old_src_gdgpo = "gdgpo" in old.get("sourceUrl", "")
+                new_src_gdgpo = "gdgpo" in r.get("sourceUrl", "")
+                if new_src_gdgpo and not old_src_gdgpo:
+                    code_best[pc] = r  # 新的是 gdgpo，替换
+    # 剩下按标题+日期兜底（没 projectCode 的）
+    uniq, seen = [], set()
+    used_codes = set()
+    for pc, r in code_best.items():
+        uniq.append(r)
+        used_codes.add(pc)
+    for r in recs:
+        pc = r.get("projectCode") or ""
+        if pc in used_codes:
+            continue
         k = (r["title"][:40], r["pubDate"])
         if k in seen:
             continue
