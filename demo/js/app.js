@@ -52,7 +52,16 @@ function restoreOpportunities() {
     const saved = JSON.parse(localStorage.getItem('opp_fields') || '{}');
     for (const ann of state.announcements) {
       const s = saved[ann.id];
-      if (s) Object.assign(ann, s);
+      if (s) {
+        for (const [k, v] of Object.entries(s)) {
+          // 数组字段: 存时是JSON字符串, 读时parse
+          if (k === 'progressRecords' && typeof v === 'string') {
+            try { ann.progressRecords = JSON.parse(v); } catch { ann.progressRecords = []; }
+          } else {
+            ann[k] = v;
+          }
+        }
+      }
     }
   } catch (e) {}
 }
@@ -60,7 +69,12 @@ function saveOpportunityField(annId, field, value) {
   try {
     const saved = JSON.parse(localStorage.getItem('opp_fields') || '{}');
     saved[annId] = saved[annId] || {};
-    saved[annId][field] = value;
+    // 数组字段自动JSON序列化
+    if (Array.isArray(value)) {
+      saved[annId][field] = JSON.stringify(value);
+    } else {
+      saved[annId][field] = value;
+    }
     localStorage.setItem('opp_fields', JSON.stringify(saved));
   } catch (e) {}
 }
@@ -113,7 +127,7 @@ function confirmOpportunity() {
     note: '商机信息已完整确认'
   });
   saveOpportunityField(annId, 'progress', '已确认');
-  saveOpportunityField(annId, 'progressRecords', JSON.stringify(ann.progressRecords));
+  saveOpportunityField(annId, 'progressRecords', ann.progressRecords);
 
   // 重新生成提醒（过滤掉已确认）
   state.reminders = generateReminders(state.announcements);
