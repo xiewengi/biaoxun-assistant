@@ -1807,6 +1807,9 @@ function renderAnnouncementDetail() {
             <div class="flex gap-2">
               <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-assign="${a.id}">任务分配</button>
               <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50" data-progress="${a.id}">进度更新</button>
+              ${a.progress === '已确认'
+                ? `<button class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm opacity-70 cursor-not-allowed" disabled>✓ 信息已确认</button>`
+                : `<button id="btn-confirm-opp" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">✅ 信息已确认</button>`}
             </div>
           </div>
         </div>
@@ -1885,16 +1888,7 @@ function renderAnnouncementDetail() {
                 </select>
               </div>
             </div>
-            <!-- 底部操作：已确认状态提示 + 保存按钮 -->
-            <div class="mt-4 flex items-center justify-between px-3">
-              ${a.progress === '已确认'
-                ? `<span class="text-xs text-green-600 font-medium">✅ 商机信息已确认</span>`
-                : `<span class="text-xs text-gray-400">* 商机管理 4 个必填项完成后可确认</span>`}
-              <button id="btn-confirm-opp"
-                class="px-4 py-2 text-sm rounded-lg text-white font-medium ${a.progress === '已确认' ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-600 hover:bg-blue-700'}">
-                ${a.progress === '已确认' ? '✓ 信息已确认' : '✅ 信息已确认'}
-              </button>
-            </div>
+
           </div>
         </div>
       </div>
