@@ -442,7 +442,9 @@ function renderAnnouncementList() {
         <!-- 批量操作：默认隐藏，选中时 inline 出现在最右侧 -->
         <div id="batchBar" style="display:none" class="flex items-center gap-1.5 ml-auto">
           <span id="batchCount" class="text-xs text-blue-600 font-medium whitespace-nowrap">已选 0 条</span>
-          <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="batchAssignBtn">批量分配</button>
+          ${state.currentUser && state.currentUser.group === '集团客户部'
+          ? `<button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="batchAssignBtn">批量分配</button>`
+          : `<button class="px-3 py-1 text-xs bg-gray-300 text-white rounded cursor-not-allowed" id="batchAssignBtn" disabled title="仅集团客户部可批量分配">批量分配</button>`}
           <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-gray-50" id="batchClearBtn">清空选择</button>
         </div>
       </div>
@@ -503,7 +505,10 @@ function renderAnnouncementList() {
                   <td class="px-3 py-3 whitespace-nowrap" style="width:80px">${renderBidStatusTag(a)}</td>
                   <td class="px-4 py-3 text-center whitespace-nowrap sticky right-0 ann-row-last" style="background:#fff;width:120px">
                     ${a.progress === '待分配' || !a.currentHandler ? 
-                      `<button class="text-blue-600 hover:underline text-xs mr-2" data-assign="${a.id}">分配</button>` : ''}
+                      (state.currentUser && state.currentUser.group === '集团客户部'
+                        ? `<button class="text-blue-600 hover:underline text-xs mr-2" data-assign="${a.id}">分配</button>`
+                        : `<button class="text-gray-300 text-xs cursor-not-allowed mr-2" disabled title="仅集团客户部可分配">分配</button>`)
+                      : ''}
                     <button class="text-blue-600 hover:underline text-xs" data-detail="${a.id}">详情</button>
                   </td>
                 </tr>
@@ -640,7 +645,9 @@ function renderAnnouncementDetail() {
               </div>
             </div>
             <div class="flex gap-2">
-              <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-assign="${a.id}">任务分配</button>
+              ${state.currentUser && state.currentUser.group === '集团客户部'
+                ? `<button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-assign="${a.id}">任务分配</button>`
+                : `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="仅集团客户部可分配">任务分配</button>`}
               <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50" data-progress="${a.id}">进度更新</button>
               ${a.progress === '已确认'
                 ? `<button class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm opacity-70 cursor-not-allowed" disabled>✓ 信息已确认</button>`
@@ -912,7 +919,10 @@ function renderReminders() {
                   <td class="px-4 py-3 text-center whitespace-nowrap sticky right-0 ann-row-last" style="background:#fff;width:150px">
                     <button class="text-blue-600 hover:underline text-xs mr-2" data-detail="${r.targetId}">查看公告</button>
                     ${r.type === 'admin-assign' || r.annProgress === '待分配' ?
-                      `<button class="text-blue-600 hover:underline text-xs" data-assign="${r.targetId}">分配</button>` : ''}
+                      (state.currentUser && state.currentUser.group === '集团客户部'
+                        ? `<button class="text-blue-600 hover:underline text-xs" data-assign="${r.targetId}">分配</button>`
+                        : `<button class="text-gray-300 text-xs cursor-not-allowed" disabled title="仅集团客户部可分配">分配</button>`)
+                      : ''}
                   </td>
                 </tr>
               `).join('')}
