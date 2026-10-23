@@ -1696,6 +1696,7 @@ function bindEvents() {
     alert('已批量分配 ' + state.selectedAnnIds.size + ' 条给 ' + receiver);
     state.selectedAnnIds.clear();
     state.modal = null;
+    state.reminders = generateReminders(state.announcements);
     render();
   });
 
@@ -1978,6 +1979,7 @@ function bindEvents() {
       });
       state.modal = null;
       state.assignAnnId = null;
+      state.reminders = generateReminders(state.announcements);
       render();
     };
   });
@@ -2000,6 +2002,7 @@ function bindEvents() {
       });
       state.modal = null;
       state.progressAnnId = null;
+      state.reminders = generateReminders(state.announcements);
       render();
     };
   });
@@ -2094,6 +2097,7 @@ function bindEvents() {
       state.selectedReminderIds.clear();
       state.modal = null;
       alert(`✅ 批量分配成功：共更新 ${updatedCount} 条公告的分配状态`);
+      state.reminders = generateReminders(state.announcements);
       render();
     };
   });
