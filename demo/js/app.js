@@ -181,33 +181,70 @@ function render() {
 // ============ 登录页面 ============
 function renderLoginPage() {
   return `
-    <div class="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div class="bg-white rounded-2xl shadow-xl p-8 w-[400px] fade-in">
-        <div class="text-center mb-6">
-          <div class="w-14 h-14 mx-auto bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-sm">标</div>
-          <div class="text-2xl font-bold text-gray-800 mt-4">标讯助手</div>
-          <div class="text-sm text-gray-500 mt-1">账号登录</div>
+    <!-- 动态渐变背景 -->
+    <div class="login-bg h-screen w-screen relative overflow-hidden flex items-center justify-center">
+      <!-- 装饰圆 -->
+      <div class="login-blob login-blob-1"></div>
+      <div class="login-blob login-blob-2"></div>
+      <div class="login-blob login-blob-3"></div>
+      
+      <!-- 毛玻璃卡片 -->
+      <div class="login-card fade-in" style="width:420px">
+        <!-- Logo + 标题 -->
+        <div class="text-center mb-8">
+          <div class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg"
+               style="background:linear-gradient(135deg,#3b82f6 0%,#1e40af 100%)">
+            标
+          </div>
+          <div class="text-xl font-bold text-gray-900 mt-5 tracking-tight">标讯助手</div>
+          <div class="text-sm text-gray-500 mt-1.5">智能招标信息管理平台</div>
         </div>
+
+        <!-- 登录表单 -->
         <div class="space-y-4">
-          <div>
-            <label class="block text-xs text-gray-500 mb-1">账号</label>
+          <!-- 账号 -->
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
             <input id="login-account" type="text" placeholder="请输入账号"
-                   class="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white"
+                   class="login-input"
                    autocomplete="username">
           </div>
-          <div>
-            <label class="block text-xs text-gray-500 mb-1">密码</label>
-            <input id="login-password" type="password" placeholder="统一密码：123456"
-                   class="w-full h-11 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white"
+          
+          <!-- 密码 -->
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            <input id="login-password" type="password" placeholder="请输入密码"
+                   class="login-input"
                    autocomplete="current-password">
           </div>
-          <button id="login-btn" class="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors">
-            登录
+
+          <!-- 登录按钮 -->
+          <button id="login-btn" class="login-btn">
+            <span>登 录</span>
+            <svg class="login-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </button>
         </div>
-        <div class="mt-6 pt-4 border-t border-gray-100 text-xs text-gray-400 text-center">
-          演示账号：sheshujuan / lixiaoyi / huangxinchong / linxiaoyu2 / linxuxun<br>
-          统一密码：123456
+
+        <!-- 底部提示 -->
+        <div class="mt-7 pt-5 border-t border-gray-200/60">
+          <div class="flex items-center justify-center gap-1.5 text-xs text-gray-400">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+            <span>演示环境</span>
+          </div>
+          <div class="text-center text-xs text-gray-300 mt-2 leading-relaxed">
+            账号：sheshujuan / lixiaoyi / huangxinchong / linxiaoyu2 / linxuxun<br>
+            密码统一：<span class="font-mono text-gray-400">123456</span>
+          </div>
         </div>
       </div>
     </div>
