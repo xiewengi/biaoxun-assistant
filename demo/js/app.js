@@ -314,7 +314,7 @@ function renderSidebar() {
               <path stroke-linecap="round" stroke-linejoin="round" d="${i.icon}"></path>
             </svg>
             ${i.label}
-            ${i.key === 'reminders' && state.reminders.filter(r => r.level === 'urgent').length > 0 ? `<span class="ml-auto bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full">${state.reminders.filter(r => r.level === 'urgent').length}</span>` : ''}
+            ${i.key === 'reminders' ? (() => { const cnt = getFilteredReminders().length; return cnt > 0 ? `<span class="ml-auto bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full animate-pulse">${cnt}</span>` : ''; })() : ''}
           </div>
         `).join('')}
       </nav>
