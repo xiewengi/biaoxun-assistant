@@ -1039,7 +1039,8 @@ const SOURCES_DATA = [
 ];
 
 // ===== 数据加载函数 =====</script>
-<script>
+<script>// ===== 主应用逻辑（由标讯助手demo.html 自动同步）=====
+
 // --- script[2] ---
 // 标讯助手 Demo - 主应用逻辑
 let state = {
@@ -1059,6 +1060,7 @@ let state = {
   // 翻页
   pageSize: 10,           // 10 / 50 / 100 / 0(全部)
   currentPage: 1,
+  reminderDistrictFilter: '',  // 任务提醒页专属区县筛选
 };
 
 // ============ 初始化 ============
@@ -1593,19 +1595,18 @@ function renderAnnouncementDetail() {
 
 // ---- 任务提醒 ----
 function renderReminders() {
-  // 需求3：动态过滤——已分配（progress=已分配）的不再展示，只展示待分配
-  // 从 state.reminders 生成时带了 annProgress 字段，但批量分配后 state.reminders 里的旧数据
-  // 不会自动更新 annProgress，所以这里要重新查 state.announcements 的实时 progress
+  // 需求3+区县筛选：动态过滤——已分配的不再展示 + 按区县过滤
   const liveReminders = state.reminders.filter(r => {
     const ann = state.announcements.find(a => a.id === r.targetId);
-    // admin-assign 类（管理员分派类提醒）——只在 progress=待分配 时显示
+    // 进度过滤
     if (r.type === 'admin-assign') {
-      return ann && ann.progress === '待分配';
+      if (!(ann && ann.progress === '待分配')) return false;
     }
-    // sales-follow 类（业务员跟进类提醒）——progress=已分配 后也不再需要提醒
     if (r.type === 'sales-follow') {
-      return ann && ann.progress !== '已分配';
+      if (!(ann && ann.progress !== '已分配')) return false;
     }
+    // 区县过滤（提醒页专属）
+    if (state.reminderDistrictFilter && r.district !== state.reminderDistrictFilter) return false;
     return true;
   });
 
@@ -1661,8 +1662,20 @@ function renderReminders() {
     </div>
     -->
 
-    <!-- 批量操作栏 -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 mb-3 flex items-center gap-3">
+    <!-- 区县筛选 + 批量操作栏 -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 mb-3 flex items-center gap-3 flex-wrap">
+      <!-- 区县筛选 -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-500">区县筛选</span>
+        <select id="reminder-district-filter" class="h-8 px-2 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400 min-w-[110px]">
+          <option value="">全部区县</option>
+          ${[...new Set(state.announcements.map(a => a.district))].sort().map(d => `<option value="${d}" ${state.reminderDistrictFilter===d?'selected':''}>${d}</option>`).join('')}
+        </select>
+        ${state.reminderDistrictFilter ? `<button id="reminder-district-clear" class="text-xs text-blue-500 hover:underline">清除</button>` : ''}
+      </div>
+      
+      <div class="h-5 w-px bg-gray-200"></div>
+      
       <div class="text-sm text-gray-500 flex-1">
         ${selectedCount > 0
           ? `已选中 <span class="font-semibold text-blue-600">${selectedCount}</span> 条`
@@ -2633,6 +2646,24 @@ function bindEvents() {
       alert('模拟手动触发抓取：已启动定时任务1（真实环境会抓取 49 个网站）');
     };
   });
+
+  // 任务提醒页区县筛选
+  const remDistrictFilter = document.getElementById('reminder-district-filter');
+  if (remDistrictFilter) {
+    remDistrictFilter.onchange = () => {
+      state.reminderDistrictFilter = remDistrictFilter.value;
+      state.currentPage = 1;
+      render();
+    };
+  }
+  const remDistrictClear = document.getElementById('reminder-district-clear');
+  if (remDistrictClear) {
+    remDistrictClear.onclick = () => {
+      state.reminderDistrictFilter = '';
+      state.currentPage = 1;
+      render();
+    };
+  }
 
   // 翻页 - page size 切换
   document.querySelectorAll('[data-page-size]').forEach(el => {
