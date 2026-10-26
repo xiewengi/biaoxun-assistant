@@ -1,0 +1,4357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标讯助手 - Demo（离线版）</title>
+<style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.inset-0{inset:0}.z-50{z-index:50}.col-span-2{grid-column:span 2/span 2}.-mx-2{margin-left:-.5rem;margin-right:-.5rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-3{margin-left:.75rem}.ml-auto{margin-left:auto}.mr-1{margin-right:.25rem}.mr-2{margin-right:.5rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.table{display:table}.grid{display:grid}.h-10{height:2.5rem}.h-16{height:4rem}.h-2{height:.5rem}.h-5{height:1.25rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-screen{height:100vh}.max-h-72{max-height:18rem}.w-2{width:.5rem}.w-5{width:1.25rem}.w-60{width:15rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-\[480px\]{width:480px}.w-full{width:100%}.min-w-\[280px\]{min-width:280px}.min-w-\[300px\]{min-width:300px}.min-w-\[32px\]{min-width:32px}.max-w-5xl{max-width:64rem}.max-w-\[150px\]{max-width:150px}.max-w-\[180px\]{max-width:180px}.max-w-\[400px\]{max-width:400px}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}.cursor-pointer{cursor:pointer}.resize-none{resize:none}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-y-4{row-gap:1rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-1\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.375rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.375rem*var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.overflow-auto{overflow:auto}.overflow-hidden,.truncate{overflow:hidden}.truncate{text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-wrap{white-space:pre-wrap}.break-all{word-break:break-all}.rounded{border-radius:.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-blue-600{--tw-border-opacity:1;border-color:rgb(37 99 235/var(--tw-border-opacity,1))}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246/var(--tw-border-opacity,1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235/var(--tw-border-opacity,1))}.border-gray-50{--tw-border-opacity:1;border-color:rgb(249 250 251/var(--tw-border-opacity,1))}.border-red-100{--tw-border-opacity:1;border-color:rgb(254 226 226/var(--tw-border-opacity,1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246/var(--tw-bg-opacity,1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235/var(--tw-bg-opacity,1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity,1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity,1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94/var(--tw-bg-opacity,1))}.bg-orange-100{--tw-bg-opacity:1;background-color:rgb(255 237 213/var(--tw-bg-opacity,1))}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237/var(--tw-bg-opacity,1))}.bg-orange-500{--tw-bg-opacity:1;background-color:rgb(249 115 22/var(--tw-bg-opacity,1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242/var(--tw-bg-opacity,1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68/var(--tw-bg-opacity,1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.from-blue-500{--tw-gradient-from:#3b82f6 var(--tw-gradient-from-position);--tw-gradient-to:rgba(59,130,246,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.to-blue-700{--tw-gradient-to:#1d4ed8 var(--tw-gradient-to-position)}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-5{padding-left:1.25rem}.pt-4{padding-top:1rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246/var(--tw-text-opacity,1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235/var(--tw-text-opacity,1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity,1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity,1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity,1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity,1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity,1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55/var(--tw-text-opacity,1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity,1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74/var(--tw-text-opacity,1))}.text-orange-500{--tw-text-opacity:1;color:rgb(249 115 22/var(--tw-text-opacity,1))}.text-orange-600{--tw-text-opacity:1;color:rgb(234 88 12/var(--tw-text-opacity,1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68/var(--tw-text-opacity,1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-sm,.shadow-xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color)}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-filter{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216/var(--tw-bg-opacity,1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity,1))}.hover\:text-blue-600:hover{--tw-text-opacity:1;color:rgb(37 99 235/var(--tw-text-opacity,1))}.hover\:underline:hover{text-decoration-line:underline}.focus\:border-blue-400:focus{--tw-border-opacity:1;border-color:rgb(96 165 250/var(--tw-border-opacity,1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-40:disabled{opacity:.4}
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  /* 表格横拉条常显样式 */
+  .scrollbar-thin::-webkit-scrollbar { width: 10px; height: 12px; }
+  .scrollbar-thin::-webkit-scrollbar-track { 
+    background: #f1f5f9; 
+    border-radius: 6px; 
+    border: 2px solid #fff;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb { 
+    background: #cbd5e1; 
+    border-radius: 6px; 
+    border: 2px solid #f1f5f9;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  /* macOS 强制滚动条常显（避免 overlay 隐藏） */
+  .ann-table-scroll, .overflow-x-auto.scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+  @supports (-webkit-overflow-scrolling: touch) {
+    .scrollbar-thin::-webkit-scrollbar { width: 10px; height: 12px; }
+  }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-yellow { background: #fef9c3; color: #854d0e; }
+  .tag-blue { background: #dbeafe; color: #1e40af; }
+  .tag-red { background: #fee2e2; color: #991b1b; }
+  .tag-gray { background: #f3f4f6; color: #374151; }
+  .tag-purple { background: #f3e8ff; color: #7e22ce; }
+  .modal-bg { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+  .fade-in { animation: fadeIn 0.2s ease-out; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .sidebar-item:hover { background: #f3f4f6; }
+  .sidebar-item.active { background: #eff6ff; color: #2563eb; }
+  .sidebar-item.active svg { stroke: #2563eb; }
+  .ann-row:hover { background: #f9fafb; }
+  .kw-del-cb:checked + .kw-del-label { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+  .kw-del-pill { display: inline-block; }
+/* sticky 左右列阴影 */
+.ann-row-first{box-shadow:4px 0 6px -4px rgba(0,0,0,.08)}
+.ann-row-last{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
+.ann-row:hover .ann-row-first{background:#f9fafb}
+.ann-row:hover .ann-row-last{background:#f9fafb}
+thead th.sticky.left-0{box-shadow:4px 0 6px -4px rgba(0,0,0,.08)}
+thead th.sticky.right-0{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
+  /* 手动补 Tailwind 没编译的 overflow-y-auto / overflow-x-hidden */
+  main[class*="overflow-y-auto"] { overflow-y: auto !important; }
+  main[class*="overflow-x-hidden"] { overflow-x: hidden !important; }
+  .overflow-x-auto { overflow-x: auto !important; }
+  /* 关键：表格 card 锁死宽度，不让 flex min-content 撑爆 */
+  .bg-white.rounded-xl.shadow-sm.border-gray-100.style-width-100,
+  .bg-white.rounded-xl.shadow-sm.border-gray-100[style*="width:100%"] { width: 100% !important; max-width: 100%; }
+
+
+/* ===== 登录页 · 现代毛玻璃风格 ===== */
+.login-bg {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 30%, #3b82f6 60%, #6366f1 100%);
+  background-size: 400% 400%;
+  animation: loginGradientShift 15s ease infinite;
+}
+@keyframes loginGradientShift {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* 浮动装饰圆 */
+.login-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .5;
+  animation: loginBlobFloat 20s ease-in-out infinite;
+}
+.login-blob-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, #f472b6 0%, transparent 70%);
+  top: -200px; left: -100px;
+  animation-delay: 0s;
+}
+.login-blob-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #22d3ee 0%, transparent 70%);
+  bottom: -150px; right: -100px;
+  animation-delay: -5s;
+}
+.login-blob-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+  top: 40%; right: 20%;
+  animation-delay: -10s;
+}
+@keyframes loginBlobFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(40px,-30px) scale(1.1); }
+  66% { transform: translate(-30px,40px) scale(0.95); }
+}
+
+/* 毛玻璃卡片 */
+.login-card {
+  position: relative;
+  padding: 40px 36px 32px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid rgba(255,255,255,.3);
+  box-shadow:
+    0 25px 50px -12px rgba(0,0,0,.25),
+    0 0 0 1px rgba(255,255,255,.5) inset;
+  z-index: 10;
+}
+
+/* 输入框 */
+.login-input-wrap {
+  position: relative;
+}
+.login-input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px; height: 18px;
+  color: #94a3b8;
+  pointer-events: none;
+  transition: color .2s;
+}
+.login-input {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px 0 42px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: rgba(255,255,255,.8);
+  font-size: 14px;
+  color: #0f172a;
+  transition: all .2s;
+}
+.login-input::placeholder { color: #cbd5e1; }
+.login-input:hover { border-color: #cbd5e1; background: #fff; }
+.login-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(59,130,246,.12);
+}
+.login-input-wrap:focus-within .login-input-icon { color: #3b82f6; }
+
+/* 登录按钮 */
+.login-btn {
+  position: relative;
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  cursor: pointer;
+  transition: all .25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 14px rgba(59,130,246,.35);
+}
+.login-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59,130,246,.45);
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+}
+.login-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(59,130,246,.3); }
+.login-btn-arrow {
+  width: 18px; height: 18px;
+  transition: transform .25s;
+}
+.login-btn:hover .login-btn-arrow { transform: translateX(3px); }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+<div id="app"></div>
+<script>
+// ===== 数据层（由标讯助手demo.html 自动同步）=====
+
+// --- script[0] ---
+const INLINE_ANN = [
+ {
+  "id": "ANN202610234478",
+  "title": "2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目竞争性磋商公告",
+  "projectName": "2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目",
+  "projectCode": "445121-2026-01715",
+  "buyer": "潮州市潮安区凤凰镇人民政府",
+  "agency": "潮州市中杰工程咨询有限公司",
+  "budget": "2,432,917.23元",
+  "fundSource": "—",
+  "district": "潮安",
+  "annType": "采购公告",
+  "pubDate": "2026-10-23",
+  "deadline": "2026-11-05",
+  "bidOpenDate": "2026-11-05",
+  "summary": "项目概况 2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年11月05日 15时00分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445121-2026-01715 项目名称：2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目 采购方式：竞争性磋商 预算金额：2,432,917.23元 采购需求： 采购包1(2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目): 采购包预算金额： 2,432,917.",
+  "contact": "0768-6782009 0768-2189045 陈先生 0768-2189045",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市潮安区凤凰镇人民政府",
+    "address": "广东省潮州市潮安区凤凰镇华园大道南路50号",
+    "person": "",
+    "phone": "0768-6782009"
+   },
+   "agency": {
+    "name": "潮州市中杰工程咨询有限公司",
+    "address": "广东省潮州市湘桥区北关村北美路中段土尾南片8号综合楼3楼",
+    "person": "洪歆杰",
+    "phone": "0768-2189045"
+   },
+   "project": {
+    "person": "陈先生",
+    "phone": "0768-2189045"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=536b5225-bf89-43a3-97ae-864bd3a6a71b&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610229446",
+  "title": "招标公告",
+  "projectName": "深圳能源环保股份有限公司下属发电厂2027年度飞灰螯合物吨袋采购项目",
+  "projectCode": "0310-ZBZX-",
+  "buyer": "—",
+  "agency": "—",
+  "budget": "—",
+  "fundSource": "—",
+  "district": "湘桥",
+  "annType": "招标公告",
+  "pubDate": "2026-10-22",
+  "deadline": "—",
+  "bidOpenDate": "—",
+  "summary": "深圳能源环保股份有限公司下属发电厂2027年度飞灰螯合物吨袋采购项目\n\n招 标 公 告\n\n项目名称： 深圳能源环保股份有限公司下属发电厂2027年度飞灰螯合物吨袋采购项目\n\n招标编号：0310-ZBZX-材料-20260218\n\n日 期：2026年10月22日\n\n1、深圳能源集团股份有限公司招标中心（以下简称“招标代理人”），受深圳能源环保股份有限公司（以下简称“招标人”或“买方”）的委托，就上述项目进行公开招标，现邀请能够满足本项目投标资格要求的潜在投标人（以下简称“投标人”或“卖方”）按照本公告的要求参与投标。\n\n2、项目概况和招标范围：\n\n2.1 项目规模及概况：\n\n规模：预计总量为__",
+  "contact": "—",
+  "contacts": {
+   "purchaser": {
+    "name": "",
+    "address": "",
+    "person": "",
+    "phone": ""
+   },
+   "agency": {
+    "name": "",
+    "address": "",
+    "person": "",
+    "phone": ""
+   },
+   "project": {
+    "person": "黄奕谋",
+    "phone": ""
+   }
+  },
+  "sourceUrl": "https://zb.sec.com.cn/zbgg/21461.jhtml",
+  "matchedKeywords": [
+   "数字",
+   "平台",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610213790",
+  "title": "暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目（项目编号：0724-2631ST826480）招标公告",
+  "projectName": "暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目",
+  "projectCode": "0724-2631ST826480",
+  "buyer": "暨南大学附属第一医院潮汕医院",
+  "agency": "国义招标股份有限公司",
+  "budget": "7,940,000.00元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-21",
+  "deadline": "2026-11-11",
+  "bidOpenDate": "2026-11-11",
+  "summary": "项目概况 暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月11日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：0724-2631ST826480 项目名称：暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目 采购方式：公开招标 预算金额：7,940,000.00元 采购需求： 采购包1(CT维修保养服务3年): 采购包预算金额： 3,050,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目",
+  "contact": "0768-8864153 020-37860531、020-37860521、0754 邓彩云、戴琨琳、马倩升 020-37860531、020-37860521、0754",
+  "contacts": {
+   "purchaser": {
+    "name": "暨南大学附属第一医院潮汕医院",
+    "address": "饶平县黄冈镇环城北路969号",
+    "person": "",
+    "phone": "0768-8864153"
+   },
+   "agency": {
+    "name": "国义招标股份有限公司",
+    "address": "广州市越秀区东风东路726号18楼",
+    "person": "戴琨琳",
+    "phone": "020-37860531、020-37860521、0754"
+   },
+   "project": {
+    "person": "邓彩云、戴琨琳、马倩升",
+    "phone": "020-37860531、020-37860521、0754"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=402e5eb5-daaa-4e22-a31b-6af059fa1996&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "系统"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610211563",
+  "title": "新圩镇苗田村基础设施及人居环境提升工程竞争性磋商公告",
+  "projectName": "新圩镇苗田村基础设施及人居环境提升工程",
+  "projectCode": "445122-2026-01720",
+  "buyer": "饶平县新圩镇人民政府",
+  "agency": "驿大项目管理有限公司",
+  "budget": "1,104,405.44元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-21",
+  "deadline": "2026-11-03",
+  "bidOpenDate": "2026-11-03",
+  "summary": "项目概况 新圩镇苗田村基础设施及人居环境提升工程 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年11月03日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01720 项目名称：新圩镇苗田村基础设施及人居环境提升工程 采购方式：竞争性磋商 预算金额：1,104,405.44元 采购需求： 采购包1(新圩镇苗田村基础设施及人居环境提升工程): 采购包预算金额： 1,104,405.44元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元",
+  "contact": "13690043319 15007684884 张工 15007684884",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县新圩镇人民政府",
+    "address": "广东省潮州市饶平县新圩镇团结路西70号",
+    "person": "",
+    "phone": "13690043319"
+   },
+   "agency": {
+    "name": "驿大项目管理有限公司",
+    "address": "四川省成都市金牛区高新技术产业园区迎宾大道298号4栋603号",
+    "person": "钟成莉",
+    "phone": "15007684884"
+   },
+   "project": {
+    "person": "张工",
+    "phone": "15007684884"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=fb2dfa8f-4bca-4a1f-b065-80ebd5afe626&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610202016",
+  "title": "韩江北溪（铁铺-官塘段）村庄河塘渠道生态整治项目-铁铺片区勘察设计",
+  "projectCode": "潮公易建招字[2026]170号",
+  "buyer": "潮州市湘桥区铁铺镇人民政府",
+  "agency": "广东永固工程管理有限公司",
+  "budget": "￥4,351,910.48元",
+  "fundSource": "—",
+  "district": "湘桥",
+  "annType": "建设工程招标公告",
+  "pubDate": "2026-10-20",
+  "deadline": "2026-10-31",
+  "bidOpenDate": "2026-11-12",
+  "summary": "广东省工程建设项目招标公告\n| “〈交货) 地点                                         / 尔 |\n                           项目建设所需资金通过积极争取上级专项资金| 在直。 4\n资金来源       财政资金      资金来源构成 | 项债、超长期特别国债、中央预算内投资等各类专\n项资金支持，不足部分由地方财政资金统筹解决。\n(一) 污染治理工程: 主要为新建种养结合资源化回用系统 12 个片区，对养殖尾水进行资源\n化回用，配套类污收集系统、引水及灌溉系统等，〈二) 人居环境整治工程: 包括农村生活\n污水治理约 15.",
+  "contact": "—",
+  "contacts": {
+   "purchaser": {
+    "name": "",
+    "address": "",
+    "person": "",
+    "phone": ""
+   },
+   "agency": {
+    "name": "",
+    "address": "",
+    "person": "",
+    "phone": ""
+   },
+   "project": {
+    "person": "",
+    "phone": ""
+   }
+  },
+  "sourceUrl": "https://www.czggzy.com:8088/info.u.jsp?id=2016&clsid=J",
+  "matchedKeywords": [
+   "系统"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610166900",
+  "title": "潮州市政务服务中心信息化建设(2026年)项目招标公告",
+  "projectName": "潮州市政务服务中心信息化建设(2026年)项目",
+  "projectCode": "CZC2026023",
+  "buyer": "潮州市政务服务和数据管理局",
+  "agency": "潮州市公共资源交易中心",
+  "budget": "7,463,061.95元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-16",
+  "deadline": "2026-11-10",
+  "bidOpenDate": "2026-11-10",
+  "summary": "项目概况 潮州市政务服务中心信息化建设(2026年)项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月10日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026023 项目名称：潮州市政务服务中心信息化建设(2026年)项目 采购方式：公开招标 预算金额：7,463,061.95元 采购需求： 采购包1(潮州市政务服务中心信息化建设（2026年）项目): 采购包预算金额： 7,463,061.95元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目",
+  "contact": "0768-2331598 0768-2280181 卢雅琨 0768-2280181",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市政务服务和数据管理局",
+    "address": "潮州市潮州大道中段凤新大厦北翼第九至第十一层",
+    "person": "",
+    "phone": "0768-2331598"
+   },
+   "agency": {
+    "name": "潮州市公共资源交易中心",
+    "address": "广东省潮州市潮州大道中段广发银行12楼",
+    "person": "卢雅琨",
+    "phone": "0768-2280181"
+   },
+   "project": {
+    "person": "卢雅琨",
+    "phone": "0768-2280181"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=6e2bd30e-c281-4015-a19a-9402b1edd0a5&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "信息化",
+   "智慧",
+   "平台",
+   "系统",
+   "软件",
+   "云",
+   "机房",
+   "网络"
+  ],
+  "businessTags": [
+   "平台",
+   "机房"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610168716",
+  "title": "潮安区庵埠镇综合养老服务中心建设项目竞争性磋商公告",
+  "projectName": "潮安区庵埠镇综合养老服务中心建设项目",
+  "projectCode": "CZZZ[2026]G002",
+  "buyer": "潮州市潮安区庵埠镇人民政府",
+  "agency": "潮州市中正招投标代理有限公司",
+  "budget": "2,751,916.55元",
+  "fundSource": "—",
+  "district": "潮安",
+  "annType": "采购公告",
+  "pubDate": "2026-10-16",
+  "deadline": "2026-10-27",
+  "bidOpenDate": "2026-10-27",
+  "summary": "项目概况 潮安区庵埠镇综合养老服务中心建设项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月27日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：CZZZ[2026]G002 项目名称：潮安区庵埠镇综合养老服务中心建设项目 采购方式：竞争性磋商 预算金额：2,751,916.55元 采购需求： 采购包1(潮安区庵埠镇综合养老服务中心建设项目): 采购包预算金额： 2,751,916.55元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价",
+  "contact": "6611887 0768-6639666 郭锡壮 0768-6639666",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市潮安区庵埠镇人民政府",
+    "address": "广东省潮州市潮安区庵埠镇亨利北路",
+    "person": "",
+    "phone": "6611887"
+   },
+   "agency": {
+    "name": "潮州市中正招投标代理有限公司",
+    "address": "广东省潮州市潮安区城区安盛花园26幢101号",
+    "person": "郭锡雄",
+    "phone": "0768-6639666"
+   },
+   "project": {
+    "person": "郭锡壮",
+    "phone": "0768-6639666"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=9e25945d-82af-49cd-969f-fbd974be7362&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610158698",
+  "title": "钱东镇道路清扫保洁及垃圾清运与绿化养护项目竞争性磋商公告",
+  "projectName": "钱东镇道路清扫保洁及垃圾清运与绿化养护项目",
+  "projectCode": "FHGJST269C2043",
+  "buyer": "饶平县钱东镇人民政府",
+  "agency": "丰汇国际项目管理有限公司",
+  "budget": "2,553,272.08元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-15",
+  "deadline": "2026-10-27",
+  "bidOpenDate": "2026-10-27",
+  "summary": "项目概况 钱东镇道路清扫保洁及垃圾清运与绿化养护项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月27日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：FHGJST269C2043 项目名称：钱东镇道路清扫保洁及垃圾清运与绿化养护项目 采购方式：竞争性磋商 预算金额：2,553,272.08元 采购需求： 采购包1(钱东镇道路清扫保洁及垃圾清运与绿化养护项目): 采购包预算金额： 2,553,272.08元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预",
+  "contact": "0768-8718456 19866255606 马工 19866255606",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县钱东镇人民政府",
+    "address": "广东省潮州市饶平县钱东镇大陇公园前一横2号",
+    "person": "",
+    "phone": "0768-8718456"
+   },
+   "agency": {
+    "name": "丰汇国际项目管理有限公司",
+    "address": "汕头市龙湖区黄河路19号智汇时代雅园4栋1701",
+    "person": "马逸乐",
+    "phone": "19866255606"
+   },
+   "project": {
+    "person": "马工",
+    "phone": "19866255606"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=8586b284-2d87-4558-8070-735857c5ecad&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610151994",
+  "title": "潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目招标公告",
+  "projectName": "潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目",
+  "projectCode": "04-17-04A-2026-D-F-E29972",
+  "buyer": "潮州市公安局",
+  "agency": "公诚管理咨询有限公司",
+  "budget": "2,250,700.00元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-15",
+  "deadline": "2026-11-06",
+  "bidOpenDate": "2026-11-06",
+  "summary": "项目概况 潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月06日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：04-17-04A-2026-D-F-E29972 项目名称：潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目 采购方式：公开招标 预算金额：2,250,700.00元 采购需求： 采购包1(潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目",
+  "contact": "13500105437 07683269996 高丽珍、宗正月、戚琳 07683269996",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市公安局",
+    "address": "潮州市湘桥区城新西路81号",
+    "person": "",
+    "phone": "13500105437"
+   },
+   "agency": {
+    "name": "公诚管理咨询有限公司",
+    "address": "广东省潮州市湘桥区潮枫路223号新时空大厦8楼",
+    "person": "李成斌",
+    "phone": "07683269996"
+   },
+   "project": {
+    "person": "高丽珍、宗正月、戚琳",
+    "phone": "07683269996"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=6fcd65ac-0a67-4557-b44c-f6d34d6e0c32&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "软件",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610146392",
+  "title": "潮州市金山中学后勤服务项目招标公告",
+  "projectName": "潮州市金山中学后勤服务项目",
+  "projectCode": "CZC2026024",
+  "buyer": "潮州市金山中学",
+  "agency": "潮州市公共资源交易中心",
+  "budget": "5,663,433.60元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-14",
+  "deadline": "2026-11-04",
+  "bidOpenDate": "2026-11-04",
+  "summary": "项目概况 潮州市金山中学后勤服务项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月04日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026024 项目名称：潮州市金山中学后勤服务项目 采购方式：公开招标 预算金额：5,663,433.60元 采购需求： 采购包1(潮州市金山中学后勤服务项目): 采购包预算金额： 5,663,433.60元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元) 1-1 其他商务服务 内宿及课余",
+  "contact": "13632039080 0768-2280181 卢巧玲 0768-2280181",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市金山中学",
+    "address": "广东省潮州市湘桥区桥东东山路99号",
+    "person": "",
+    "phone": "13632039080"
+   },
+   "agency": {
+    "name": "潮州市公共资源交易中心",
+    "address": "广东省潮州市潮州大道中段广发银行12楼",
+    "person": "卢巧玲",
+    "phone": "0768-2280181"
+   },
+   "project": {
+    "person": "卢巧玲",
+    "phone": "0768-2280181"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=43be227d-2bb4-44a0-b5a2-f50901418553&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610143487",
+  "title": "潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目招标公告",
+  "projectName": "潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目",
+  "projectCode": "CZZD[2026]A019",
+  "buyer": "潮州市生态环境局",
+  "agency": "潮州市正得项目管理咨询有限公司",
+  "budget": "5,300,000.00元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-14",
+  "deadline": "2026-11-04",
+  "bidOpenDate": "2026-11-04",
+  "summary": "项目概况 潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月04日 09时00分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZZD[2026]A019 项目名称：潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目 采购方式：公开招标 预算金额：5,300,000.00元 采购需求： 采购包1(潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目): 采购包预算金额： 5,300",
+  "contact": "0768-3288399 0768-2303555 邱先生 0768-2303555",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市生态环境局",
+    "address": "潮州大道凤新东路市环境监控中心大楼",
+    "person": "",
+    "phone": "0768-3288399"
+   },
+   "agency": {
+    "name": "潮州市正得项目管理咨询有限公司",
+    "address": "广东省潮州市湘桥区绿茵路金阳大厦202",
+    "person": "王绵",
+    "phone": "0768-2303555"
+   },
+   "project": {
+    "person": "邱先生",
+    "phone": "0768-2303555"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=79a3589b-6c2c-4e3c-9826-15ba041908eb&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云",
+   "监控"
+  ],
+  "businessTags": [
+   "监控",
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610125608",
+  "title": "饶平县新丰镇镇区环卫保洁项目竞争性磋商公告",
+  "projectName": "饶平县新丰镇镇区环卫保洁项目",
+  "projectCode": "445122-2026-01627",
+  "buyer": "饶平县新丰镇人民政府",
+  "agency": "建信大项目管理(广州)有限公司",
+  "budget": "1,050,000.00元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-12",
+  "deadline": "2026-10-23",
+  "bidOpenDate": "2026-10-23",
+  "summary": "项目概况 饶平县新丰镇镇区环卫保洁项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月23日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01627 项目名称：饶平县新丰镇镇区环卫保洁项目 采购方式：竞争性磋商 预算金额：1,050,000.00元 采购需求： 采购包1(饶平县新丰镇镇区环卫保洁项目): 采购包预算金额： 1,050,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元) 1-1 清",
+  "contact": "0768-8629526 0768-8595834 林工 0768-8595834",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县新丰镇人民政府",
+    "address": "广东省潮州市饶平县新丰镇新丰大道128号",
+    "person": "",
+    "phone": "0768-8629526"
+   },
+   "agency": {
+    "name": "建信大项目管理",
+    "address": "潮州市饶平县黄冈镇颐养居东北角办公楼4楼",
+    "person": "陈敏婷",
+    "phone": "0768-8595834"
+   },
+   "project": {
+    "person": "林工",
+    "phone": "0768-8595834"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=e296dd01-7396-48a1-9802-34c180967ab1&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610102912",
+  "title": "化学与精细化工广东省实验室潮州分中心实验室家具采购项目（项目编号：0724-2631ST825692）招标公告",
+  "projectName": "化学与精细化工广东省实验室潮州分中心实验室家具采购项目",
+  "projectCode": "0724-2631ST825692",
+  "buyer": "化学与精细化工广东省实验室潮州分中心",
+  "agency": "国义招标股份有限公司",
+  "budget": "1,804,885.94元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-10",
+  "deadline": "2026-11-02",
+  "bidOpenDate": "2026-11-02",
+  "summary": "项目概况 化学与精细化工广东省实验室潮州分中心实验室家具采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月02日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：0724-2631ST825692 项目名称：化学与精细化工广东省实验室潮州分中心实验室家具采购项目 采购方式：公开招标 预算金额：1,804,885.94元 采购需求： 采购包1(实验室家具): 采购包预算金额： 1,804,885.94元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(",
+  "contact": "0768-3260221 020-37860531、020-37860521、0754 邓彩云、戴琨琳、马倩升 020-37860531、020-37860521、0754",
+  "contacts": {
+   "purchaser": {
+    "name": "化学与精细化工广东省实验室潮州分中心",
+    "address": "潮州市潮安区安丰东路21号韩江实验室",
+    "person": "",
+    "phone": "0768-3260221"
+   },
+   "agency": {
+    "name": "国义招标股份有限公司",
+    "address": "广东省广州市越秀区广东省广州市越秀区东风东路726号18楼",
+    "person": "戴琨琳",
+    "phone": "020-37860531、020-37860521、0754"
+   },
+   "project": {
+    "person": "邓彩云、戴琨琳、马倩升",
+    "phone": "020-37860531、020-37860521、0754"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=3b7e8559-c5bb-4b5c-b8ed-1f805250671d&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "数字",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610107398",
+  "title": "饶平县民政局关于2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次)招标公告",
+  "projectName": "2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次)",
+  "projectCode": "LZZX-CZ-ZB-310426",
+  "buyer": "饶平县民政局",
+  "agency": "潮州市联正工程咨询有限公司",
+  "budget": "1,096,000.00元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-10",
+  "deadline": "2026-11-03",
+  "bidOpenDate": "2026-11-03",
+  "summary": "项目概况 2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次) 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月03日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：LZZX-CZ-ZB-310426 项目名称：2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次) 采购方式：公开招标 预算金额：1,096,000.00元 采购需求： 采购包1(2026年“银龄安康行动”老年人意外伤害综合保险采购项目): 采购包预算金额： 1,096,000.00元 品目号 ",
+  "contact": "0768-7803920 0768-2228456 邱工 0768-2228456",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县民政局",
+    "address": "广东省潮州市饶平县饶平大道中段",
+    "person": "",
+    "phone": "0768-7803920"
+   },
+   "agency": {
+    "name": "潮州市联正工程咨询有限公司",
+    "address": "广东省潮州市湘桥区潮州市湘桥区桥东街道卧石路浮堆西路4号综合楼301室",
+    "person": "卢若清",
+    "phone": "0768-2228456"
+   },
+   "project": {
+    "person": "邱工",
+    "phone": "0768-2228456"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=37fc2a1e-f9db-48a5-9851-cc7b2eaf8702&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610090265",
+  "title": "潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次)招标公告",
+  "projectName": "潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次)",
+  "projectCode": "HZJJCZCG2026007",
+  "buyer": "潮州市政府项目建设中心",
+  "agency": "惠州市建佳造价咨询事务所有限公司",
+  "budget": "4,352,559.98元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-09",
+  "deadline": "2026-10-30",
+  "bidOpenDate": "2026-10-30",
+  "summary": "项目概况 潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次) 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月30日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：HZJJCZCG2026007 项目名称：潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次) 采购方式：公开招标 预算金额：4,352,559.98元 采购需求： 采购包1(潮州市韩东新城防洪综合整",
+  "contact": "0768-2393053 13631004418 邢工 13631004418",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市政府项目建设中心",
+    "address": "潮州大道南段建设大厦三楼",
+    "person": "",
+    "phone": "0768-2393053"
+   },
+   "agency": {
+    "name": "惠州市建佳造价咨询事务所有限公司",
+    "address": "广东省潮州市枫溪区堤头村邱厝池如意楼701室",
+    "person": "邱学馨",
+    "phone": "13631004418"
+   },
+   "project": {
+    "person": "邢工",
+    "phone": "13631004418"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=76635a49-e2ca-4457-bf42-87183b1f019e&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610098659",
+  "title": "饶平县新丰镇村级生活垃圾转运项目竞争性磋商公告",
+  "projectName": "饶平县新丰镇村级生活垃圾转运项目",
+  "projectCode": "GDYS-2026-FWCG289",
+  "buyer": "饶平县新丰镇人民政府",
+  "agency": "广东源胜招标采购有限公司",
+  "budget": "1,300,000.00元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-09",
+  "deadline": "2026-10-22",
+  "bidOpenDate": "2026-10-22",
+  "summary": "项目概况 饶平县新丰镇村级生活垃圾转运项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月22日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：GDYS-2026-FWCG289 项目名称：饶平县新丰镇村级生活垃圾转运项目 采购方式：竞争性磋商 预算金额：1,300,000.00元 采购需求： 采购包1(饶平县新丰镇村级生活垃圾转运项目): 采购包预算金额： 1,300,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元)",
+  "contact": "13422001425 13172343312 黄工 13172343312",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县新丰镇人民政府",
+    "address": "广东省潮州市饶平县新丰镇新丰大道128号",
+    "person": "",
+    "phone": "13422001425"
+   },
+   "agency": {
+    "name": "广东源胜招标采购有限公司",
+    "address": "潮州市饶平县黄冈镇2058电商创意园A区107号-108号",
+    "person": "蔡建昌",
+    "phone": "13172343312"
+   },
+   "project": {
+    "person": "黄工",
+    "phone": "13172343312"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=ec622ebd-0a6b-4c98-850d-4dedf12202f1&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ }
+];
+const INLINE_SITE = [
+  {
+    "name": "中洲宏腾工程管理有限公司",
+    "url": "http://www.gdhtgs.com/index.asp",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 867,
+    "status_msg": "正常 864ms",
+    "error_detail": "",
+    "found_links": 46,
+    "matched_links": 0
+  },
+  {
+    "name": "广东河海工程咨询有限公司",
+    "url": "http://www.gdhhgroup.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 803,
+    "status_msg": "正常 798ms",
+    "error_detail": "",
+    "found_links": 8,
+    "matched_links": 0
+  },
+  {
+    "name": "公诚管理咨询有限公司",
+    "url": "https://www.chengezhao.com/cms/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 450,
+    "status_msg": "正常 447ms",
+    "error_detail": "",
+    "found_links": 34,
+    "matched_links": 9
+  },
+  {
+    "name": "深圳公共资源交易中心",
+    "url": "https://gego.zhongcy.com/mall-view/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 508,
+    "status_msg": "正常 507ms",
+    "error_detail": "",
+    "found_links": 2,
+    "matched_links": 1
+  },
+  {
+    "name": "中烟电子采购平台",
+    "url": "https://cgjy.tobacco.com.cn/zchwzb/38135.jhtml",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 10838,
+    "status_msg": "正常 10836ms",
+    "error_detail": "",
+    "found_links": 9,
+    "matched_links": 0
+  },
+  {
+    "name": "特采装备网",
+    "url": "https://www.tezhongzhuangbei.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 789,
+    "status_msg": "正常 754ms",
+    "error_detail": "",
+    "found_links": 419,
+    "matched_links": 71
+  },
+  {
+    "name": "穗科建管",
+    "url": "http://www.gzsuike.com/Home/index.html",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 293,
+    "status_msg": "正常 291ms",
+    "error_detail": "",
+    "found_links": 13,
+    "matched_links": 0
+  },
+  {
+    "name": "国家互联网基础资源大数据平台",
+    "url": "https://www.tendersinfo.cn/home",
+    "ok": false,
+    "http_code": 200,
+    "latency_ms": 372,
+    "status_msg": "内容异常 200",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "招标采购投标服务平台",
+    "url": "https://www.gxxszb.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 4444,
+    "status_msg": "正常 4440ms",
+    "error_detail": "",
+    "found_links": 95,
+    "matched_links": 2
+  },
+  {
+    "name": "深圳能源电子招标投标平台",
+    "url": "https://zb.sec.com.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 1152,
+    "status_msg": "正常 1150ms",
+    "error_detail": "",
+    "found_links": 47,
+    "matched_links": 10
+  },
+  {
+    "name": "广东省机电设备招标中心有限公司",
+    "url": "https://www.gdebidding.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 981,
+    "status_msg": "正常 978ms",
+    "error_detail": "",
+    "found_links": 23,
+    "matched_links": 6
+  },
+  {
+    "name": "中国铁塔",
+    "url": "https://ebid.chinatowercom.cn/zgtt/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 464,
+    "status_msg": "正常 460ms",
+    "error_detail": "",
+    "found_links": 49,
+    "matched_links": 14
+  },
+  {
+    "name": "广东志正招标有限公司",
+    "url": "https://www.zztender.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 253,
+    "status_msg": "正常 252ms",
+    "error_detail": "",
+    "found_links": 4,
+    "matched_links": 0
+  },
+  {
+    "name": "中国招标信息发布网",
+    "url": "http://www.cnzhaobiao.cn/",
+    "ok": false,
+    "http_code": 403,
+    "latency_ms": 118,
+    "status_msg": "HTTP 403",
+    "error_detail": "服务器拒绝（403 Forbidden）",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "广州公共资源交易中心",
+    "url": "http://www.gzggzy.cn/jyywjsgcqtgczbgg/1053647.jhtml",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 784,
+    "status_msg": "正常 782ms",
+    "error_detail": "",
+    "found_links": 43,
+    "matched_links": 7
+  },
+  {
+    "name": "潮州市饶平县人民政府网站",
+    "url": "https://www.raoping.gov.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 1692,
+    "status_msg": "正常 1689ms",
+    "error_detail": "",
+    "found_links": 9,
+    "matched_links": 1
+  },
+  {
+    "name": "铁建云链",
+    "url": "https://www.crccep.cn/homeIndex",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 189,
+    "status_msg": "正常 189ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "广东省网上中介服务超市",
+    "url": "https://ygp.gdzwfw.gov.cn/zjfwcs/gd-zjcs-pub/home",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 1764,
+    "status_msg": "正常 1761ms",
+    "error_detail": "",
+    "found_links": 20,
+    "matched_links": 0
+  },
+  {
+    "name": "广咨电子招投标电子平台",
+    "url": "https://www.gzebid.cn/#/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 382,
+    "status_msg": "正常 382ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "竞采星",
+    "url": "https://www.easyjcx.com/#/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 199,
+    "status_msg": "正常 199ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "广东省政府采购中心",
+    "url": "http://gpcgd.gd.gov.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 401,
+    "status_msg": "正常 396ms",
+    "error_detail": "",
+    "found_links": 144,
+    "matched_links": 39
+  },
+  {
+    "name": "广东政务服务网",
+    "url": "https://tzxm.gd.gov.cn/index.html",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 426,
+    "status_msg": "正常 424ms",
+    "error_detail": "",
+    "found_links": 11,
+    "matched_links": 1
+  },
+  {
+    "name": "金采网",
+    "url": "http://www.cfcpn.com/jcw/index",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 221,
+    "status_msg": "正常 221ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "中国政府采购网",
+    "url": "http://www.ccgp.gov.cn/index.shtml",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 122,
+    "status_msg": "正常 117ms",
+    "error_detail": "",
+    "found_links": 166,
+    "matched_links": 16
+  },
+  {
+    "name": "广东国科招标有限公司",
+    "url": "http://www.gzgkbidding.com/index.php?m=Home&c=Index&a=index",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 361,
+    "status_msg": "正常 360ms",
+    "error_detail": "",
+    "found_links": 9,
+    "matched_links": 2
+  },
+  {
+    "name": "军队采购网",
+    "url": "https://www.plap.mil.cn/freecms/site/juncai/index.html",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 784,
+    "status_msg": "正常 780ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "全国招标采购公共服务平台",
+    "url": "https://www.hnzbcgxxw.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 581,
+    "status_msg": "正常 579ms",
+    "error_detail": "",
+    "found_links": 45,
+    "matched_links": 2
+  },
+  {
+    "name": "深圳阳光采购平台",
+    "url": "https://www.szygcgpt.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 195,
+    "status_msg": "正常 194ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "大唐电子商务平台",
+    "url": "https://www.cdt-ec.com/home/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 321,
+    "status_msg": "正常 321ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "潮州市正得项目管理咨询有限公司",
+    "url": "http://www.czzhengde.com/index.asp",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 4249,
+    "status_msg": "正常 4248ms",
+    "error_detail": "",
+    "found_links": 5,
+    "matched_links": 0
+  },
+  {
+    "name": "广东省公共资源交易平台",
+    "url": "https://ygp.gdzwfw.gov.cn/#/44/index",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 267,
+    "status_msg": "正常 267ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "广东省政府采购网",
+    "url": "https://gdgpo.czt.gd.gov.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 236,
+    "status_msg": "正常 236ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "全国公共资源交易平台",
+    "url": "https://www.ggzy.gov.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 447,
+    "status_msg": "正常 444ms",
+    "error_detail": "",
+    "found_links": 73,
+    "matched_links": 11
+  },
+  {
+    "name": "国义招标股份有限公司",
+    "url": "https://www.gmgitc.com/Index",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 375,
+    "status_msg": "正常 374ms",
+    "error_detail": "",
+    "found_links": 6,
+    "matched_links": 0
+  },
+  {
+    "name": "广东华伦",
+    "url": "https://www.gdhualun.com.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 678,
+    "status_msg": "正常 677ms",
+    "error_detail": "",
+    "found_links": 10,
+    "matched_links": 2
+  },
+  {
+    "name": "潮州市中正招投标代理有限公司",
+    "url": "https://www.czzhongzheng.com/sy",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 1493,
+    "status_msg": "正常 1493ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "广东省农村产权流转交易管理服务平台",
+    "url": "https://cqjy.gdagri.gov.cn/trade",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 2017,
+    "status_msg": "正常 2015ms",
+    "error_detail": "",
+    "found_links": 1,
+    "matched_links": 1
+  },
+  {
+    "name": "南方电网电子采购交易平台",
+    "url": "https://ecsg.com.cn/cms//index.html",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 731,
+    "status_msg": "正常 729ms",
+    "error_detail": "",
+    "found_links": 12,
+    "matched_links": 7
+  },
+  {
+    "name": "中通服供应链股份有限公司电子招标系统",
+    "url": "https://zb.chinaccsscm.cn/",
+    "ok": false,
+    "http_code": 412,
+    "latency_ms": 353,
+    "status_msg": "HTTP 412",
+    "error_detail": "HTTP 412 错误",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "中国招标投标公共服务平台",
+    "url": "https://bulletin.cebpubservice.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 841,
+    "status_msg": "正常 840ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "人保E采",
+    "url": "https://ec.picc.com/cms/default/webfile/index.html",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 535,
+    "status_msg": "正常 534ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "粤海水务阳光采购平台",
+    "url": "https://dzzc.guangdongwater.com/cms/index.html",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 475,
+    "status_msg": "正常 473ms",
+    "error_detail": "",
+    "found_links": 15,
+    "matched_links": 1
+  },
+  {
+    "name": "潮州市中杰工程咨询有限公司",
+    "url": "https://www.czszjgczx.com/h-col-108.html",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 538,
+    "status_msg": "正常 537ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "广东子乔建设管理有限公司",
+    "url": "http://www.ziqiaojianshe.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 607,
+    "status_msg": "正常 607ms",
+    "error_detail": "",
+    "found_links": 1,
+    "matched_links": 0
+  },
+  {
+    "name": "广东教采云零散采购竞价平台",
+    "url": "https://www.gdedulscg.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 3051,
+    "status_msg": "正常 3047ms",
+    "error_detail": "",
+    "found_links": 5,
+    "matched_links": 0
+  },
+  {
+    "name": "广东省招标投标监管网",
+    "url": "http://zbtb.gd.gov.cn/#/index",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 157,
+    "status_msg": "正常 157ms",
+    "error_detail": "",
+    "found_links": 0,
+    "matched_links": 0
+  },
+  {
+    "name": "智汇城市",
+    "url": "http://www.gdzhcity.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 1050,
+    "status_msg": "正常 1047ms",
+    "error_detail": "",
+    "found_links": 69,
+    "matched_links": 8
+  },
+  {
+    "name": "广东南方数码科技股份有限公司",
+    "url": "https://o.southgis.com/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 1958,
+    "status_msg": "正常 1954ms",
+    "error_detail": "",
+    "found_links": 28,
+    "matched_links": 6
+  },
+  {
+    "name": "中国财经报",
+    "url": "https://www.cfen.com.cn/",
+    "ok": true,
+    "http_code": 200,
+    "latency_ms": 476,
+    "status_msg": "正常 473ms",
+    "error_detail": "",
+    "found_links": 99,
+    "matched_links": 11
+  }
+];
+
+// --- script[1] ---
+</script>
+<script>
+// 从 data/announcements.json 加载真实招标数据
+// 其他页面用内联测试数据
+async function loadAnnouncements() { return INLINE_ANN; }
+
+async function loadSiteResults() { return INLINE_SITE; }
+
+// ============================================================
+// 团队优先级 / 顺序说明（勿随意改动！）
+//   ① 集团客户部   —— 战略级客户，固定排在团队管理页首卡
+//   ② 战客中心
+//   ③ 市区
+//   ④ 潮安
+//   ⑤ 饶平
+// 若后续新增团队，必须先与老大确认是否需要调整排序。
+// ============================================================
+const TEAM_GROUPS = [
+  { id: 1, name: '集团客户部', region: '集团客户部', admin: '佘淑娟', adminContact: '13600121222', adminAccount: 'sheshujuan', createdAt: '2025-04-20', members: [], memberPinyin: [], memberContacts: [], position: '负责人' },
+  { id: 2, name: '战客中心', region: '战客中心', admin: '李晓仪', adminContact: '13923509399', adminAccount: 'lixiaoyi', createdAt: '2025-01-15', members: [], memberPinyin: [], memberContacts: [], position: '负责人' },
+  { id: 3, name: '市区', region: '市区', admin: '黄昕翀', adminContact: '13828363210', adminAccount: 'huangxinchong', createdAt: '2025-02-20', members: [], memberPinyin: [], memberContacts: [], position: '负责人' },
+  { id: 4, name: '潮安', region: '潮安', admin: '林潇宇', adminContact: '13534633962', adminAccount: 'linxiaoyu2', createdAt: '2025-03-10', members: [], memberPinyin: [], memberContacts: [], position: '负责人' },
+  { id: 5, name: '饶平', region: '饶平', admin: '林旭勋', adminContact: '13923527333', adminAccount: 'linxuxun', createdAt: '2025-04-05', members: [], memberPinyin: [], memberContacts: [], position: '负责人' },
+];
+
+// 进度选项（预制）——老大 2026-10-23 新增「已确认」状态
+const PROGRESS_OPTIONS = ['待分配', '已分配', '已确认'];
+
+// 任务提醒数据（根据公告数据动态生成）
+function generateReminders(announcements) {
+  const reminders = [];
+  let id = 1;
+  announcements.forEach(a => {
+    // 已确认的公告不再生成任何提醒
+    if (a.progress === '已确认') return;
+    // 管理员超时未分配提醒
+    if (a.progress === '待分配' || !a.currentHandler) {
+      reminders.push({
+        id: id++,
+        type: 'admin-assign',
+        label: '管理员分派',
+        title: `项目「${(a.projectName || a.title).slice(0, 30)}...」已入库 ${Math.floor(Math.random()*3)+1} 天未分配`,
+        targetId: a.id,
+        time: a.createdAt,
+        level: 'urgent',
+        district: a.district,
+        annTitle: a.title,
+        annProgress: a.progress || '待分配',
+        annCurrentHandler: a.currentHandler || ''
+      });
+    }
+    // 业务员跟进提醒
+    if (a.progress === '已分配') {
+      const daysToFollow = Math.floor(Math.random()*5);
+      reminders.push({
+        id: id++,
+        type: 'sales-follow',
+        label: '业务员跟进',
+        title: `项目「${(a.projectName || a.title).slice(0, 30)}...」需跟进`,
+        targetId: a.id,
+        time: a.nextFollowUp,
+        level: daysToFollow <= 1 ? 'urgent' : (daysToFollow <= 3 ? 'warn' : 'info'),
+        district: a.district,
+        annTitle: a.title,
+        annProgress: a.progress || '已分配',
+        annCurrentHandler: a.currentHandler || ''
+      });
+    }
+  });
+  return reminders;
+}
+
+// 定时任务配置（部分字段运行时动态更新）
+const SCHEDULE_CONFIG = {
+  keywordList: '信息化、智能化、弱电、智慧、数字、平台、系统、软件、大数据、云、机房、数据中心、网络、等保、网络安全、监控、安防、视频、雪亮、物联、5G、室分、无线覆盖、WiFi、专线、光缆、通信、IDC、AI、大模型、数字人、无人机、低空、一卡通、门禁、停车、充电桩、光伏、储能、烟感、消防物联、明厨亮灶、在线监测'.split('、'),
+  crawlInterval: '每2小时',
+  reminderInterval: '每天 09:00, 15:00',
+  crawlStatus: '运行中',
+};
+// 数据源注册表（与 collector/sources.json 同步；后续增删只需改这里，不动采集代码）
+const SOURCES_DATA = [
+  {
+    "name": "潮州市公共资源交易中心",
+    "url": "https://www.czggzy.com:8088",
+    "domain": "www.czggzy.com",
+    "sourceCode": "czggzy",
+    "enabled": true
+  },
+  {
+    "name": "中洲宏腾工程管理有限公司",
+    "url": "http://www.gdhtgs.com/index.asp",
+    "domain": "www.gdhtgs.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东河海工程咨询有限公司",
+    "url": "http://www.gdhhgroup.com/",
+    "domain": "www.gdhhgroup.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "公诚管理咨询有限公司",
+    "url": "https://www.chengezhao.com/cms/",
+    "domain": "www.chengezhao.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "深圳公共资源交易中心",
+    "url": "https://gego.zhongcy.com/mall-view/",
+    "domain": "gego.zhongcy.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中烟电子采购平台",
+    "url": "https://cgjy.tobacco.com.cn/zchwzb/38135.jhtml",
+    "domain": "cgjy.tobacco.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "特采装备网",
+    "url": "https://www.tezhongzhuangbei.com/",
+    "domain": "www.tezhongzhuangbei.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "穗科建管",
+    "url": "http://www.gzsuike.com/Home/index.html",
+    "domain": "www.gzsuike.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "国家互联网基础资源大数据平台",
+    "url": "https://www.tendersinfo.cn/home",
+    "domain": "www.tendersinfo.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "招标采购投标服务平台",
+    "url": "https://www.gxxszb.com/",
+    "domain": "www.gxxszb.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "深圳能源电子招标投标平台",
+    "url": "https://zb.sec.com.cn/",
+    "domain": "zb.sec.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省机电设备招标中心有限公司",
+    "url": "https://www.gdebidding.com/",
+    "domain": "www.gdebidding.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国铁塔",
+    "url": "https://ebid.chinatowercom.cn/zgtt/",
+    "domain": "ebid.chinatowercom.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东志正招标有限公司",
+    "url": "https://www.zztender.com/",
+    "domain": "www.zztender.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国招标信息发布网",
+    "url": "http://www.cnzhaobiao.cn/",
+    "domain": "www.cnzhaobiao.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广州公共资源交易中心",
+    "url": "http://www.gzggzy.cn/jyywjsgcqtgczbgg/1053647.jhtml",
+    "domain": "www.gzggzy.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "潮州市饶平县人民政府网站",
+    "url": "https://www.raoping.gov.cn/",
+    "domain": "www.raoping.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "铁建云链",
+    "url": "https://www.crccep.cn/homeIndex",
+    "domain": "www.crccep.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省网上中介服务超市",
+    "url": "https://ygp.gdzwfw.gov.cn/zjfwcs/gd-zjcs-pub/home",
+    "domain": "ygp.gdzwfw.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广咨电子招投标电子平台",
+    "url": "https://www.gzebid.cn/#/",
+    "domain": "www.gzebid.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "竞采星",
+    "url": "https://www.easyjcx.com/#/",
+    "domain": "www.easyjcx.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省政府采购中心",
+    "url": "http://gpcgd.gd.gov.cn/",
+    "domain": "gpcgd.gd.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东政务服务网",
+    "url": "https://tzxm.gd.gov.cn/index.html",
+    "domain": "tzxm.gd.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "金采网",
+    "url": "http://www.cfcpn.com/jcw/index",
+    "domain": "www.cfcpn.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国政府采购网",
+    "url": "http://www.ccgp.gov.cn/index.shtml",
+    "domain": "www.ccgp.gov.cn",
+    "sourceCode": "ccgp",
+    "enabled": true
+  },
+  {
+    "name": "广东国科招标有限公司",
+    "url": "http://www.gzgkbidding.com/index.php?m=Home&c=Index&a=index",
+    "domain": "www.gzgkbidding.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "军队采购网",
+    "url": "https://www.plap.mil.cn/freecms/site/juncai/index.html",
+    "domain": "www.plap.mil.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "全国招标采购公共服务平台",
+    "url": "https://www.hnzbcgxxw.com/",
+    "domain": "www.hnzbcgxxw.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "深圳阳光采购平台",
+    "url": "https://www.szygcgpt.com/",
+    "domain": "www.szygcgpt.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "大唐电子商务平台",
+    "url": "https://www.cdt-ec.com/home/",
+    "domain": "www.cdt-ec.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "潮州市正得项目管理咨询有限公司",
+    "url": "http://www.czzhengde.com/index.asp",
+    "domain": "www.czzhengde.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省公共资源交易平台",
+    "url": "https://ygp.gdzwfw.gov.cn/#/44/index",
+    "domain": "ygp.gdzwfw.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省政府采购网",
+    "url": "https://gdgpo.czt.gd.gov.cn/",
+    "domain": "gdgpo.czt.gd.gov.cn",
+    "sourceCode": "gdgpo",
+    "enabled": true
+  },
+  {
+    "name": "全国公共资源交易平台",
+    "url": "https://www.ggzy.gov.cn/",
+    "domain": "www.ggzy.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "国义招标股份有限公司",
+    "url": "https://www.gmgitc.com/Index",
+    "domain": "www.gmgitc.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东华伦",
+    "url": "https://www.gdhualun.com.cn/",
+    "domain": "www.gdhualun.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "潮州市中正招投标代理有限公司",
+    "url": "https://www.czzhongzheng.com/sy",
+    "domain": "www.czzhongzheng.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省农村产权流转交易管理服务平台",
+    "url": "https://cqjy.gdagri.gov.cn/trade",
+    "domain": "cqjy.gdagri.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "南方电网电子采购交易平台",
+    "url": "https://ecsg.com.cn/cms//index.html",
+    "domain": "ecsg.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中通服供应链股份有限公司电子招标系统",
+    "url": "https://zb.chinaccsscm.cn/",
+    "domain": "zb.chinaccsscm.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国招标投标公共服务平台",
+    "url": "https://bulletin.cebpubservice.com/",
+    "domain": "bulletin.cebpubservice.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "人保E采",
+    "url": "https://ec.picc.com/cms/default/webfile/index.html",
+    "domain": "ec.picc.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "粤海水务阳光采购平台",
+    "url": "https://dzzc.guangdongwater.com/cms/index.html",
+    "domain": "dzzc.guangdongwater.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "潮州市中杰工程咨询有限公司",
+    "url": "https://www.czszjgczx.com/h-col-108.html",
+    "domain": "www.czszjgczx.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东子乔建设管理有限公司",
+    "url": "http://www.ziqiaojianshe.cn/",
+    "domain": "www.ziqiaojianshe.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东教采云零散采购竞价平台",
+    "url": "https://www.gdedulscg.cn/",
+    "domain": "www.gdedulscg.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东省招标投标监管网",
+    "url": "http://zbtb.gd.gov.cn/#/index",
+    "domain": "zbtb.gd.gov.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "智汇城市",
+    "url": "http://www.gdzhcity.com/",
+    "domain": "www.gdzhcity.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "广东南方数码科技股份有限公司",
+    "url": "https://o.southgis.com/",
+    "domain": "o.southgis.com",
+    "sourceCode": "generic",
+    "enabled": true
+  },
+  {
+    "name": "中国财经报",
+    "url": "https://www.cfen.com.cn/",
+    "domain": "www.cfen.com.cn",
+    "sourceCode": "generic",
+    "enabled": true
+  }
+];
+
+// ===== 数据加载函数 =====
+</script>
+<script>// ===== 主应用逻辑（由标讯助手demo.html 自动同步）=====
+
+// --- script[2] ---
+// 标讯助手 Demo - 主应用逻辑
+
+// 登录账号（由 TEAM_GROUPS 自动派生，统一密码 123456）
+const USERS = TEAM_GROUPS.map(g => ({
+  account: g.adminAccount,
+  name: g.admin,
+  phone: g.adminContact,
+  group: g.name,
+  groupId: g.id,
+  password: '123456'
+}));
+
+// 登录持久化 key
+const LS_USER = 'currentUser';
+
+// 商机管理必填字段（老大 2026-10-23 定案）
+const REQUIRED_OPP_FIELDS = [
+  { key: 'isValidOpportunity', label: '是否有效商机' },
+  { key: 'hasOperatorInvolvement', label: '是否有运营商参与' },
+  { key: 'opportunityCode', label: '商机编码' },
+  { key: 'willBid', label: '是否应标' },
+];
+
+let state = {
+  currentUser: null,      // { account, name, phone, group, groupId }
+  page: 'announcements',
+  announcements: [],
+  siteResults: [],        // 真实站点采集结果
+  filteredList: [],
+  reminders: [],
+  selectedReminderIds: new Set(),
+  filters: { keyword: '', region: '', district: '', progress: '', bidStatus: '', businessTag: '' },
+  detailId: null,
+  modal: null, // 'assign' | 'batch-assign' | 'reminder-batch-assign' | 'progress' | 'add-group' | 'edit-group' | null
+  assignAnnId: null,
+  progressAnnId: null,
+  editGroupId: null,
+  selectedAnnIds: new Set(),
+  // 翻页
+  pageSize: 10,           // 10 / 50 / 100 / 0(全部)
+  currentPage: 1,
+  reminderDistrictFilter: '',  // 任务提醒页专属区县筛选
+};
+
+// ============ 初始化 ============
+// ============ 商机管理 localStorage 持久化 ============
+function restoreOpportunities() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('opp_fields') || '{}');
+    for (const ann of state.announcements) {
+      const s = saved[ann.id];
+      if (s) {
+        for (const [k, v] of Object.entries(s)) {
+          // 数组字段: 存时是JSON字符串, 读时parse
+          if (k === 'progressRecords' && typeof v === 'string') {
+            try { ann.progressRecords = JSON.parse(v); } catch { ann.progressRecords = []; }
+          } else {
+            ann[k] = v;
+          }
+        }
+      }
+    }
+  } catch (e) {}
+}
+function saveOpportunityField(annId, field, value) {
+  try {
+    const saved = JSON.parse(localStorage.getItem('opp_fields') || '{}');
+    saved[annId] = saved[annId] || {};
+    // 数组字段自动JSON序列化
+    if (Array.isArray(value)) {
+      saved[annId][field] = JSON.stringify(value);
+    } else {
+      saved[annId][field] = value;
+    }
+    localStorage.setItem('opp_fields', JSON.stringify(saved));
+  } catch (e) {}
+}
+function bindOpportunityEvents() {
+  document.querySelectorAll('[data-opp-field]').forEach(el => {
+    const annId = state.detailId;
+    if (!annId) return;
+    const field = el.dataset.oppField;
+    const ev = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(ev, () => {
+      const ann = state.announcements.find(x => x.id === annId);
+      if (ann) ann[field] = el.value;
+      saveOpportunityField(annId, field, el.value);
+    });
+  });
+}
+
+// ============ 商机管理 · 信息已确认（校验 + 保存） ============
+function confirmOpportunity() {
+  const annId = state.detailId;
+  if (!annId) return;
+  const ann = state.announcements.find(x => x.id === annId);
+  if (!ann) return;
+
+  // 先从 DOM 同步商机字段到 ann 对象（防止用户填了表单但对象没更新）
+  document.querySelectorAll('[data-opp-field]').forEach(el => {
+    const field = el.dataset.oppField;
+    ann[field] = el.value;
+    saveOpportunityField(annId, field, el.value);
+  });
+
+  // 校验 4 个必填字段
+  const missing = [];
+  REQUIRED_OPP_FIELDS.forEach(f => {
+    const v = (ann[f.key] || '').trim();
+    if (!v) missing.push(f.label);
+  });
+  if (missing.length > 0) {
+    alert('请先完善以下必填项：\n  - ' + missing.join('\n  - '));
+    return;
+  }
+
+  // 保存为「已确认」
+  ann.progress = '已确认';
+  ann.progressRecords = ann.progressRecords || [];
+  ann.progressRecords.push({
+    progress: '已确认',
+    follower: state.currentUser ? state.currentUser.name : '当前用户',
+    followDate: new Date().toISOString().slice(0, 10),
+    note: '商机信息已完整确认'
+  });
+  saveOpportunityField(annId, 'progress', '已确认');
+  saveOpportunityField(annId, 'progressRecords', ann.progressRecords);
+
+  // 重新生成提醒（过滤掉已确认）
+  state.reminders = generateReminders(state.announcements);
+
+  alert('✅ 商机信息已确认！');
+  render();
+}
+
+async function init() {
+  state.announcements = await loadAnnouncements();
+  state.siteResults = await loadSiteResults();
+  state.reminders = generateReminders(state.announcements);
+  restoreOpportunities();
+  // 恢复登录态
+  try {
+    const saved = localStorage.getItem(LS_USER);
+    if (saved) state.currentUser = JSON.parse(saved);
+  } catch (e) {}
+  applyFilters();
+  render();
+}
+
+// ============ 筛选逻辑 ============
+function applyFilters() {
+  const f = state.filters;
+  state.filteredList = state.announcements.filter(a => {
+    if (f.keyword) {
+      const kw = f.keyword.toLowerCase();
+      if (!a.title.toLowerCase().includes(kw) && !a.projectName.toLowerCase().includes(kw) && !a.buyer.toLowerCase().includes(kw) && !a.matchedKeywords.some(k => k.toLowerCase().includes(kw)))
+        return false;
+    }
+    if (f.region && a.region !== f.region) return false;
+    if (f.district && a.district !== f.district) return false;
+    if (f.progress && a.progress !== f.progress) return false;
+    if (f.bidStatus && computeBidStatus(a) !== f.bidStatus) return false;
+    if (f.businessTag && !(a.businessTags || []).includes(f.businessTag)) return false;
+    return true;
+  });
+  state.filteredList.sort((a, b) => b.pubDate.localeCompare(a.pubDate));
+  state.currentPage = 1;  // 筛选变化时回到第一页
+}
+
+// ============ 渲染主框架 ============
+function render() {
+  const app = document.getElementById('app');
+
+  // 未登录 → 渲染独立登录页（不要主框架）
+  if (!state.currentUser) {
+    app.innerHTML = renderLoginPage();
+    bindLoginEvents();
+    return;
+  }
+
+  app.innerHTML = `
+    <div class="flex h-screen overflow-hidden">
+      ${renderSidebar()}
+      <div class="flex-1 flex flex-col overflow-hidden">
+        ${renderHeader()}
+        <main class="flex-1 scrollbar-thin p-6" style="overflow-y:auto;overflow-x:hidden">
+          ${renderPage()}
+        </main>
+      </div>
+    </div>
+    ${state.modal === 'assign' ? renderAssignModal() : state.modal === 'batch-assign' ? renderBatchAssignModal() : state.modal === 'reminder-batch-assign' ? renderReminderBatchAssignModal() : state.modal === 'kw-delete' ? renderKwDeleteModal() : ''}
+    ${state.modal === 'progress' ? renderProgressModal() : ''}
+    ${state.modal === 'add-group' ? renderAddGroupModal() : ''}
+    ${state.modal === 'edit-group' ? renderEditGroupModal() : ''}
+  `;
+  bindEvents();
+}
+
+// ============ 登录页面 ============
+function renderLoginPage() {
+  return `
+    <!-- 动态渐变背景 -->
+    <div class="login-bg h-screen w-screen relative overflow-hidden flex items-center justify-center">
+      <!-- 装饰圆 -->
+      <div class="login-blob login-blob-1"></div>
+      <div class="login-blob login-blob-2"></div>
+      <div class="login-blob login-blob-3"></div>
+      
+      <!-- 毛玻璃卡片 -->
+      <div class="login-card fade-in" style="width:420px">
+        <!-- Logo + 标题 -->
+        <div class="text-center mb-8">
+          <div class="w-[200px] h-14 mx-auto rounded-xl flex items-center justify-center text-white font-bold text-2xl shadow-lg tracking-wider"
+               style="background:linear-gradient(135deg,#3b82f6 0%,#1e40af 100%)">
+            标讯助手
+          </div>
+          <div class="text-sm text-gray-500 mt-4">智能招标信息管理平台</div>
+        </div>
+
+        <!-- 登录表单 -->
+        <div class="space-y-4">
+          <!-- 账号 -->
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            <input id="login-account" type="text" placeholder="请输入账号"
+                   class="login-input"
+                   autocomplete="username">
+          </div>
+          
+          <!-- 密码 -->
+          <div class="login-input-wrap">
+            <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            <input id="login-password" type="password" placeholder="请输入密码"
+                   class="login-input"
+                   autocomplete="current-password">
+          </div>
+
+          <!-- 登录按钮 -->
+          <button id="login-btn" class="login-btn">
+            <span>登 录</span>
+            <svg class="login-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- 底部提示 -->
+        <div class="mt-7 pt-5 border-t border-gray-200/60">
+          <div class="flex items-center justify-center gap-1.5 text-xs text-gray-400">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+            <span>演示环境</span>
+          </div>
+          <div class="text-center text-xs text-gray-300 mt-2 leading-relaxed">
+            账号：sheshujuan / lixiaoyi / huangxinchong / linxiaoyu2 / linxuxun<br>
+            密码统一：<span class="font-mono text-gray-400">123456</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindLoginEvents() {
+  const btn = document.getElementById('login-btn');
+  if (!btn) return;
+  btn.onclick = doLogin;
+  document.querySelectorAll('#login-account, #login-password').forEach(el => {
+    el.onkeydown = (e) => { if (e.key === 'Enter') doLogin(); };
+  });
+}
+
+function doLogin() {
+  const account = document.getElementById('login-account').value.trim();
+  const password = document.getElementById('login-password').value.trim();
+  if (!account || !password) { alert('请输入账号和密码'); return; }
+  const u = USERS.find(x => x.account === account && x.password === password);
+  if (!u) { alert('账号或密码错误'); return; }
+  // 登录成功
+  const user = { account: u.account, name: u.name, phone: u.phone, group: u.group, groupId: u.groupId };
+  state.currentUser = user;
+  localStorage.setItem(LS_USER, JSON.stringify(user));
+  render();
+}
+
+function doLogout() {
+  if (!confirm('确认退出登录？')) return;
+  state.currentUser = null;
+  localStorage.removeItem(LS_USER);
+  state.selectedReminderIds.clear();
+  state.selectedAnnIds.clear();
+  state.detailId = null;
+  state.modal = null;
+  render();
+}
+
+function renderSidebar() {
+  const items = [
+    { key: 'announcements', label: '招标公告', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
+    { key: 'reminders', label: '任务提醒', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' },
+    { key: 'team', label: '团队管理', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+    { key: 'schedule', label: '定时任务', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { key: 'sources', label: '数据来源', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
+  ];
+  return `
+    <aside class="w-60 bg-white border-r border-gray-200 flex flex-col">
+      <div class="h-16 flex items-center gap-3 px-5 border-b border-gray-200">
+        <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">标</div>
+        <div>
+          <div class="font-semibold text-gray-900">标讯助手</div>
+          <div class="text-xs text-gray-400">Demo v1.0</div>
+        </div>
+      </div>
+      <nav class="flex-1 py-3 px-2 space-y-1">
+        ${items.map(i => `
+          <div class="sidebar-item ${state.page === i.key ? 'active' : ''} flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer text-sm text-gray-600" data-page="${i.key}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="${i.icon}"></path>
+            </svg>
+            ${i.label}
+            ${i.key === 'reminders' ? (() => { const cnt = getFilteredReminders().length; return cnt > 0 ? `<span class="ml-auto bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full animate-pulse">${cnt}</span>` : ''; })() : ''}
+          </div>
+        `).join('')}
+      </nav>
+      <div class="px-4 py-3 border-t border-gray-200 text-xs text-gray-400">
+        <div>战略客户中心</div>
+        <div>行业：党政/医疗/工业…</div>
+      </div>
+    </aside>
+  `;
+}
+
+function renderHeader() {
+  const pageTitle = { announcements: '招标公告', sources: '数据来源', reminders: '任务提醒', team: '团队管理', schedule: '定时任务配置' }[state.page];
+  const stats = getStats();
+  const siteOk = state.siteResults.filter(r => r.ok).length;
+  const lastCrawl = state.siteResults.length > 0 
+    ? new Date(Math.max(...state.siteResults.map(r => 0))).toLocaleString('zh-CN') 
+    : '—';
+  return `
+    <header class="h-16 bg-white border-b border-gray-200 flex items-center px-6 gap-6">
+      <div>
+        <h1 class="text-lg font-semibold text-gray-900">${pageTitle}</h1>
+        <p class="text-xs text-gray-400">当前共 ${state.filteredList.length} 条公告 · 数据来源 ${siteOk}/${SOURCES_DATA.filter(s => s.enabled).length} 个网站</p>
+      </div>
+      ${state.page === 'announcements' ? `
+        <div class="ml-auto flex items-center gap-2">
+          <div class="text-sm text-gray-500">
+            <span class="font-semibold text-gray-700">${stats.todayCount}</span> 今日新增 · 
+            <span class="font-semibold text-orange-600">${stats.unassignedCount}</span> 待分配 · 
+            <span class="font-semibold text-blue-600">${stats.inProgressCount}</span> 已分配
+          </div>
+          <button class="text-xs text-gray-400 hover:text-blue-600 px-3 py-1.5 border border-gray-200 rounded-lg" id="btn-refresh">
+            🔄 刷新抓取
+          </button>
+        </div>
+      ` : `<div class="ml-auto text-sm text-gray-500"></div>`}
+      <!-- 当前登录用户 -->
+      <div class="flex items-center gap-3 pl-3 ml-2 border-l border-gray-200">
+        <div class="text-right">
+          <div class="text-sm font-medium text-gray-800">${state.currentUser ? state.currentUser.name : ''}</div>
+          <div class="text-xs text-gray-400">${state.currentUser ? state.currentUser.group : ''}</div>
+        </div>
+        <button id="btn-logout" class="text-xs text-gray-500 hover:text-red-600 px-2.5 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50">
+          退出
+        </button>
+      </div>
+    </header>
+  `;
+}
+
+function getStats() {
+  const today = new Date().toISOString().slice(0, 10);
+  return {
+    todayCount: state.announcements.filter(a => a.pubDate === today).length,
+    unassignedCount: state.announcements.filter(a => a.progress === '待分配' || !a.currentHandler).length,
+    inProgressCount: state.announcements.filter(a => a.progress === '已分配').length,
+  };
+}
+
+// ============ 页面渲染 ============
+function renderPage() {
+  if (state.detailId) return renderAnnouncementDetail();
+  switch (state.page) {
+    case 'announcements': return renderAnnouncementList();
+    case 'sources': return renderSources();
+    case 'reminders': return renderReminders();
+    case 'team': return renderTeam();
+    case 'schedule': return renderSchedule();
+  }
+}
+
+// ---- 招标公告列表 ----
+function renderAnnouncementList() {
+  const districts = [...new Set(state.announcements.map(a => a.district))].sort();
+  const tags = [...new Set(state.announcements.flatMap(a => a.businessTags || []))].sort();
+  const progresses = ['待分配', '已分配'];
+  const bidStatuses = ['意向', '挂网', '截止报名', '开标'];
+
+  // 翻页逻辑
+  const total = state.page === 'reminders' ? state.reminders.length : state.filteredList.length;
+  const pageSize = state.pageSize === 0 ? total : state.pageSize;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(state.currentPage, totalPages);
+  const startIdx = (currentPage - 1) * pageSize;
+  const pageData = state.pageSize === 0 ? state.filteredList : state.filteredList.slice(startIdx, startIdx + pageSize);
+
+  // 页码按钮（最多显示7个）
+  let pageButtons = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pageButtons.push(i);
+  } else {
+    pageButtons.push(1);
+    let s = Math.max(2, currentPage - 1);
+    let e = Math.min(totalPages - 1, currentPage + 1);
+    if (s > 2) pageButtons.push('...');
+    for (let i = s; i <= e; i++) pageButtons.push(i);
+    if (e < totalPages - 1) pageButtons.push('...');
+    pageButtons.push(totalPages);
+  }
+
+  return `
+    <!-- 筛选区 + 批量操作（同一行，右侧浮入） -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 mb-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <input type="text" placeholder="搜索标题 / 采购人 / 关键词..." 
+               class="min-w-[200px] w-[340px] h-9 px-3 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" 
+               value="${state.filters.keyword}" data-filter="keyword">
+        <select class="h-9 px-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" data-filter="district">
+          <option value="">全部区县</option>
+          ${districts.map(d => `<option value="${d}" ${state.filters.district===d?'selected':''}>${d}</option>`).join('')}
+        </select>
+        <select class="h-9 px-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" data-filter="businessTag">
+          <option value="">全部业务标签</option>
+          ${tags.map(t => `<option value="${t}" ${state.filters.businessTag===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+        <select class="h-9 px-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" data-filter="progress">
+          <option value="">全部进度</option>
+          ${progresses.map(p => `<option value="${p}" ${state.filters.progress===p?'selected':''}>${p}</option>`).join('')}
+        </select>
+        <select class="h-9 px-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" data-filter="bidStatus">
+          <option value="">全部标讯状态</option>
+          ${bidStatuses.map(s => `<option value="${s}" ${state.filters.bidStatus===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+
+        <!-- 批量操作：默认隐藏，选中时 inline 出现在最右侧 -->
+        <div id="batchBar" style="display:none" class="flex items-center gap-1.5 ml-auto">
+          <span id="batchCount" class="text-xs text-blue-600 font-medium whitespace-nowrap">已选 0 条</span>
+          ${state.currentUser && state.currentUser.group === '集团客户部'
+          ? `<button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="batchAssignBtn">批量分配</button>`
+          : `<button class="px-3 py-1 text-xs bg-gray-300 text-white rounded cursor-not-allowed" id="batchAssignBtn" disabled title="仅集团客户部可批量分配">批量分配</button>`}
+          <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-gray-50" id="batchClearBtn">清空选择</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 公告表格 -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" style="width:100%">
+      <div class="scrollbar-thin" style="border-radius:inherit;overflow-x:auto">
+        <div style="width:1394px;min-width:1394px;box-sizing:content-box">
+          <table class="text-sm border-separate" style="width:100%;border-spacing:0">
+                        <thead class="text-gray-500 text-xs">
+              <tr>
+                <th class="px-2 py-3 text-center font-medium sticky left-0 z-20" style="background:#f9fafb;width:44px">
+                  <input type="checkbox" id="annSelectAll">
+                </th>
+                <th class="px-4 py-3 text-left font-medium sticky left-0 z-10" style="background:#f9fafb;width:300px">项目名称 / 项目编码</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:130px">采购人</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:130px">代理机构</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:100px">预算</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:60px">区县</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:100px">业务标签</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:90px">发布日期</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:90px">报名截止</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:70px">处理人</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:80px">进度</th>
+                 <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:80px">标讯状态</th>
+                <th class="px-4 py-3 text-center font-medium sticky right-0 z-10" style="background:#f9fafb;width:120px">操作</th>
+              </tr>
+            </thead>
+                        <tbody>
+              ${pageData.length === 0 ? `
+                <tr><td colspan="13" class="py-16 text-center text-gray-400">暂无符合条件的公告</td></tr>
+              ` : pageData.map(a => `
+                <tr class="ann-row border-t border-gray-50 hover:bg-gray-50" data-id="${a.id}">
+                  <td class="px-2 py-3 text-center sticky left-0 ann-row-first" style="background:#fff;width:44px">
+                    <input type="checkbox" class="ann-row-check" data-id="${a.id}">
+                  </td>
+                  <td class="px-4 py-3 sticky left-0 ann-row-first" style="background:#fff;width:300px">
+                    <div class="font-medium text-gray-800 max-w-[400px] truncate cursor-pointer hover:text-blue-600" data-detail="${a.id}">${a.projectName || a.title}</div>
+                    <div class="flex items-center gap-2 mt-1">
+                      <span class="text-xs text-gray-400 font-mono">${a.projectCode}</span>
+                      <span class="text-gray-300">|</span>
+                      <div class="flex flex-wrap gap-1">
+                        ${a.matchedKeywords.slice(0, 3).map(k => `<span class="tag tag-purple">${k}</span>`).join('')}
+                        ${a.matchedKeywords.length > 3 ? `<span class="tag tag-gray">+${a.matchedKeywords.length-3}</span>` : ''}
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-3 py-3 text-gray-600 truncate" style="width:130px" title="${a.buyer}">${a.buyer}</td>
+                  <td class="px-3 py-3 text-gray-500 truncate" style="width:130px" title="${a.agency}">${a.agency}</td>
+                  <td class="px-3 py-3 font-semibold text-orange-600 whitespace-nowrap" style="width:100px">${a.budget}</td>
+                  <td class="px-3 py-3" style="width:60px"><span class="tag tag-blue">${a.district}</span></td>
+                  <td class="px-3 py-3" style="width:100px">${(a.businessTags || []).map(t => `<span class="tag tag-green mr-1">${t}</span>`).join('') || '<span class="text-gray-400 text-xs">—</span>'}</td>
+                  <td class="px-3 py-3 text-gray-500 whitespace-nowrap" style="width:90px">${a.pubDate}</td>
+                  <td class="px-3 py-3 text-gray-500 whitespace-nowrap" style="width:90px">${a.deadline}</td>
+                  <td class="px-3 py-3 text-gray-700 whitespace-nowrap" style="width:70px">${a.currentHandler || '-'}</td>
+                  <td class="px-3 py-3 whitespace-nowrap" style="width:80px">${renderProgressTag(a.progress)}</td>
+                  <td class="px-3 py-3 whitespace-nowrap" style="width:80px">${renderBidStatusTag(a)}</td>
+                  <td class="px-4 py-3 text-center whitespace-nowrap sticky right-0 ann-row-last" style="background:#fff;width:120px">
+                    ${a.progress === '待分配' || !a.currentHandler ? 
+                      (state.currentUser && state.currentUser.group === '集团客户部'
+                        ? `<button class="text-blue-600 hover:underline text-xs mr-2" data-assign="${a.id}">分配</button>`
+                        : `<button class="text-gray-300 text-xs cursor-not-allowed mr-2" disabled title="仅集团客户部可分配">分配</button>`)
+                      : ''}
+                    <button class="text-blue-600 hover:underline text-xs" data-detail="${a.id}">详情</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+<!-- 分页 -->
+    <div class="flex items-center justify-between mt-4 text-sm text-gray-500">
+      <!-- 左：统计 + 每页N条 -->
+      <div class="flex items-center gap-3">
+        <span>共 <span class="font-semibold text-gray-700">${total}</span> 条</span>
+        <span class="text-gray-300">|</span>
+        <span>
+          每页
+          <select class="h-7 px-2 border border-gray-200 rounded text-sm mx-1" data-page-size>
+            <option value="10" ${state.pageSize===10?'selected':''}>10</option>
+            <option value="50" ${state.pageSize===50?'selected':''}>50</option>
+            <option value="100" ${state.pageSize===100?'selected':''}>100</option>
+            <option value="0" ${state.pageSize===0?'selected':''}>全部</option>
+          </select>
+          条
+        </span>
+        <span class="text-gray-300">|</span>
+        <span>第 ${total === 0 ? 0 : startIdx + 1} - ${Math.min(startIdx + pageSize, total)} 条</span>
+      </div>
+
+      <!-- 右：分页按钮 -->
+      ${totalPages > 1 ? `
+      <div class="flex items-center gap-1">
+        <button class="px-3 py-1 border border-gray-200 rounded text-sm text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed" 
+                data-page-btn="prev" ${currentPage===1?'disabled':''}>← 上一页</button>
+        ${pageButtons.map(b => 
+          b === '...' 
+            ? `<span class="px-2 py-1 text-gray-400">...</span>`
+            : `<button class="min-w-[32px] px-2 py-1 border rounded text-sm ${b===currentPage?'bg-blue-600 text-white border-blue-600':'border-gray-200 text-gray-600 hover:bg-gray-50'}" 
+                      data-page-btn="${b}">${b}</button>`
+        ).join('')}
+        <button class="px-3 py-1 border border-gray-200 rounded text-sm text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed" 
+                data-page-btn="next" ${currentPage===totalPages?'disabled':''}>下一页 →</button>
+      </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function renderProgressTag(p) {
+  const map = {
+    '待分配': 'tag-red',
+    '已分配': 'tag-blue',
+    '已确认': 'tag-green',
+  };
+  return `<span class="tag ${map[p] || 'tag-gray'}">${p}</span>`;
+}
+
+// 标讯状态：根据 annType + bidOpenDate 动态计算
+function computeBidStatus(a) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const t = a.annType || '';
+  if (t.includes('意向')) return '意向';
+  if (!a.bidOpenDate || a.bidOpenDate === '—') return '挂网';
+  const open = new Date(a.bidOpenDate); open.setHours(0,0,0,0);
+  if (open < today) return '截止报名';
+  if (open.getTime() === today.getTime()) return '开标';
+  return '挂网';
+}
+
+function renderBidStatusTag(a) {
+  const status = computeBidStatus(a);
+  const map = {
+    '意向': 'tag-yellow',
+    '挂网': 'tag-blue',
+    '截止报名': 'tag-gray',
+    '开标': 'tag-green',
+  };
+  return `<span class="tag ${map[status] || 'tag-gray'}">${status}</span>`;
+}
+
+// ========== 三方联系方式渲染 ==========
+function renderContacts(a) {
+  const c = a.contacts || {};
+  const sections = [
+    { key: "purchaser", label: "采购人" },
+    { key: "agency",    label: "采购代理机构" },
+    { key: "project",   label: "项目联系" },
+  ];
+  const cards = [];
+  for (const sec of sections) {
+    const s = c[sec.key] || {};
+    const name    = s.name    || "";
+    const address = s.address || "";
+    const person  = s.person  || "";
+    const phone   = s.phone   || "";
+    if (!name && !address && !person && !phone) continue;
+    const parts = [];
+    if (name)    parts.push(`<div class="font-medium text-gray-800 mb-1">${name}</div>`);
+    if (address) parts.push(`<div class="text-gray-500 text-xs break-all">📍 ${address}</div>`);
+    if (person)  parts.push(`<div class="text-gray-500 text-xs break-all">👤 ${person}</div>`);
+    if (phone)   parts.push(`<div class="text-gray-500 text-xs break-all">📞 ${phone}</div>`);
+    cards.push(`
+      <div class="p-3 bg-gray-50 rounded-lg overflow-hidden">
+        <div class="text-xs text-blue-600 font-medium mb-1">${sec.label}</div>
+        ${parts.join("")}
+      </div>`);
+  }
+  if (cards.length === 0) {
+    return `<div class="text-gray-400 text-sm">${a.contact || "—"}</div>`;
+  }
+  return `<div class="grid grid-cols-3 gap-3">${cards.join("")}</div>`;
+}
+
+// ---- 公告详情 ----
+function renderAnnouncementDetail() {
+  const a = state.announcements.find(x => x.id === state.detailId);
+  if (!a) { state.detailId = null; return renderAnnouncementList(); }
+  const isConfirmed = a.progress === '已确认';
+  const disabledAttr = isConfirmed ? 'disabled' : '';
+  
+  return `
+    <div class="max-w-5xl mx-auto">
+      <button class="text-gray-500 hover:text-blue-600 text-sm mb-4" data-back>← 返回列表</button>
+      
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-4">
+        <div class="p-6 border-b border-gray-100">
+          <div class="flex items-start gap-3">
+            <div class="flex-1">
+              <h2 class="text-xl font-semibold text-gray-900 leading-snug mb-2">${a.projectName || a.title}</h2>
+              <div class="flex flex-wrap gap-1.5">
+                ${a.matchedKeywords.map(k => `<span class="tag tag-purple">🔑 ${k}</span>`).join('')}
+                <span class="tag tag-green">业务标签：${(a.businessTags || []).map(t => `<span class="tag tag-green mr-1">${t}</span>`).join('') || '<span class="text-gray-400">—</span>'}</span>
+                <span class="tag tag-blue">${a.district}</span>
+                ${renderProgressTag(a.progress)}
+                ${renderBidStatusTag(a)}
+              </div>
+            </div>
+            <div class="flex gap-2">
+              ${isConfirmed
+                ? `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="商机已确认, 不可分配">任务分配</button>`
+                : (state.currentUser && state.currentUser.group === '集团客户部'
+                  ? `<button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-assign="${a.id}">任务分配</button>`
+                  : `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="仅集团客户部可分配">任务分配</button>`)}
+              <!-- 进度更新按钮暂时注释, 后续需要再启用 -->
+              <!-- <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50" data-progress="${a.id}">进度更新</button> -->
+              ${a.progress === '已确认'
+                ? `<button class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm opacity-70 cursor-not-allowed" disabled>✓ 信息已确认</button>`
+                : `<button id="btn-confirm-opp" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">✅ 信息已确认</button>`}
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-6">
+          <div class="grid grid-cols-2 gap-x-10 gap-y-4 text-sm">
+            <div><span class="text-gray-400">项目编码：</span><span class="font-mono text-gray-700">${a.projectCode}</span></div>
+            <div><span class="text-gray-400">公告类型：</span><span class="text-gray-700">${a.annType}</span></div>
+            <div><span class="text-gray-400">标讯状态：</span>${renderBidStatusTag(a)}</div>
+            <div><span class="text-gray-400">采购人：</span><span class="text-gray-700">${a.buyer}</span></div>
+            <div><span class="text-gray-400">代理机构：</span><span class="text-gray-700">${a.agency}</span></div>
+            <div><span class="text-gray-400">采购方式：</span><span class="text-gray-700">${a.purchaseMethod || '—'}</span></div>
+            <div><span class="text-gray-400">预算金额：</span><span class="text-orange-600 font-semibold">${a.budget}</span></div>
+            <div><span class="text-gray-400">资金来源：</span><span class="text-gray-700">${a.fundSource}</span></div>
+            <div><span class="text-gray-400">所属区县：</span><span class="text-gray-700">${a.district}</span></div>
+            <div><span class="text-gray-400">所属区域：</span><span class="text-gray-700">${a.region}</span></div>
+            <div><span class="text-gray-400">发布日期：</span><span class="text-gray-700">${a.pubDate}</span></div>
+            <div><span class="text-gray-400">报名截止：</span><span class="text-gray-700">${a.deadline}</span></div>
+            <div><span class="text-gray-400">开标日期：</span><span class="text-gray-700">${a.bidOpenDate}</span></div>
+            <div><span class="text-gray-400">创建时间：</span><span class="text-gray-700">${a.createdAt}</span></div>
+            <div><span class="text-gray-400">当前处理人：</span><span class="text-gray-700">${a.currentHandler || '未分配'}</span></div>
+            <div class="col-span-2"><span class="text-gray-400">命中关键词：</span><span class="text-gray-700">${a.matchedKeywords.map(k => `<span class="tag tag-purple mr-1">${k}</span>`).join('')}</span></div>
+            <div class="col-span-2"><span class="text-gray-400">业务标签：</span><span class="text-gray-700">业务标签：${(a.businessTags || []).map(t => `<span class="tag tag-green mr-1">${t}</span>`).join('') || '<span class="text-gray-400">—</span>'}</span></div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-gray-100">
+            <div class="text-gray-400 text-sm mb-2">📞 联系方式</div>
+            ${renderContacts(a)}
+          </div>
+          
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="text-gray-400 text-sm mb-2">原始链接</div>
+            <a href="${a.sourceUrl}" target="_blank" class="text-blue-600 hover:underline text-sm break-all">${a.sourceUrl}</a>
+          </div>
+
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <div class="text-gray-400 text-sm mb-2">项目概况全文</div>
+            <div class="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap bg-gray-50 rounded-lg p-4">${a.summary}</div>
+          </div>
+
+                    <!-- 商机管理 -->
+          <div class="mt-6 pt-5 pb-4 border-t border-gray-100">
+            <div class="text-gray-500 text-sm font-medium mb-3">🎯 商机管理</div>
+            <div class="grid grid-cols-3 gap-x-2 gap-y-4 text-sm">
+              <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">是否有效商机（有无信息化）</label>
+                <select data-opp-field="isValidOpportunity" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
+                  <option value="">请选择</option>
+                  <option value="是" ${a.isValidOpportunity === '是' ? 'selected' : ''}>是</option>
+                  <option value="否" ${a.isValidOpportunity === '否' ? 'selected' : ''}>否</option>
+                </select>
+              </div>
+              <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">是否有运营商参与</label>
+                <select data-opp-field="hasOperatorInvolvement" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
+                  <option value="">请选择</option>
+                  <option value="是" ${a.hasOperatorInvolvement === '是' ? 'selected' : ''}>是</option>
+                  <option value="否" ${a.hasOperatorInvolvement === '否' ? 'selected' : ''}>否</option>
+                </select>
+              </div>
+              <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">商机编码</label>
+                <input data-opp-field="opportunityCode" ${disabledAttr} value="${a.opportunityCode || ''}" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="由用户自由填写">
+              </div>
+              <div class="col-span-3 px-3">                <label class="text-gray-500 text-sm mb-2 block">商机了解情况</label>
+                <textarea data-opp-field="opportunityStatus" ${disabledAttr} rows="4" class="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none h-28" placeholder="由用户自由填写"></textarea>
+              </div>
+              <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">是否应标</label>
+                <select data-opp-field="willBid" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
+                  <option value="">请选择</option>
+                  <option value="准备应标" ${a.willBid === '准备应标' ? 'selected' : ''}>准备应标</option>
+                  <option value="已经应标" ${a.willBid === '已经应标' ? 'selected' : ''}>已经应标</option>
+                  <option value="弃标" ${a.willBid === '弃标' ? 'selected' : ''}>弃标</option>
+                </select>
+              </div>
+              <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">挂树选择</label>
+                <select data-opp-field="treePlacement" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
+                  <option value="">请选择</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 进度记录 -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="font-semibold text-gray-900 mb-4">📋 进度记录</h3>
+        <div class="space-y-3">
+          ${(a.progressRecords || []).map(r => `
+            <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+              <div class="w-2 h-2 mt-1.5 rounded-full bg-blue-500 flex-shrink-0"></div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="font-medium text-gray-800">${r.progress}</span>
+                  <span class="text-gray-400">·</span>
+                  <span class="text-gray-500">${r.follower}</span>
+                  <span class="text-gray-400 ml-auto text-xs">${r.followDate}</span>
+                </div>
+                <div class="text-gray-600 text-sm mt-1">${r.note}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- 任务提醒 ----
+// 任务提醒页的"有效提醒"过滤：排除已分配 + 按区县筛选
+function getFilteredReminders() {
+  const user = state.currentUser;
+  return state.reminders.filter(r => {
+    const ann = state.announcements.find(a => a.id === r.targetId);
+    // 已确认的公告 → 不再显示提醒
+    if (ann && ann.progress === '已确认') return false;
+    // 权限过滤：只看分配给当前登录人的
+    if (user && r.annCurrentHandler !== user.name) return false;
+    // 进度过滤
+    if (r.type === 'admin-assign') {
+      if (!(ann && ann.progress === '待分配')) return false;
+    }
+    if (r.type === 'sales-follow') {
+      if (!(ann && ann.progress === '已分配')) return false;
+    }
+    // 区县过滤
+    if (state.reminderDistrictFilter && r.district !== state.reminderDistrictFilter) return false;
+    return true;
+  });
+}
+
+function renderReminders() {
+  const liveReminders = getFilteredReminders();
+
+  const urgent = liveReminders.filter(r => r.level === 'urgent');
+  const warn = liveReminders.filter(r => r.level === 'warn');
+  const info = liveReminders.filter(r => r.level === 'info');
+
+  // 翻页（和招标公告页共享 state.pageSize / state.currentPage）
+  const total = liveReminders.length;
+  const pageSize = state.pageSize === 0 ? total : state.pageSize;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const currentPage = Math.min(state.currentPage, totalPages);
+  const startIdx = (currentPage - 1) * pageSize;
+  const pageData = state.pageSize === 0 ? liveReminders : liveReminders.slice(startIdx, startIdx + pageSize);
+
+  // 页码按钮
+  let pageButtons = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pageButtons.push(i);
+  } else {
+    pageButtons.push(1);
+    let s = Math.max(2, currentPage - 1);
+    let e = Math.min(totalPages - 1, currentPage + 1);
+    if (s > 2) pageButtons.push('...');
+    for (let i = s; i <= e; i++) pageButtons.push(i);
+    if (e < totalPages - 1) pageButtons.push('...');
+    pageButtons.push(totalPages);
+  }
+
+  const allOnPageIds = pageData.map(r => r.id);
+  const selectedCount = [...state.selectedReminderIds].filter(id => allOnPageIds.includes(id)).length;
+  const allCheckedOnPage = allOnPageIds.length > 0 && allOnPageIds.every(id => state.selectedReminderIds.has(id));
+  const someCheckedOnPage = selectedCount > 0 && !allCheckedOnPage;
+
+  return `
+    <!-- 需求1：级别卡片暂时注释掉，后面需要再启用
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="bg-white rounded-xl border border-gray-100 p-5">
+        <div class="text-xs text-gray-500 mb-1">紧急</div>
+        <div class="text-2xl font-bold text-red-600">${urgent.length}</div>
+        <div class="text-xs text-gray-400 mt-1">超时未处理 / 即将到期</div>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-5">
+        <div class="text-xs text-gray-500 mb-1">关注</div>
+        <div class="text-2xl font-bold text-orange-500">${warn.length}</div>
+        <div class="text-xs text-gray-400 mt-1">3天内需跟进</div>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-5">
+        <div class="text-xs text-gray-500 mb-1">一般</div>
+        <div class="text-2xl font-bold text-blue-500">${info.length}</div>
+        <div class="text-xs text-gray-400 mt-1">按计划跟进</div>
+      </div>
+    </div>
+    -->
+
+    <!-- 区县筛选 + 批量操作栏 -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 mb-3 flex items-center gap-3 flex-wrap">
+      <!-- 区县筛选 -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-500">区县筛选</span>
+        <select id="reminder-district-filter" class="h-8 px-2 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400 min-w-[110px]">
+          <option value="">全部区县</option>
+          ${[...new Set(state.announcements.map(a => a.district))].sort().map(d => `<option value="${d}" ${state.reminderDistrictFilter===d?'selected':''}>${d}</option>`).join('')}
+        </select>
+        ${state.reminderDistrictFilter ? `<button id="reminder-district-clear" class="text-xs text-blue-500 hover:underline">清除</button>` : ''}
+      </div>
+      
+      <div class="h-5 w-px bg-gray-200"></div>
+      
+      <div class="text-sm text-gray-500 flex-1">
+        ${selectedCount > 0
+          ? `已选中 <span class="font-semibold text-blue-600">${selectedCount}</span> 条`
+          : '点击左侧复选框选择要批量分配的提醒'}
+      </div>
+      <button id="reminder-clear-selection"
+              class="px-3 py-1.5 text-xs text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              ${selectedCount === 0 ? 'disabled' : ''}>
+        清除选择
+      </button>
+      ${state.currentUser && state.currentUser.group === '集团客户部'
+              ? `<button id="reminder-batch-assign"
+                  class="px-4 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
+                  ${selectedCount === 0 ? 'disabled' : ''}>
+                  📋 批量分配（${selectedCount}）
+                </button>`
+              : `<button id="reminder-batch-assign" disabled title="仅集团客户部可批量分配"
+                  class="px-4 py-1.5 text-xs bg-gray-300 text-white rounded-lg cursor-not-allowed">
+                  📋 批量分配（${selectedCount}）
+                </button>`}
+    </div>
+
+    <!-- 任务提醒表格（横拉 + 翻页，和招标公告页同结构） -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" style="width:100%">
+      <div class="scrollbar-thin" style="border-radius:inherit;overflow-x:auto">
+        <div style="width:1150px;min-width:1150px;box-sizing:content-box">
+          <table class="text-sm border-separate" style="width:100%;border-spacing:0">
+            <thead class="text-gray-500 text-xs">
+              <tr>
+                <th class="px-2 py-3 text-center font-medium sticky left-0 z-20" style="background:#f9fafb;width:44px">
+                  <input type="checkbox" id="reminderSelectAll"
+                         class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                         ${allCheckedOnPage ? 'checked' : ''}
+                         ${someCheckedOnPage ? 'data-indeterminate="1"' : ''}>
+                </th>
+                <!-- 需求1：级别列暂时注释 <th class="px-3 py-3 text-left font-medium sticky left-0 z-10" style="background:#f9fafb;width:70px">级别</th> -->
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:90px">任务类型</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:320px">公告标题 / 提醒内容</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:90px">区县</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:80px">当前进度</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:80px">处理人</th>
+                <th class="px-3 py-3 text-left font-medium" style="background:#f9fafb;width:100px">时间</th>
+                <th class="px-4 py-3 text-center font-medium sticky right-0 z-10" style="background:#f9fafb;width:150px">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${pageData.length === 0 ? `
+                <tr><td colspan="8" class="py-16 text-center text-gray-400">暂无任务提醒</td></tr>
+              ` : pageData.map(r => `
+                <tr class="ann-row border-t border-gray-50 hover:bg-gray-50 ${state.selectedReminderIds.has(r.id) ? 'bg-blue-50/40' : ''}">
+                  <td class="px-2 py-3 text-center sticky left-0 ann-row-first" style="background:#fff;width:44px">
+                    <input type="checkbox"
+                           class="reminder-row-check w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                           data-id="${r.id}"
+                           ${state.selectedReminderIds.has(r.id) ? 'checked' : ''}>
+                  </td>
+                  <!-- 需求1：级别列暂时注释
+                  <td class="px-3 py-3 sticky left-0 ann-row-first" style="background:#fff;width:70px">
+                    ${r.level === 'urgent' ? '<span class="tag tag-red">紧急</span>' : r.level === 'warn' ? '<span class="tag tag-yellow">关注</span>' : '<span class="tag tag-blue">一般</span>'}
+                  </td>
+                  -->
+                  <td class="px-3 py-3 text-gray-600" style="width:90px">${r.label}</td>
+                  <td class="px-3 py-3" style="width:320px">
+                    <div class="font-medium text-gray-800 max-w-[400px] truncate cursor-pointer hover:text-blue-600" title="${r.annTitle || r.title}" data-detail="${r.targetId}">${r.annTitle || r.title}</div>
+                    <div class="text-xs text-gray-400 mt-0.5">${r.title}</div>
+                  </td>
+                  <td class="px-3 py-3" style="width:90px">${r.district ? `<span class="tag tag-blue">${r.district}</span>` : '<span class="text-gray-300">-</span>'}</td>
+                  <td class="px-3 py-3" style="width:80px">${renderProgressTag(r.annProgress || '待分配')}</td>
+                  <td class="px-3 py-3 text-gray-700 whitespace-nowrap" style="width:80px">${r.annCurrentHandler || '-'}</td>
+                  <td class="px-3 py-3 text-gray-500 whitespace-nowrap" style="width:100px">${r.time}</td>
+                  <td class="px-4 py-3 text-center whitespace-nowrap sticky right-0 ann-row-last" style="background:#fff;width:150px">
+                    <button class="text-blue-600 hover:underline text-xs mr-2" data-detail="${r.targetId}">查看公告</button>
+                    ${r.type === 'admin-assign' || r.annProgress === '待分配' ?
+                      (state.currentUser && state.currentUser.group === '集团客户部'
+                        ? `<button class="text-blue-600 hover:underline text-xs" data-assign="${r.targetId}">分配</button>`
+                        : `<button class="text-gray-300 text-xs cursor-not-allowed" disabled title="仅集团客户部可分配">分配</button>`)
+                      : ''}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分页 -->
+    <div class="flex items-center justify-between mt-4 text-sm text-gray-500">
+      <div class="flex items-center gap-3">
+        <span>共 <span class="font-semibold text-gray-700">${total}</span> 条</span>
+        <span class="text-gray-300">|</span>
+        <span>
+          每页
+          <select class="h-7 px-2 border border-gray-200 rounded text-sm mx-1" data-page-size>
+            <option value="10" ${state.pageSize===10?'selected':''}>10</option>
+            <option value="50" ${state.pageSize===50?'selected':''}>50</option>
+            <option value="100" ${state.pageSize===100?'selected':''}>100</option>
+            <option value="0" ${state.pageSize===0?'selected':''}>全部</option>
+          </select>
+          条
+        </span>
+        <span class="text-gray-300">|</span>
+        <span>第 ${total === 0 ? 0 : startIdx + 1} - ${Math.min(startIdx + pageSize, total)} 条</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="px-2.5 py-1 border rounded text-sm border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                data-page-btn="prev" ${currentPage===1?'disabled':''}>← 上一页</button>
+        ${pageButtons.map(b => b === '...'
+          ? `<span class="px-2 text-gray-400">…</span>`
+          : `<button class="min-w-[32px] px-2 py-1 border rounded text-sm ${b===currentPage?'bg-blue-600 text-white border-blue-600':'border-gray-200 text-gray-600 hover:bg-gray-50'}" 
+                     data-page-btn="${b}">${b}</button>`
+        ).join('')}
+        <button class="px-2.5 py-1 border rounded text-sm border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                data-page-btn="next" ${currentPage===totalPages?'disabled':''}>下一页 →</button>
+      </div>
+    </div>
+  `;
+}
+
+function patchReminderCheckboxIndeterminate() {
+  const box = document.getElementById('reminderSelectAll');
+  if (!box) return;
+  if (box.dataset.indeterminate === '1') box.indeterminate = true;
+  else box.indeterminate = false;
+}
+
+// ---- 团队管理 ----
+function renderTeam() {
+  return `
+    <div class="flex justify-between items-center mb-4">
+      <div class="text-sm text-gray-500">共 ${TEAM_GROUPS.length} 个小组</div>
+      <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-add-group>＋ 新增小组</button>
+    </div>
+    
+    <div class="grid grid-cols-2 gap-4">
+      ${TEAM_GROUPS.map(g => `
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 group-card" data-group-id="${g.id}">
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-900 text-lg">${g.name}</h3>
+              <div class="text-xs text-gray-400 mt-1">区域：${g.region} · 创建于 ${g.createdAt}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="text-xs text-blue-600 hover:text-blue-800 px-2 py-1 border border-blue-200 rounded hover:bg-blue-50" data-edit-group="${g.id}">✎ 修改</button>
+              <span class="tag tag-blue">${g.admin} +${g.members.length}人</span>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 p-3 bg-orange-50 rounded-lg">
+              <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">${g.admin[0]}</div>
+              <div class="flex-1">
+                <div class="text-sm font-medium text-gray-800">${g.admin}</div>
+                <div class="text-xs text-gray-500 mt-0.5">
+                  <span class="inline-flex items-center gap-1 mr-3">📞 ${g.adminContact}</span>
+                  <span class="inline-flex items-center gap-1">👤 ${g.adminAccount}</span>
+                </div>
+              </div>
+              <span class="tag tag-yellow">负责人</span>
+            </div>
+            
+            ${g.members.length > 0 ? g.members.map((m, i) => `
+              <div class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg">
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">${m[0]}</div>
+                <div class="flex-1">
+                  <div class="text-sm font-medium text-gray-800">${m}</div>
+              <div class="text-xs text-gray-500">
+                <span>📞 ${g.memberContacts[i] || '—'}</span>
+                <span class="mx-2">·</span>
+                <span>👤 ${g.memberPinyin[i] || '—'}</span>
+              </div>
+                </div>
+              </div>
+            `).join('') : `<div class="text-xs text-gray-400 text-center py-2">暂无团队成员，点击修改添加</div>`}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ---- 修改小组弹窗 ----
+function renderEditGroupModal() {
+  const g = TEAM_GROUPS.find(x => x.id === state.editGroupId);
+  if (!g) return '';
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-xl w-[560px] max-h-[80vh] p-6 shadow-xl flex flex-col" data-stop>
+        <h3 class="font-semibold text-gray-900 text-lg mb-4">修改小组：${g.name}</h3>
+        
+        <div class="flex-1 overflow-auto space-y-4 scrollbar-thin pr-1">
+          <!-- 基本信息 -->
+          <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+            <div class="text-xs text-gray-500 font-medium uppercase tracking-wide">基本信息</div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">小组名称</label>
+                <input id="edit-name" value="${g.name}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              </div>
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">所属区域</label>
+                <input id="edit-region" value="${g.region}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              </div>
+            </div>
+          </div>
+          
+          <!-- 负责人信息 -->
+          <div class="bg-orange-50 rounded-lg p-4 space-y-3">
+            <div class="text-xs text-orange-700 font-medium uppercase tracking-wide">负责人</div>
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">姓名</label>
+                <input id="edit-admin" value="${g.admin}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              </div>
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">联系方式</label>
+                <input id="edit-admin-contact" value="${g.adminContact}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              </div>
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">账号</label>
+                <input id="edit-admin-account" value="${g.adminAccount}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              </div>
+            </div>
+          </div>
+          
+          <!-- 团队成员 -->
+          <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-500 font-medium uppercase tracking-wide">团队成员（业务员）</div>
+              <button class="text-xs text-blue-600 hover:text-blue-800" data-add-member-line>＋ 加一行</button>
+            </div>
+            <div id="edit-members" class="space-y-2">
+              ${g.members.length > 0 ? g.members.map((m, i) => `
+                <div class="flex items-center gap-2 member-row" data-idx="${i}">
+                  <div class="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">${m[0]}</div>
+                  <input value="${m}" class="member-name flex-1 min-w-0 h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="姓名">
+                  <input value="${g.memberContacts[i] || ''}" class="member-contact w-[140px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="联系方式">
+                  <input value="${g.memberPinyin[i] || ''}" class="member-pinyin w-[130px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="账号">
+                  <button class="text-red-500 hover:text-red-700 text-sm px-2 remove-member flex-shrink-0" title="删除">✕</button>
+                </div>
+              `).join('') : `
+                <div class="text-xs text-gray-400 text-center py-3 border border-dashed border-gray-200 rounded-lg">暂无成员，点击上方「＋ 加一行」添加</div>
+              `}
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-100">
+          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-save-group>保存</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- 定时任务 ----
+
+// ---- 数据来源管理 ----
+function renderSources() {
+  const sources = SOURCES_DATA;
+  const enabled = sources.filter(s => s.enabled);
+  const disabled = sources.filter(s => !s.enabled);
+  const implemented = ['czggzy', 'ccgp', 'gdgpo'];
+  const implCount = sources.filter(s => s.enabled && implemented.includes(s.sourceCode)).length;
+  const genericCount = enabled.filter(s => s.sourceCode === 'generic').length;
+
+  return `
+    <div class="space-y-4">
+      <!-- 概览卡 -->
+      <div class="grid grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div class="text-xs text-gray-400 mb-1">总登记网站</div>
+          <div class="text-2xl font-bold text-gray-900">${sources.length}</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div class="text-xs text-gray-400 mb-1">启用中</div>
+          <div class="text-2xl font-bold text-blue-600">${enabled.length}</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div class="text-xs text-gray-400 mb-1">已实现采集器</div>
+          <div class="text-2xl font-bold text-green-600">${implCount}</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+          <div class="text-xs text-gray-400 mb-1">待适配（generic）</div>
+          <div class="text-2xl font-bold text-orange-500">${genericCount}</div>
+        </div>
+      </div>
+
+      <!-- 表格 -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+          <div>
+            <h3 class="font-semibold text-gray-900">📋 数据源注册表</h3>
+            <p class="text-xs text-gray-400 mt-1">定时任务（collect.py --source all）会基于此表中「启用」项自动采集；增删改不需要改代码</p>
+          </div>
+          <button class="px-3 py-1.5 text-xs text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50" id="btn-add-source">
+            + 新增数据源
+          </button>
+        </div>
+
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 text-gray-500 text-xs">
+            <tr>
+              <th class="px-4 py-3 text-left font-medium w-10">#</th>
+              <th class="px-4 py-3 text-left font-medium">网站名称</th>
+              <th class="px-4 py-3 text-left font-medium">网址</th>
+              <th class="px-4 py-3 text-left font-medium w-24">sourceCode</th>
+              <th class="px-4 py-3 text-center font-medium w-20">适配器</th>
+              <th class="px-4 py-3 text-center font-medium w-16">启用</th>
+              <th class="px-4 py-3 text-center font-medium w-28">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${sources.map((s, i) => {
+              const isImpl = implemented.includes(s.sourceCode);
+              const statusDot = s.enabled
+                ? (isImpl ? '<span class="tag tag-green">已实现</span>' : '<span class="tag tag-orange">待适配</span>')
+                : '<span class="tag tag-gray">已停用</span>';
+              return `
+              <tr class="ann-row border-b border-gray-50">
+                <td class="px-4 py-3 text-gray-400 text-xs">${i + 1}</td>
+                <td class="px-4 py-3 font-medium text-gray-800">${s.name}</td>
+                <td class="px-4 py-3 max-w-[280px]">
+                  <a href="${s.url}" target="_blank" class="text-blue-600 hover:underline truncate block" title="${s.url}">${s.url}</a>
+                </td>
+                <td class="px-4 py-3">
+                  <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">${s.sourceCode}</code>
+                </td>
+                <td class="px-4 py-3 text-center">${statusDot}</td>
+                <td class="px-4 py-3 text-center">
+                  <label class="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" ${s.enabled ? 'checked' : ''} class="source-toggle w-4 h-4 text-blue-600" data-idx="${i}">
+                  </label>
+                </td>
+                <td class="px-4 py-3 text-center">
+                  <button class="text-xs text-gray-500 hover:text-blue-600 mr-2 source-edit" data-idx="${i}">编辑</button>
+                  <button class="text-xs text-gray-500 hover:text-red-600 source-del" data-idx="${i}">删除</button>
+                </td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 说明卡片 -->
+      <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 text-xs text-orange-700 leading-relaxed">
+        <div class="font-semibold mb-1">💡 关于 generic 待适配源</div>
+        <div>列表中大部分网站标记为 generic，表示暂无专属采集适配器。定时任务执行时会自动跳过 generic 源（仅采集 czggzy / ccgp / gdgpo 已实现的三个）。后续新增一个网站若属于这三类，改 sourceCode 即可自动纳入；完全新类型的则在 SOURCE_DISPATCH 里注册实现函数。</div>
+      </div>
+    </div>
+  `;
+}
+
+
+
+function renderKwDeleteModal() {
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-xl w-[520px] p-6 shadow-xl" data-stop>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-semibold text-gray-900">🗑️ 选择要删除的关键词</h3>
+          <button class="text-gray-400 hover:text-gray-600" data-close-modal>×</button>
+        </div>
+
+        <!-- 操作条 -->
+        <div class="flex items-center gap-2 mb-3 text-xs">
+          <button id="kw-del-all" class="px-2 py-1 border border-gray-200 rounded hover:bg-gray-50">全选</button>
+          <button id="kw-del-none" class="px-2 py-1 border border-gray-200 rounded hover:bg-gray-50">全不选</button>
+          <button id="kw-del-invert" class="px-2 py-1 border border-gray-200 rounded hover:bg-gray-50">反选</button>
+          <span class="ml-auto text-gray-400">已选 <span id="kw-del-count" class="text-red-500 font-medium">0</span> 个</span>
+        </div>
+
+        <!-- 选择列表：横向 tag 风格 -->
+        <div id="kw-del-list" class="max-h-80 overflow-y-auto scrollbar-thin border border-gray-100 rounded-lg p-4">
+          <div class="flex flex-wrap gap-2">
+            ${SCHEDULE_CONFIG.keywordList.map((k,i) => `
+              <label class="kw-del-pill cursor-pointer">
+                <input type="checkbox" class="kw-del-cb" data-kw="${i}">
+                <span class="kw-del-label inline-block px-3 py-1.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700 border border-purple-200 hover:bg-purple-200 transition-colors">
+                  ${k}
+                </span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-5">
+          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+          <button id="kw-del-confirm" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+            确认删除
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSchedule() {
+  const successSites = state.siteResults.filter(r => r.ok);
+  const failSites = state.siteResults.filter(r => !r.ok);
+  const siteOk = successSites.length;
+  const total = state.siteResults.length;
+  const successRate = total > 0 ? (siteOk / total * 100).toFixed(1) : 0;
+  const totalMatched = successSites.reduce((s, r) => s + r.matched_links, 0);
+  const totalFound = successSites.reduce((s, r) => s + r.found_links, 0);
+  
+  // 按匹配数排序 Top 站点
+  const topSites = [...successSites].sort((a, b) => b.matched_links - a.matched_links).slice(0, 10);
+  
+  const lastCrawlTime = state.siteResults.length > 0 
+    ? new Date().toLocaleString('zh-CN')
+    : '—';
+
+  return `
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-xl border border-gray-100 p-5">
+        <div class="text-xs text-gray-500 mb-1">运行状态</div>
+        <div class="flex items-center gap-2 mt-1">
+          <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <div class="font-semibold text-green-600">${SCHEDULE_CONFIG.crawlStatus}</div>
+        </div>
+        <div class="text-xs text-gray-400 mt-1">上次运行：${lastCrawlTime}</div>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-5">
+        <div class="text-xs text-gray-500 mb-1">采集成功率</div>
+        <div class="text-2xl font-bold text-gray-800">${successRate}<span class="text-sm text-gray-400 font-normal">%</span></div>
+        <div class="text-xs text-gray-400 mt-1">成功 ${siteOk}/${total} 个网站</div>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-5">
+        <div class="text-xs text-gray-500 mb-1">公告总数</div>
+        <div class="text-2xl font-bold text-blue-600">${state.announcements.length}</div>
+        <div class="text-xs text-gray-400 mt-1">近 1 个月（真实采集 ${totalMatched} 条）</div>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-100 p-5">
+        <div class="text-xs text-gray-500 mb-1">采集间隔</div>
+        <div class="text-2xl font-bold text-gray-800">2<span class="text-sm text-gray-400 font-normal">小时</span></div>
+        <div class="text-xs text-gray-400 mt-1">定时任务1</div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-4">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-semibold text-gray-900">🔑 定时任务1 - 关键词设定</h3>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-400">共 ${SCHEDULE_CONFIG.keywordList.length} 个</span>
+          <button id="kw-delete-open" class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-colors">批量删除</button>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-2 items-center">
+        ${SCHEDULE_CONFIG.keywordList.map((k, idx) => `
+          <span class="px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 text-xs font-medium border border-purple-200 hover:bg-purple-200 transition-colors">${k}</span>
+        `).join('')}
+        <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-dashed border-gray-300 text-gray-400 text-xs hover:border-blue-400 hover:text-blue-500 transition-colors" id="kw-add-btn">
+          <span class="text-sm leading-none">+</span> 新增
+        </button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="font-semibold text-gray-900 mb-4">🏆 TOP10 采集量（匹配关键词）</h3>
+        <div class="space-y-2 text-sm">
+          ${topSites.map((r, i) => `
+            <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
+              <div class="flex items-center gap-2">
+                <span class="w-5 h-5 rounded-full ${i<3?'bg-orange-100 text-orange-600':'bg-gray-100 text-gray-500'} text-xs flex items-center justify-center font-semibold">${i+1}</span>
+                <span class="text-gray-700">${r.name}</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-400">+${r.matched_links} 条</span>
+                <span class="text-xs text-gray-400">${r.latency_ms}ms</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="font-semibold text-gray-900 mb-4">💥 采集失败站点（${failSites.length}）</h3>
+        ${failSites.length === 0 ? `
+          <div class="text-center text-gray-400 py-8">🎉 全部网站采集成功</div>
+        ` : `
+          <div class="space-y-3">
+            ${failSites.map(r => `
+              <div class="p-3 bg-red-50 rounded-lg border border-red-100">
+                <div class="flex items-center gap-2 text-sm">
+                  <span class="text-red-500">❌</span>
+                  <span class="font-medium text-gray-800">${r.name}</span>
+                  <span class="ml-auto text-xs text-red-600 font-mono">${r.status_msg}</span>
+                </div>
+                <div class="text-xs text-red-500 mt-1.5 pl-5">
+                  原因：${r.error_detail || '未知错误'}
+                </div>
+                <a href="${r.url}" target="_blank" class="text-xs text-gray-400 hover:text-blue-600 pl-5 mt-1 inline-block break-all">${r.url}</a>
+              </div>
+            `).join('')}
+          </div>
+        `}
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="font-semibold text-gray-900 mb-4">⏱ 任务调度配置</h3>
+        <div class="space-y-4 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500">定时任务1（抓取）</span>
+            <span class="text-gray-800">${SCHEDULE_CONFIG.crawlInterval}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">定时任务2（解析落库）</span>
+            <span class="text-gray-800">抓取后自动执行</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">任务提醒</span>
+            <span class="text-gray-800">${SCHEDULE_CONFIG.reminderInterval}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">全站抓取 / 解析</span>
+            <span class="text-gray-800">实际耗时 ${state.siteResults.reduce((s, r) => s + r.latency_ms, 0)}ms · 提取 ${totalFound} 条候选 · 命中关键词 ${totalMatched} 条</span>
+          </div>
+        </div>
+        <button class="mt-6 w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">手动触发一次抓取</button>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3 class="font-semibold text-gray-900 mb-4">📡 全部采集状态（${total} 个）</h3>
+        <div class="space-y-1.5 text-sm max-h-72 overflow-auto scrollbar-thin">
+          ${state.siteResults.map(r => `
+            <div class="flex justify-between items-center py-1.5 ${r.ok ? 'border-b border-gray-50' : 'bg-red-50 rounded px-2 py-2 -mx-2'}">
+              <div class="flex items-center gap-2">
+                <span class="${r.ok ? 'text-green-600' : 'text-red-500'}">${r.ok ? '●' : '○'}</span>
+                <span class="text-gray-700">${r.name}</span>
+              </div>
+              <div class="text-xs flex items-center gap-2">
+                ${r.ok ? `<span class="text-gray-400">${r.latency_ms}ms</span>${r.matched_links > 0 ? `<span class="text-green-600 font-medium">+${r.matched_links}条</span>` : ''}` : `<span class="text-red-500">${r.status_msg}</span>`}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============ Modal ============
+function renderAssignModal() {
+  const ann = state.announcements.find(a => a.id === state.assignAnnId);
+  if (!ann) return '';
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-xl w-[480px] p-6 shadow-xl" data-stop>
+        <h3 class="font-semibold text-gray-900 text-lg mb-1">任务分配</h3>
+        <p class="text-sm text-gray-400 mb-5 truncate">${ann.projectName || ann.title}</p>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">分配给区域小组</label>
+            <select id="assign-group" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              <option value="">请选择小组</option>
+              ${TEAM_GROUPS.filter(g => g.name !== "集团客户部").map(g => `<option value="${g.name}">${g.name}（${g.region}）</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">接收人</label>
+            <select id="assign-receiver" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              <option value="">请选择接收人</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">备注（可选）</label>
+            <textarea id="assign-note" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none" placeholder="分配说明..."></textarea>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-2 mt-6">
+          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-confirm-assign>确认分配</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+
+
+function renderBatchAssignModal() {
+  const ids = Array.from(state.selectedAnnIds);
+  if (ids.length === 0) return '';
+  const anns = state.announcements.filter(a => ids.includes(a.id));
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-xl w-[560px] p-6 shadow-xl" data-stop>
+        <h3 class="font-semibold text-gray-900 text-lg mb-1">批量分配任务</h3>
+        <p class="text-sm text-gray-400 mb-4">共选中 ${ids.length} 条公告</p>
+        
+        <div class="max-h-40 overflow-y-auto scrollbar-thin border border-gray-100 rounded-lg p-2 mb-5 bg-gray-50">
+          ${anns.map(a => `<div class="text-xs text-gray-600 py-1 truncate">${a.projectName || a.title}</div>`).join('')}
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">分配给区域小组</label>
+            <select id="batch-assign-group" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              <option value="">请选择小组</option>
+              ${TEAM_GROUPS.filter(g => g.name !== "集团客户部").map(g => `<option value="${g.name}">${g.name}（${g.region}）</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">接收人</label>
+            <select id="batch-assign-receiver" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              <option value="">请选择接收人</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">备注（可选）</label>
+            <textarea id="batch-assign-note" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none" placeholder="分配说明..."></textarea>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-2 mt-6">
+          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-confirm-batch-assign>确认批量分配</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- 任务提醒页批量分配弹窗 ----
+function renderReminderBatchAssignModal() {
+  const targetAnnIds = [...state.selectedReminderIds]
+    .map(rid => state.reminders.find(r => r.id === rid))
+    .filter(Boolean)
+    .map(r => r.targetId);
+  const annSet = new Set();
+  const targetAnns = [];
+  for (const id of targetAnnIds) {
+    if (annSet.has(id)) continue;
+    annSet.add(id);
+    const a = state.announcements.find(x => x.id === id);
+    if (a) targetAnns.push(a);
+  }
+  if (targetAnns.length === 0) return '';
+
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-xl w-[620px] max-h-[80vh] p-6 shadow-xl flex flex-col" data-stop>
+        <h3 class="font-semibold text-gray-900 text-lg mb-1">批量任务分配</h3>
+        <p class="text-sm text-gray-400 mb-4">
+          共选中 <span class="font-semibold text-blue-600">${targetAnns.length}</span> 条公告，统一分配给同一小组/接收人
+        </p>
+
+        <!-- 待分配清单 -->
+        <div class="bg-gray-50 rounded-lg p-3 mb-4 max-h-[200px] overflow-auto scrollbar-thin">
+          <div class="text-xs text-gray-500 font-medium mb-2">📋 待分配清单</div>
+          <div class="space-y-1.5">
+            ${targetAnns.map(a => `
+              <div class="flex items-center gap-2 text-sm text-gray-700">
+                <span class="text-gray-400 text-xs font-mono w-16">${a.district || '-'}</span>
+                <span class="text-gray-400 text-xs w-16">${a.progress || '-'}</span>
+                <span class="truncate flex-1" title="${a.title}">${a.title}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="space-y-4 flex-1">
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">分配给区域小组</label>
+            <select id="reminder-batch-group" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              <option value="">请选择小组</option>
+              ${TEAM_GROUPS.filter(g => g.name !== "集团客户部").map(g => `<option value="${g.name}">${g.name}（${g.region}）</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">接收人</label>
+            <select id="reminder-batch-receiver" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              <option value="">请选择接收人</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">备注（可选）</label>
+            <textarea id="reminder-batch-note" rows="2" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none" placeholder="分配说明..."></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-100">
+          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-confirm-reminder-batch-assign>确认批量分配</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderProgressModal() {
+  const ann = state.announcements.find(a => a.id === state.progressAnnId);
+  if (!ann) return '';
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-xl w-[480px] p-6 shadow-xl" data-stop>
+        <h3 class="font-semibold text-gray-900 text-lg mb-1">更新进度</h3>
+        <p class="text-sm text-gray-400 mb-5 truncate">${ann.projectName || ann.title}</p>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">当前进度</label>
+            <select id="progress-select" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              ${PROGRESS_OPTIONS.map(p => `<option value="${p}" ${ann.progress===p?'selected':''}>${p}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600 mb-1 block">跟进说明</label>
+            <textarea id="progress-note" rows="3" class="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none" placeholder="本次跟进情况..."></textarea>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-2 mt-6">
+          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-confirm-progress>确认更新</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============ 事件绑定 ============
+// ============ 辅助：绑定成员行删除按钮 ============
+function bindMemberRow(row) {
+  const del = row.querySelector('.remove-member');
+  if (del) del.onclick = () => { row.remove(); };
+}
+
+// ============ 事件绑定 ============
+function bindEvents() {
+  // 侧边栏切换
+  document.querySelectorAll('.sidebar-item').forEach(el => {
+    el.onclick = () => {
+      state.page = el.dataset.page;
+      state.currentPage = 1;
+      state.detailId = null;
+      state.modal = null;
+      render();
+    };
+  });
+
+  // 返回列表
+  document.querySelectorAll('[data-back]').forEach(el => {
+    el.onclick = () => { state.detailId = null; render(); };
+  });
+
+  // 筛选
+  document.querySelectorAll('[data-filter]').forEach(el => {
+    el.oninput = el.onchange = () => {
+      state.selectedAnnIds.clear();  // 筛选变化 → 清空批量选择
+      state.filters[el.dataset.filter] = el.value;
+      applyFilters();
+      render();
+    };
+  });
+
+  // 查看详情
+  document.querySelectorAll('[data-detail]').forEach(el => {
+    el.onclick = () => { state.detailId = el.dataset.detail; render(); };
+  });
+
+  // 分配按钮
+  document.querySelectorAll('[data-assign]').forEach(el => {
+    el.onclick = () => {
+      state.assignAnnId = el.dataset.assign;
+      state.progressAnnId = null;
+      state.modal = 'assign';
+      render();
+    };
+  });
+
+  // 进度按钮
+  document.querySelectorAll('[data-progress]').forEach(el => {
+    el.onclick = () => {
+      state.progressAnnId = el.dataset.progress;
+      state.assignAnnId = null;
+      state.modal = 'progress';
+      render();
+    };
+  });
+  // ---- 批量选择 ----
+  const selectAll = document.getElementById('annSelectAll');
+  const rowChecks = document.querySelectorAll('.ann-row-check');
+  const batchBar = document.getElementById('batchBar');
+  const batchCount = document.getElementById('batchCount');
+  const ids = Array.from(state.selectedAnnIds);
+  rowChecks.forEach(cb => { if (ids.includes(cb.dataset.id)) cb.checked = true; });
+  if (selectAll) {
+    const visibleIds = Array.from(rowChecks).map(cb => cb.dataset.id);
+    selectAll.checked = visibleIds.length > 0 && visibleIds.every(id => ids.includes(id));
+    selectAll.onchange = (e) => {
+      rowChecks.forEach(cb => {
+        cb.checked = e.target.checked;
+        if (e.target.checked) state.selectedAnnIds.add(cb.dataset.id);
+        else state.selectedAnnIds.delete(cb.dataset.id);
+      });
+      updateBatchBar();
+    };
+  }
+  rowChecks.forEach(cb => {
+    cb.onchange = () => {
+      if (cb.checked) state.selectedAnnIds.add(cb.dataset.id);
+      else state.selectedAnnIds.delete(cb.dataset.id);
+      // sync selectAll
+      const allCb = document.getElementById('annSelectAll');
+      if (allCb) {
+        const visibleIds = Array.from(rowChecks).map(c => c.dataset.id);
+        allCb.checked = visibleIds.length > 0 && visibleIds.every(id => state.selectedAnnIds.has(id));
+      }
+      updateBatchBar();
+    };
+  });
+  const uBar = document.getElementById('batchBar');
+  if (uBar) uBar.innerHTML = uBar.innerHTML.replace('已选 0 条', '已选 ' + state.selectedAnnIds.size + ' 条');
+  if (state.selectedAnnIds.size > 0) {
+    const bBar = document.getElementById('batchBar');
+    if (bBar) bBar.style.display = 'flex';
+  }
+  const clearBtn = document.getElementById('batchClearBtn');
+  if (clearBtn) clearBtn.onclick = () => { state.selectedAnnIds.clear(); render(); };
+  const batchAssign = document.getElementById('batchAssignBtn');
+  if (batchAssign) batchAssign.onclick = () => { state.modal = 'batch-assign'; render(); };
+
+  // ---- 批量分配弹窗内小组->人员联动 ----
+  const bGroup = document.getElementById('batch-assign-group');
+  const bReceiver = document.getElementById('batch-assign-receiver');
+  if (bGroup && bReceiver) {
+    bGroup.onchange = () => {
+      const g = TEAM_GROUPS.find(x => x.name === bGroup.value);
+      bReceiver.innerHTML = g ? 
+        `<option value="${g.admin}">${g.admin}（管理员）</option>` + 
+        g.members.map(m => `<option value="${m}">${m}</option>`).join('') :
+        '<option value="">请选择接收人</option>';
+    };
+  }
+  // ---- 批量确认分配 ----
+  const bConfirm = document.querySelectorAll('[data-confirm-batch-assign]');
+  bConfirm.forEach(el => el.onclick = () => {
+    const group = document.getElementById('batch-assign-group').value;
+    const receiver = document.getElementById('batch-assign-receiver').value;
+    if (!group || !receiver) { alert('请选择小组和接收人'); return; }
+    state.selectedAnnIds.forEach(id => {
+      const ann = state.announcements.find(a => a.id === id);
+      if (ann) {
+        ann.currentHandler = receiver;
+        ann.progress = '已分配';
+        ann.progressRecords = ann.progressRecords || [];
+        ann.progressRecords.push({ progress: '已分配', follower: '管理员', followDate: new Date().toISOString().slice(0,10), note: `批量分配给 ${group} - ${receiver}` });
+      }
+    });
+    alert('已批量分配 ' + state.selectedAnnIds.size + ' 条给 ' + receiver);
+    state.selectedAnnIds.clear();
+    state.modal = null;
+    state.reminders = generateReminders(state.announcements);
+    render();
+  });
+
+  // ---- 批量操作条更新函数 ----
+  function updateBatchBar() {
+    const bar = document.getElementById('batchBar');
+    const cnt = document.getElementById('batchCount');
+    if (!bar || !cnt) return;
+    const n = state.selectedAnnIds.size;
+    bar.style.display = n > 0 ? 'flex' : 'none';
+    cnt.textContent = '已选 ' + n + ' 条';
+  }
+  // ---- 关键词管理 ----  });
+  document.querySelectorAll('#kw-add-btn').forEach(el => {
+    el.onclick = () => {
+      const v = prompt('新增关键词（多个用顿号、空格或逗号分隔）');
+      if (v && v.trim()) {
+        const parts = v.split(/[、,，\s]+/).filter(x => x.trim());
+        parts.forEach(p => {
+          if (p && !SCHEDULE_CONFIG.keywordList.includes(p)) SCHEDULE_CONFIG.keywordList.push(p);
+        });
+        render();
+      }
+    };
+  });
+  // ---- 关键词批量删除弹窗 ----
+  document.querySelectorAll('#kw-delete-open').forEach(el => {
+    el.onclick = () => { state.modal = 'kw-delete'; render(); };
+  });
+  document.querySelectorAll('#kw-del-all').forEach(el => el.onclick = () => {
+    document.querySelectorAll('.kw-del-cb').forEach(cb => cb.checked = true);
+    updateKwDelCount();
+  });
+  document.querySelectorAll('#kw-del-none').forEach(el => el.onclick = () => {
+    document.querySelectorAll('.kw-del-cb').forEach(cb => cb.checked = false);
+    updateKwDelCount();
+  });
+  document.querySelectorAll('#kw-del-invert').forEach(el => el.onclick = () => {
+    document.querySelectorAll('.kw-del-cb').forEach(cb => cb.checked = !cb.checked);
+    updateKwDelCount();
+  });
+  document.querySelectorAll('.kw-del-cb').forEach(cb => {
+    cb.onchange = updateKwDelCount;
+  });
+  function updateKwDelCount() {
+    const n = document.querySelectorAll('.kw-del-cb:checked').length;
+    const c = document.getElementById('kw-del-count');
+    const btn = document.getElementById('kw-del-confirm');
+    if (c) c.textContent = n;
+    if (btn) btn.disabled = n === 0;
+  }
+  document.querySelectorAll('#kw-del-confirm').forEach(el => {
+    el.onclick = () => {
+      const cbs = [...document.querySelectorAll('.kw-del-cb:checked')];
+      const idxs = cbs.map(c => parseInt(c.dataset.kw)).sort((a,b)=>b-a);
+      if (idxs.length === 0) return;
+      if (!confirm('确认删除选中的 ' + idxs.length + ' 个关键词？')) return;
+      idxs.forEach(i => SCHEDULE_CONFIG.keywordList.splice(i, 1));
+      state.modal = null;
+      render();
+    };
+  });
+  // ---- 数据源管理事件 ----
+  document.querySelectorAll('.source-toggle').forEach(el => {
+    el.onchange = () => {
+      SOURCES_DATA[parseInt(el.dataset.idx)].enabled = el.checked;
+      render();
+    };
+  });
+  document.querySelectorAll('.source-edit').forEach(el => {
+    el.onclick = () => {
+      const i = parseInt(el.dataset.idx);
+      const s = SOURCES_DATA[i];
+      const name = prompt('网站名称', s.name);
+      if (name === null) return;
+      const url = prompt('网址', s.url);
+      if (url === null) return;
+      const code = prompt('sourceCode (czggzy / ccgp / gdgpo / generic)', s.sourceCode);
+      if (code === null) return;
+      const u = new URL(url);
+      SOURCES_DATA[i] = {
+        ...s, name: name.trim(), url: url.trim(),
+        domain: u.netloc.toLowerCase(), sourceCode: (code.trim() || 'generic')
+      };
+      render();
+    };
+  });
+  document.querySelectorAll('.source-del').forEach(el => {
+    el.onclick = () => {
+      if (!confirm('确认删除该数据源？此操作仅影响 Demo 内存显示，不会改动 sources.json。')) return;
+      SOURCES_DATA.splice(parseInt(el.dataset.idx), 1);
+      render();
+    };
+  });
+  document.querySelectorAll('#btn-add-source').forEach(el => {
+    el.onclick = () => {
+      const name = prompt('网站名称');
+      if (!name) return;
+      const url = prompt('网址');
+      if (!url) return;
+      const code = prompt('sourceCode (czggzy / ccgp / gdgpo / generic)', 'generic') || 'generic';
+      try {
+        const u = new URL(url);
+        SOURCES_DATA.push({
+          name: name.trim(), url: url.trim(), domain: u.netloc.toLowerCase(),
+          sourceCode: (code.trim() || 'generic'), enabled: true
+        });
+        render();
+      } catch(e) { alert('网址格式错误'); }
+    };
+  });
+
+  // 刷新
+  document.querySelectorAll('#btn-refresh').forEach(el => {
+    el.onclick = () => {
+      alert('模拟手动触发抓取：已启动定时任务1（真实环境会抓取 49 个网站）');
+    };
+  });
+
+  // 退出登录
+  document.querySelectorAll('#btn-logout').forEach(el => {
+    el.onclick = () => doLogout();
+  });
+
+  // 商机管理 · 信息已确认
+  document.querySelectorAll('#btn-confirm-opp').forEach(el => {
+    el.onclick = () => confirmOpportunity();
+  });
+
+  // 商机管理表单 · 字段变更同步到 ann 对象
+  bindOpportunityEvents();
+
+  // 任务提醒页区县筛选
+  const remDistrictFilter = document.getElementById('reminder-district-filter');
+  if (remDistrictFilter) {
+    remDistrictFilter.onchange = () => {
+      state.reminderDistrictFilter = remDistrictFilter.value;
+      state.currentPage = 1;
+      render();
+    };
+  }
+  const remDistrictClear = document.getElementById('reminder-district-clear');
+  if (remDistrictClear) {
+    remDistrictClear.onclick = () => {
+      state.reminderDistrictFilter = '';
+      state.currentPage = 1;
+      render();
+    };
+  }
+
+  // 翻页 - page size 切换
+  document.querySelectorAll('[data-page-size]').forEach(el => {
+    el.onchange = () => {
+      state.pageSize = parseInt(el.value);
+      state.currentPage = 1;
+      render();
+    };
+  });
+
+  // 翻页 - 页码按钮
+  document.querySelectorAll('[data-page-btn]').forEach(el => {
+    el.onclick = () => {
+      const total = state.page === 'reminders' ? state.reminders.length : state.filteredList.length;
+      const pageSize = state.pageSize === 0 ? total : state.pageSize;
+      const totalPages = Math.max(1, Math.ceil(total / pageSize));
+      const action = el.dataset.pageBtn;
+      
+      if (action === 'prev') {
+        state.currentPage = Math.max(1, state.currentPage - 1);
+      } else if (action === 'next') {
+        state.currentPage = Math.min(totalPages, state.currentPage + 1);
+      } else {
+        state.currentPage = parseInt(action);
+      }
+      render();
+    };
+  });
+
+  // 新增小组
+  document.querySelectorAll('[data-add-group]').forEach(el => {
+    el.onclick = () => {
+      alert('Demo 模式：新增小组功能略过，数据写死在 data.js 中');
+    };
+  });
+
+  // 打开修改小组弹窗
+  document.querySelectorAll('[data-edit-group]').forEach(el => {
+    el.onclick = () => {
+      state.editGroupId = parseInt(el.dataset.editGroup);
+      state.modal = 'edit-group';
+      render();
+    };
+  });
+
+  // 修改弹窗内：加一行成员
+  const addMemberBtn = document.querySelector('[data-add-member-line]');
+  if (addMemberBtn) {
+    addMemberBtn.onclick = () => {
+      const box = document.getElementById('edit-members');
+      if (!box) return;
+      const div = document.createElement('div');
+      div.className = 'flex items-center gap-2 member-row';
+      div.innerHTML = `
+        <div class="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">?</div>
+        <input class="member-name flex-1 min-w-0 h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="姓名">
+        <input class="member-contact w-[140px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="联系方式">
+        <input class="member-pinyin w-[130px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="账号">
+        <button class="text-red-500 hover:text-red-700 text-sm px-2 remove-member" title="删除">✕</button>
+      `;
+      box.appendChild(div);
+      bindMemberRow(div);
+    };
+  }
+
+  // 保存修改
+  document.querySelectorAll('[data-save-group]').forEach(el => {
+    el.onclick = () => {
+      const g = TEAM_GROUPS.find(x => x.id === state.editGroupId);
+      if (!g) return;
+      g.name = document.getElementById('edit-name').value.trim() || g.name;
+      g.region = document.getElementById('edit-region').value.trim() || g.region;
+      g.admin = document.getElementById('edit-admin').value.trim() || g.admin;
+      g.adminContact = document.getElementById('edit-admin-contact').value.trim() || g.adminContact;
+      g.adminAccount = document.getElementById('edit-admin-account').value.trim() || g.adminAccount;
+      const rows = document.querySelectorAll('#edit-members .member-row');
+      const newMembers = [];
+      const newContacts = [];
+      const newPinyin = [];
+      rows.forEach(row => {
+        const name = row.querySelector('.member-name').value.trim();
+        const ct = row.querySelector('.member-contact').value.trim();
+        const py = row.querySelector('.member-pinyin').value.trim();
+        if (name) { newMembers.push(name); newContacts.push(ct); newPinyin.push(py); }
+      });
+      g.members = newMembers;
+      g.memberContacts = newContacts;
+      g.memberPinyin = newPinyin;
+      state.modal = null;
+      state.editGroupId = null;
+      render();
+    };
+  });
+
+  // Modal 关闭
+  document.querySelectorAll('[data-close-modal]').forEach(el => {
+    el.onclick = () => { state.modal = null; render(); };
+  });
+  document.querySelectorAll('[data-stop]').forEach(el => {
+    el.onclick = (e) => e.stopPropagation();
+  });
+
+  // 分配时自动填充接收人列表
+  const groupSel = document.getElementById('assign-group');
+  const recvSel = document.getElementById('assign-receiver');
+  if (groupSel && recvSel) {
+    groupSel.onchange = () => {
+      const g = TEAM_GROUPS.find(x => x.name === groupSel.value);
+      recvSel.innerHTML = g ? 
+        `<option value="${g.admin}">${g.admin}（管理员）</option>` + 
+        g.members.map(m => `<option value="${m}">${m}</option>`).join('') :
+        '<option value="">请选择接收人</option>';
+    };
+  }
+
+  // 确认分配
+  document.querySelectorAll('[data-confirm-assign]').forEach(el => {
+    el.onclick = () => {
+      const group = document.getElementById('assign-group').value;
+      const receiver = document.getElementById('assign-receiver').value;
+      if (!group || !receiver) { alert('请选择小组和接收人'); return; }
+      const ann = state.announcements.find(a => a.id === state.assignAnnId);
+      ann.currentHandler = receiver;
+      ann.progress = '已分配';
+      ann.progressRecords = ann.progressRecords || [];
+      ann.progressRecords.push({
+        progress: '已分配',
+        follower: '管理员',
+        followDate: new Date().toISOString().slice(0,10),
+        note: `已分配给 ${group} - ${receiver}`
+      });
+      state.modal = null;
+      state.assignAnnId = null;
+      state.reminders = generateReminders(state.announcements);
+      render();
+    };
+  });
+
+  // 确认进度更新
+  document.querySelectorAll('[data-confirm-progress]').forEach(el => {
+    el.onclick = () => {
+      const progress = document.getElementById('progress-select').value;
+      const note = document.getElementById('progress-note').value;
+      const next = document.getElementById('progress-next').value;
+      const ann = state.announcements.find(a => a.id === state.progressAnnId);
+      ann.progress = progress;
+      ann.nextFollowUp = next;
+      ann.progressRecords = ann.progressRecords || [];
+      ann.progressRecords.push({
+        progress: progress,
+        follower: ann.currentHandler || '当前用户',
+        followDate: new Date().toISOString().slice(0,10),
+        note: note || '更新进度'
+      });
+      state.modal = null;
+      state.progressAnnId = null;
+      state.reminders = generateReminders(state.announcements);
+      render();
+    };
+  });
+
+
+  // ========== 任务提醒页 · 选中集 / 批量分配 ==========
+  // 全选
+  const raBox = document.getElementById('reminderSelectAll');
+  if (raBox) {
+    raBox.onchange = () => {
+      // 区县筛选 + 翻页后的当前页所有 id
+      const filtered = getFilteredReminders();
+      const pageSize = state.pageSize === 0 ? filtered.length : state.pageSize;
+      const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+      const currentPage = Math.min(state.currentPage, totalPages);
+      const startIdx = (currentPage - 1) * pageSize;
+      const pageIds = (state.pageSize === 0 ? filtered : filtered.slice(startIdx, startIdx + pageSize)).map(r => r.id);
+      if (raBox.checked) {
+        pageIds.forEach(id => state.selectedReminderIds.add(id));
+      } else {
+        pageIds.forEach(id => state.selectedReminderIds.delete(id));
+      }
+      render();
+    };
+  }
+  // 单行勾选
+  document.querySelectorAll('.reminder-row-check').forEach(cb => {
+    cb.onchange = () => {
+      const id = parseInt(cb.dataset.id);
+      if (cb.checked) state.selectedReminderIds.add(id);
+      else state.selectedReminderIds.delete(id);
+      render();
+    };
+  });
+  // 清除选择
+  const reminderClearBtn = document.getElementById('reminder-clear-selection');
+  if (reminderClearBtn) reminderClearBtn.onclick = () => {
+    state.selectedReminderIds.clear();
+    render();
+  };
+  // 打开批量分配弹窗
+  const batchAssignBtn = document.getElementById('reminder-batch-assign');
+  if (batchAssignBtn) batchAssignBtn.onclick = () => {
+    if (state.selectedReminderIds.size === 0) return;
+    state.modal = 'reminder-batch-assign';
+    render();
+  };
+
+  // 批量分配弹窗：小组 → 接收人 联动
+  const reminderBatchGroupSel = document.getElementById('reminder-batch-group');
+  const reminderBatchRecvSel = document.getElementById('reminder-batch-receiver');
+  if (reminderBatchGroupSel && reminderBatchRecvSel) {
+    reminderBatchGroupSel.onchange = () => {
+      const g = TEAM_GROUPS.find(x => x.name === reminderBatchGroupSel.value);
+      reminderBatchRecvSel.innerHTML = g ?
+        `<option value="${g.admin}">${g.admin}（管理员）</option>` +
+        g.members.map(m => `<option value="${m}">${m}</option>`).join('') :
+        '<option value="">请选择接收人</option>';
+    };
+  }
+
+  // 确认批量分配
+  document.querySelectorAll('[data-confirm-reminder-batch-assign]').forEach(el => {
+    el.onclick = () => {
+      const group = document.getElementById('reminder-batch-group').value;
+      const receiver = document.getElementById('reminder-batch-receiver').value;
+      const noteEl = document.getElementById('reminder-batch-note');
+      const note = noteEl ? noteEl.value : '';
+      if (!group || !receiver) { alert('请选择小组和接收人'); return; }
+
+      const filteredRems = getFilteredReminders();
+      const annIds = [...state.selectedReminderIds]
+        .map(rid => filteredRems.find(r => r.id === rid))
+        .filter(Boolean)
+        .map(r => r.targetId);
+      const uniqueAnnIds = [...new Set(annIds)];
+      let updatedCount = 0;
+      for (const id of uniqueAnnIds) {
+        const a = state.announcements.find(x => x.id === id);
+        if (!a) continue;
+        a.currentHandler = receiver;
+        a.progress = '已分配';
+        a.progressRecords = a.progressRecords || [];
+        a.progressRecords.push({
+          progress: '已分配',
+          follower: '管理员',
+          followDate: new Date().toISOString().slice(0,10),
+          note: `批量分配 · ${group} - ${receiver}${note ? '：' + note : ''}`
+        });
+        updatedCount++;
+      }
+      state.selectedReminderIds.clear();
+      state.modal = null;
+      alert(`✅ 批量分配成功：共更新 ${updatedCount} 条公告的分配状态`);
+      state.reminders = generateReminders(state.announcements);
+      render();
+    };
+  });
+
+  // 收尾：修正全选框 indeterminate 状态
+  patchReminderCheckboxIndeterminate();
+  // 修改弹窗内：初始成员行绑定删除按钮
+  document.querySelectorAll('#edit-members .member-row').forEach(row => bindMemberRow(row));
+}
+
+
+init();</script>
+
+</body>
+</html>

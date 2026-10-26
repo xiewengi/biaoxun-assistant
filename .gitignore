@@ -49,3 +49,18 @@ com.biaoxun.collect.plist.local
 
 # /tmp 落盘的 PDF
 /tmp/_cz_ann.pdf
+
+# ==================== 后端运行产物（SQLite / 本地数据） ====================
+server/data/
+server/.venv/
+*.db
+*.db-wal
+*.db-shm
+.pytest_cache/
+
+# ==================== 本地 UI 验收截图 ====================
+screenshots/
+
+# 腾讯云 SSH 私钥与服务器资料（绝不提交）
+*.pem
+腾讯云/

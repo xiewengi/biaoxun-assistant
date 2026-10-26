@@ -4,73 +4,2300 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>标讯助手 - Demo（离线版）</title>
-<style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.inset-0{inset:0}.z-50{z-index:50}.col-span-2{grid-column:span 2/span 2}.-mx-2{margin-left:-.5rem;margin-right:-.5rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-3{margin-left:.75rem}.ml-auto{margin-left:auto}.mr-1{margin-right:.25rem}.mr-2{margin-right:.5rem}.mt-1{margin-top:.25rem}.mt-1\.5{margin-top:.375rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.table{display:table}.grid{display:grid}.h-10{height:2.5rem}.h-16{height:4rem}.h-2{height:.5rem}.h-5{height:1.25rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-screen{height:100vh}.max-h-72{max-height:18rem}.w-2{width:.5rem}.w-5{width:1.25rem}.w-60{width:15rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-\[480px\]{width:480px}.w-full{width:100%}.min-w-\[280px\]{min-width:280px}.min-w-\[300px\]{min-width:300px}.min-w-\[32px\]{min-width:32px}.max-w-5xl{max-width:64rem}.max-w-\[150px\]{max-width:150px}.max-w-\[180px\]{max-width:180px}.max-w-\[400px\]{max-width:400px}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}.cursor-pointer{cursor:pointer}.resize-none{resize:none}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}.gap-y-4{row-gap:1rem}.space-y-1>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.25rem*var(--tw-space-y-reverse))}.space-y-1\.5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.375rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.375rem*var(--tw-space-y-reverse))}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.overflow-auto{overflow:auto}.overflow-hidden,.truncate{overflow:hidden}.truncate{text-overflow:ellipsis}.truncate,.whitespace-nowrap{white-space:nowrap}.whitespace-pre-wrap{white-space:pre-wrap}.break-all{word-break:break-all}.rounded{border-radius:.25rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-blue-600{--tw-border-opacity:1;border-color:rgb(37 99 235/var(--tw-border-opacity,1))}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246/var(--tw-border-opacity,1))}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235/var(--tw-border-opacity,1))}.border-gray-50{--tw-border-opacity:1;border-color:rgb(249 250 251/var(--tw-border-opacity,1))}.border-red-100{--tw-border-opacity:1;border-color:rgb(254 226 226/var(--tw-border-opacity,1))}.bg-blue-500{--tw-bg-opacity:1;background-color:rgb(59 130 246/var(--tw-bg-opacity,1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235/var(--tw-bg-opacity,1))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity,1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity,1))}.bg-green-500{--tw-bg-opacity:1;background-color:rgb(34 197 94/var(--tw-bg-opacity,1))}.bg-orange-100{--tw-bg-opacity:1;background-color:rgb(255 237 213/var(--tw-bg-opacity,1))}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237/var(--tw-bg-opacity,1))}.bg-orange-500{--tw-bg-opacity:1;background-color:rgb(249 115 22/var(--tw-bg-opacity,1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242/var(--tw-bg-opacity,1))}.bg-red-500{--tw-bg-opacity:1;background-color:rgb(239 68 68/var(--tw-bg-opacity,1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}.from-blue-500{--tw-gradient-from:#3b82f6 var(--tw-gradient-from-position);--tw-gradient-to:rgba(59,130,246,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.to-blue-700{--tw-gradient-to:#1d4ed8 var(--tw-gradient-to-position)}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1\.5{padding-left:.375rem;padding-right:.375rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pl-5{padding-left:1.25rem}.pt-4{padding-top:1rem}.text-left{text-align:left}.text-center{text-align:center}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246/var(--tw-text-opacity,1))}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235/var(--tw-text-opacity,1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219/var(--tw-text-opacity,1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175/var(--tw-text-opacity,1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128/var(--tw-text-opacity,1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99/var(--tw-text-opacity,1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity,1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55/var(--tw-text-opacity,1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39/var(--tw-text-opacity,1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74/var(--tw-text-opacity,1))}.text-orange-500{--tw-text-opacity:1;color:rgb(249 115 22/var(--tw-text-opacity,1))}.text-orange-600{--tw-text-opacity:1;color:rgb(234 88 12/var(--tw-text-opacity,1))}.text-red-500{--tw-text-opacity:1;color:rgb(239 68 68/var(--tw-text-opacity,1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-sm,.shadow-xl{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color)}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-filter{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.hover\:bg-blue-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216/var(--tw-bg-opacity,1))}.hover\:bg-gray-50:hover{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity,1))}.hover\:text-blue-600:hover{--tw-text-opacity:1;color:rgb(37 99 235/var(--tw-text-opacity,1))}.hover\:underline:hover{text-decoration-line:underline}.focus\:border-blue-400:focus{--tw-border-opacity:1;border-color:rgb(96 165 250/var(--tw-border-opacity,1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-40:disabled{opacity:.4}
-  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
-  /* 表格横拉条常显样式 */
-  .scrollbar-thin::-webkit-scrollbar { width: 10px; height: 12px; }
-  .scrollbar-thin::-webkit-scrollbar-track { 
+<style>*, ::before, ::after {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+::backdrop {
+  --tw-border-spacing-x: 0;
+  --tw-border-spacing-y: 0;
+  --tw-translate-x: 0;
+  --tw-translate-y: 0;
+  --tw-rotate: 0;
+  --tw-skew-x: 0;
+  --tw-skew-y: 0;
+  --tw-scale-x: 1;
+  --tw-scale-y: 1;
+  --tw-pan-x:  ;
+  --tw-pan-y:  ;
+  --tw-pinch-zoom:  ;
+  --tw-scroll-snap-strictness: proximity;
+  --tw-gradient-from-position:  ;
+  --tw-gradient-via-position:  ;
+  --tw-gradient-to-position:  ;
+  --tw-ordinal:  ;
+  --tw-slashed-zero:  ;
+  --tw-numeric-figure:  ;
+  --tw-numeric-spacing:  ;
+  --tw-numeric-fraction:  ;
+  --tw-ring-inset:  ;
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: #fff;
+  --tw-ring-color: rgb(59 130 246 / 0.5);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 #0000;
+  --tw-shadow: 0 0 #0000;
+  --tw-shadow-colored: 0 0 #0000;
+  --tw-blur:  ;
+  --tw-brightness:  ;
+  --tw-contrast:  ;
+  --tw-grayscale:  ;
+  --tw-hue-rotate:  ;
+  --tw-invert:  ;
+  --tw-saturate:  ;
+  --tw-sepia:  ;
+  --tw-drop-shadow:  ;
+  --tw-backdrop-blur:  ;
+  --tw-backdrop-brightness:  ;
+  --tw-backdrop-contrast:  ;
+  --tw-backdrop-grayscale:  ;
+  --tw-backdrop-hue-rotate:  ;
+  --tw-backdrop-invert:  ;
+  --tw-backdrop-opacity:  ;
+  --tw-backdrop-saturate:  ;
+  --tw-backdrop-sepia:  ;
+  --tw-contain-size:  ;
+  --tw-contain-layout:  ;
+  --tw-contain-paint:  ;
+  --tw-contain-style:  ;
+}
+
+/*
+! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com
+*/
+
+/*
+1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+*/
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  /* 1 */
+  border-width: 0;
+  /* 2 */
+  border-style: solid;
+  /* 2 */
+  border-color: #e5e7eb;
+  /* 2 */
+}
+
+::before,
+::after {
+  --tw-content: '';
+}
+
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+5. Use the user's configured `sans` font-feature-settings by default.
+6. Use the user's configured `sans` font-variation-settings by default.
+7. Disable tap highlights on iOS
+*/
+
+html,
+:host {
+  line-height: 1.5;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+  -moz-tab-size: 4;
+  /* 3 */
+  -o-tab-size: 4;
+     tab-size: 4;
+  /* 3 */
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* 4 */
+  font-feature-settings: normal;
+  /* 5 */
+  font-variation-settings: normal;
+  /* 6 */
+  -webkit-tap-highlight-color: transparent;
+  /* 7 */
+}
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+
+body {
+  margin: 0;
+  /* 1 */
+  line-height: inherit;
+  /* 2 */
+}
+
+/*
+1. Add the correct height in Firefox.
+2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+3. Ensure horizontal rules are visible by default.
+*/
+
+hr {
+  height: 0;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  border-top-width: 1px;
+  /* 3 */
+}
+
+/*
+Add the correct text decoration in Chrome, Edge, and Safari.
+*/
+
+abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
+
+/*
+Remove the default font size and weight for headings.
+*/
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/*
+Reset links to optimize for opt-in styling instead of opt-out.
+*/
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/*
+Add the correct font weight in Edge and Safari.
+*/
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+/*
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
+*/
+
+code,
+kbd,
+samp,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* 1 */
+  font-feature-settings: normal;
+  /* 2 */
+  font-variation-settings: normal;
+  /* 3 */
+  font-size: 1em;
+  /* 4 */
+}
+
+/*
+Add the correct font size in all browsers.
+*/
+
+small {
+  font-size: 80%;
+}
+
+/*
+Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+*/
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/*
+1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+3. Remove gaps between table borders by default.
+*/
+
+table {
+  text-indent: 0;
+  /* 1 */
+  border-color: inherit;
+  /* 2 */
+  border-collapse: collapse;
+  /* 3 */
+}
+
+/*
+1. Change the font styles in all browsers.
+2. Remove the margin in Firefox and Safari.
+3. Remove default padding in all browsers.
+*/
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-feature-settings: inherit;
+  /* 1 */
+  font-variation-settings: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  font-weight: inherit;
+  /* 1 */
+  line-height: inherit;
+  /* 1 */
+  letter-spacing: inherit;
+  /* 1 */
+  color: inherit;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+  padding: 0;
+  /* 3 */
+}
+
+/*
+Remove the inheritance of text transform in Edge and Firefox.
+*/
+
+button,
+select {
+  text-transform: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+*/
+
+button,
+input:where([type='button']),
+input:where([type='reset']),
+input:where([type='submit']) {
+  -webkit-appearance: button;
+  /* 1 */
+  background-color: transparent;
+  /* 2 */
+  background-image: none;
+  /* 2 */
+}
+
+/*
+Use the modern Firefox focus style for all focusable elements.
+*/
+
+:-moz-focusring {
+  outline: auto;
+}
+
+/*
+Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
+
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/*
+Add the correct vertical alignment in Chrome and Firefox.
+*/
+
+progress {
+  vertical-align: baseline;
+}
+
+/*
+Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/*
+1. Correct the odd appearance in Chrome and Safari.
+2. Correct the outline style in Safari.
+*/
+
+[type='search'] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/*
+Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to `inherit` in Safari.
+*/
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/*
+Add the correct display in Chrome and Safari.
+*/
+
+summary {
+  display: list-item;
+}
+
+/*
+Removes the default spacing and border for appropriate elements.
+*/
+
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+legend {
+  padding: 0;
+}
+
+ol,
+ul,
+menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+Reset default styling for dialogs.
+*/
+
+dialog {
+  padding: 0;
+}
+
+/*
+Prevent resizing textareas horizontally by default.
+*/
+
+textarea {
+  resize: vertical;
+}
+
+/*
+1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+2. Set the default placeholder color to the user's configured gray 400 color.
+*/
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+/*
+Set the default cursor for buttons.
+*/
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+/*
+Make sure disabled buttons don't get the pointer cursor.
+*/
+
+:disabled {
+  cursor: default;
+}
+
+/*
+1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+   This can trigger a poorly considered lint error in some tools but is included by design.
+*/
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+}
+
+/*
+Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+*/
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make elements with the HTML hidden attribute stay hidden by default */
+
+[hidden]:where(:not([hidden="until-found"])) {
+  display: none;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+}
+
+.inset-0 {
+  inset: 0px;
+}
+
+.left-0 {
+  left: 0px;
+}
+
+.right-0 {
+  right: 0px;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
+
+.-mx-2 {
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-1\.5 {
+  margin-bottom: 0.375rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mr-3 {
+  margin-right: 0.75rem;
+}
+
+.mt-0 {
+  margin-top: 0px;
+}
+
+.mt-0\.5 {
+  margin-top: 0.125rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-1\.5 {
+  margin-top: 0.375rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mt-7 {
+  margin-top: 1.75rem;
+}
+
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
+}
+
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.table {
+  display: table;
+}
+
+.grid {
+  display: grid;
+}
+
+.hidden {
+  display: none;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-16 {
+  height: 4rem;
+}
+
+.h-2 {
+  height: 0.5rem;
+}
+
+.h-28 {
+  height: 7rem;
+}
+
+.h-3 {
+  height: 0.75rem;
+}
+
+.h-3\.5 {
+  height: 0.875rem;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.h-5 {
+  height: 1.25rem;
+}
+
+.h-6 {
+  height: 1.5rem;
+}
+
+.h-7 {
+  height: 1.75rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.h-9 {
+  height: 2.25rem;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.max-h-40 {
+  max-height: 10rem;
+}
+
+.max-h-72 {
+  max-height: 18rem;
+}
+
+.max-h-80 {
+  max-height: 20rem;
+}
+
+.max-h-\[200px\] {
+  max-height: 200px;
+}
+
+.max-h-\[70vh\] {
+  max-height: 70vh;
+}
+
+.max-h-\[80vh\] {
+  max-height: 80vh;
+}
+
+.max-h-\[92vh\] {
+  max-height: 92vh;
+}
+
+.min-h-0 {
+  min-height: 0px;
+}
+
+.w-0 {
+  width: 0px;
+}
+
+.w-0\.5 {
+  width: 0.125rem;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.w-14 {
+  width: 3.5rem;
+}
+
+.w-16 {
+  width: 4rem;
+}
+
+.w-2 {
+  width: 0.5rem;
+}
+
+.w-20 {
+  width: 5rem;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.w-28 {
+  width: 7rem;
+}
+
+.w-36 {
+  width: 9rem;
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.w-5 {
+  width: 1.25rem;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.w-60 {
+  width: 15rem;
+}
+
+.w-7 {
+  width: 1.75rem;
+}
+
+.w-8 {
+  width: 2rem;
+}
+
+.w-9 {
+  width: 2.25rem;
+}
+
+.w-\[130px\] {
+  width: 130px;
+}
+
+.w-\[140px\] {
+  width: 140px;
+}
+
+.w-\[200px\] {
+  width: 200px;
+}
+
+.w-\[340px\] {
+  width: 340px;
+}
+
+.w-\[480px\] {
+  width: 480px;
+}
+
+.w-\[520px\] {
+  width: 520px;
+}
+
+.w-\[560px\] {
+  width: 560px;
+}
+
+.w-\[620px\] {
+  width: 620px;
+}
+
+.w-\[860px\] {
+  width: 860px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-px {
+  width: 1px;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.min-w-0 {
+  min-width: 0px;
+}
+
+.min-w-\[110px\] {
+  min-width: 110px;
+}
+
+.min-w-\[200px\] {
+  min-width: 200px;
+}
+
+.min-w-\[32px\] {
+  min-width: 32px;
+}
+
+.max-w-5xl {
+  max-width: 64rem;
+}
+
+.max-w-\[280px\] {
+  max-width: 280px;
+}
+
+.max-w-\[400px\] {
+  max-width: 400px;
+}
+
+.flex-1 {
+  flex: 1 1 0%;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.border-separate {
+  border-collapse: separate;
+}
+
+.transform {
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.resize-none {
+  resize: none;
+}
+
+.resize {
+  resize: both;
+}
+
+.scroll-py-2 {
+  scroll-padding-top: 0.5rem;
+  scroll-padding-bottom: 0.5rem;
+}
+
+.scroll-py-3 {
+  scroll-padding-top: 0.75rem;
+  scroll-padding-bottom: 0.75rem;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-1\.5 {
+  gap: 0.375rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-2\.5 {
+  gap: 0.625rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-5 {
+  gap: 1.25rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.gap-x-10 {
+  -moz-column-gap: 2.5rem;
+       column-gap: 2.5rem;
+}
+
+.gap-x-2 {
+  -moz-column-gap: 0.5rem;
+       column-gap: 0.5rem;
+}
+
+.gap-x-3 {
+  -moz-column-gap: 0.75rem;
+       column-gap: 0.75rem;
+}
+
+.gap-x-4 {
+  -moz-column-gap: 1rem;
+       column-gap: 1rem;
+}
+
+.gap-x-5 {
+  -moz-column-gap: 1.25rem;
+       column-gap: 1.25rem;
+}
+
+.gap-x-6 {
+  -moz-column-gap: 1.5rem;
+       column-gap: 1.5rem;
+}
+
+.gap-y-3 {
+  row-gap: 0.75rem;
+}
+
+.gap-y-4 {
+  row-gap: 1rem;
+}
+
+.gap-y-5 {
+  row-gap: 1.25rem;
+}
+
+.gap-y-6 {
+  row-gap: 1.5rem;
+}
+
+.space-y-1 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
+}
+
+.space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.375rem * var(--tw-space-y-reverse));
+}
+
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+}
+
+.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+}
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
+.overflow-auto {
+  overflow: auto;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.break-all {
+  word-break: break-all;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.rounded-sm {
+  border-radius: 0.125rem;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.rounded-b-lg {
+  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+.rounded-b-xl {
+  border-bottom-right-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-b {
+  border-bottom-width: 1px;
+}
+
+.border-l {
+  border-left-width: 1px;
+}
+
+.border-r {
+  border-right-width: 1px;
+}
+
+.border-t {
+  border-top-width: 1px;
+}
+
+.border-dashed {
+  border-style: dashed;
+}
+
+.border-blue-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(191 219 254 / var(--tw-border-opacity, 1));
+}
+
+.border-blue-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(96 165 250 / var(--tw-border-opacity, 1));
+}
+
+.border-blue-600 {
+  --tw-border-opacity: 1;
+  border-color: rgb(37 99 235 / var(--tw-border-opacity, 1));
+}
+
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(243 244 246 / var(--tw-border-opacity, 1));
+}
+
+.border-gray-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity, 1));
+}
+
+.border-gray-200\/60 {
+  border-color: rgb(229 231 235 / 0.6);
+}
+
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
+}
+
+.border-gray-50 {
+  --tw-border-opacity: 1;
+  border-color: rgb(249 250 251 / var(--tw-border-opacity, 1));
+}
+
+.border-orange-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(255 237 213 / var(--tw-border-opacity, 1));
+}
+
+.border-purple-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(233 213 255 / var(--tw-border-opacity, 1));
+}
+
+.border-red-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(254 226 226 / var(--tw-border-opacity, 1));
+}
+
+.bg-blue-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-50\/40 {
+  background-color: rgb(239 246 255 / 0.4);
+}
+
+.bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
+}
+
+.bg-blue-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-50\/40 {
+  background-color: rgb(249 250 251 / 0.4);
+}
+
+.bg-green-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
+}
+
+.bg-orange-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 237 213 / var(--tw-bg-opacity, 1));
+}
+
+.bg-orange-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 247 237 / var(--tw-bg-opacity, 1));
+}
+
+.bg-orange-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 115 22 / var(--tw-bg-opacity, 1));
+}
+
+.bg-purple-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 232 255 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
+}
+
+.bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1));
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.from-blue-500 {
+  --tw-gradient-from: #3b82f6 var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(59 130 246 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-blue-700 {
+  --tw-gradient-to: #1d4ed8 var(--tw-gradient-to-position);
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
+.px-1\.5 {
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.px-2\.5 {
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.py-0 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.py-0\.5 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.py-1\.5 {
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
+}
+
+.py-16 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.py-2\.5 {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.py-3\.5 {
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
+.pl-3 {
+  padding-left: 0.75rem;
+}
+
+.pl-5 {
+  padding-left: 1.25rem;
+}
+
+.pr-1 {
+  padding-right: 0.25rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
+}
+
+.pt-5 {
+  padding-top: 1.25rem;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-\[13px\] {
+  font-size: 13px;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.leading-5 {
+  line-height: 1.25rem;
+}
+
+.leading-6 {
+  line-height: 1.5rem;
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.leading-relaxed {
+  line-height: 1.625;
+}
+
+.leading-snug {
+  line-height: 1.375;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+.text-blue-500 {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+}
+
+.text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity, 1));
+}
+
+.text-blue-700 {
+  --tw-text-opacity: 1;
+  color: rgb(29 78 216 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-300 {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-700 {
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-800 {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity, 1));
+}
+
+.text-gray-900 {
+  --tw-text-opacity: 1;
+  color: rgb(17 24 39 / var(--tw-text-opacity, 1));
+}
+
+.text-green-500 {
+  --tw-text-opacity: 1;
+  color: rgb(34 197 94 / var(--tw-text-opacity, 1));
+}
+
+.text-green-600 {
+  --tw-text-opacity: 1;
+  color: rgb(22 163 74 / var(--tw-text-opacity, 1));
+}
+
+.text-orange-500 {
+  --tw-text-opacity: 1;
+  color: rgb(249 115 22 / var(--tw-text-opacity, 1));
+}
+
+.text-orange-600 {
+  --tw-text-opacity: 1;
+  color: rgb(234 88 12 / var(--tw-text-opacity, 1));
+}
+
+.text-orange-700 {
+  --tw-text-opacity: 1;
+  color: rgb(194 65 12 / var(--tw-text-opacity, 1));
+}
+
+.text-purple-700 {
+  --tw-text-opacity: 1;
+  color: rgb(126 34 206 / var(--tw-text-opacity, 1));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+}
+
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity, 1));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+
+.opacity-70 {
+  opacity: 0.7;
+}
+
+.shadow {
+  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-2xl {
+  --tw-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --tw-shadow-colored: 0 25px 50px -12px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-lg {
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-sm {
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-xl {
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.outline {
+  outline-style: solid;
+}
+
+.ring-1 {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.ring-blue-100 {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(219 234 254 / var(--tw-ring-opacity, 1));
+}
+
+.ring-gray-200 {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity, 1));
+}
+
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.backdrop-filter {
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+
+.transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.duration-200 {
+  transition-duration: 200ms;
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover\:border-blue-400:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(96 165 250 / var(--tw-border-opacity, 1));
+}
+
+.hover\:border-blue-500:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
+}
+
+.hover\:border-red-200:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(254 202 202 / var(--tw-border-opacity, 1));
+}
+
+.hover\:bg-blue-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-blue-700:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-blue-800:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 64 175 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-gray-100:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-gray-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-purple-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(233 213 255 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-red-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-red-600:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:text-blue-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-blue-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-blue-800:hover {
+  --tw-text-opacity: 1;
+  color: rgb(30 64 175 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-gray-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-red-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-red-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity, 1));
+}
+
+.hover\:text-red-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity, 1));
+}
+
+.hover\:underline:hover {
+  text-decoration-line: underline;
+}
+
+.focus\:border-blue-400:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(96 165 250 / var(--tw-border-opacity, 1));
+}
+
+.focus\:border-blue-500:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
+}
+
+.focus\:outline-none:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus\:ring-2:focus {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+
+.focus\:ring-blue-100:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(219 234 254 / var(--tw-ring-opacity, 1));
+}
+
+.focus\:ring-blue-500:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity, 1));
+}
+
+.active\:bg-blue-800:active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 64 175 / var(--tw-bg-opacity, 1));
+}
+
+.disabled\:cursor-not-allowed:disabled {
+  cursor: not-allowed;
+}
+
+.disabled\:opacity-40:disabled {
+  opacity: 0.4;
+}
+
+/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}
+
+:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}
+
+body{margin:0;line-height:inherit}
+
+hr{height:0;color:inherit;border-top-width:1px}
+
+abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}
+
+h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}
+
+a{color:inherit;text-decoration:inherit}
+
+code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}
+
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+
+table{text-indent:0;border-color:inherit;border-collapse:collapse}
+
+button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}
+
+button,select{text-transform:none}
+
+button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}
+
+:-moz-ui-invalid{box-shadow:none}
+
+progress{vertical-align:baseline}
+
+::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}
+
+[type=search]{-webkit-appearance:textfield;outline-offset:-2px}
+
+::-webkit-search-decoration{-webkit-appearance:none}
+
+::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}
+
+blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}
+
+menu,ol,ul{list-style:none;margin:0;padding:0}
+
+input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}
+
+input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}
+
+[role=button],button{cursor:pointer}
+
+audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}
+
+img,video{max-width:100%;height:auto}
+
+[hidden]:where(:not([hidden=until-found])){display:none}
+
+.col-span-2{grid-column:span 2/span 2}
+
+.-mx-2{margin-left:-.5rem;margin-right:-.5rem}
+
+.mx-auto{margin-left:auto;margin-right:auto}
+
+.inline-block{display:inline-block}
+
+.min-w-\[280px\]{min-width:280px}
+
+.min-w-\[300px\]{min-width:300px}
+
+.min-w-\[32px\]{min-width:32px}
+
+.max-w-\[150px\]{max-width:150px}
+
+.max-w-\[180px\]{max-width:180px}
+
+.max-w-\[400px\]{max-width:400px}
+
+@keyframes pulse{50%{opacity:.5}}
+
+.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
+
+.cursor-pointer{cursor:pointer}
+
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+.grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.flex-col{flex-direction:column}
+
+.items-start{align-items:flex-start}
+
+.items-center{align-items:center}
+
+.justify-end{justify-content:flex-end}
+
+.justify-center{justify-content:center}
+
+.justify-between{justify-content:space-between}
+
+.gap-x-10{-moz-column-gap:2.5rem;column-gap:2.5rem}
+
+.overflow-hidden,.truncate{overflow:hidden}
+
+.truncate{text-overflow:ellipsis}
+
+.truncate,.whitespace-nowrap{white-space:nowrap}
+
+.whitespace-pre-wrap{white-space:pre-wrap}
+
+.break-all{word-break:break-all}
+
+.rounded{border-radius:.25rem}
+
+.rounded-full{border-radius:9999px}
+
+.rounded-lg{border-radius:.5rem}
+
+.rounded-xl{border-radius:.75rem}
+
+.border-b{border-bottom-width:1px}
+
+.border-r{border-right-width:1px}
+
+.border-t{border-top-width:1px}
+
+.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))}
+
+.px-1\.5{padding-left:.375rem;padding-right:.375rem}
+
+.px-2{padding-left:.5rem;padding-right:.5rem}
+
+.px-3{padding-left:.75rem;padding-right:.75rem}
+
+.px-4{padding-left:1rem;padding-right:1rem}
+
+.px-5{padding-left:1.25rem;padding-right:1.25rem}
+
+.px-6{padding-left:1.5rem;padding-right:1.5rem}
+
+.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}
+
+.py-1{padding-top:.25rem;padding-bottom:.25rem}
+
+.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}
+
+.py-16{padding-top:4rem;padding-bottom:4rem}
+
+.py-2{padding-top:.5rem;padding-bottom:.5rem}
+
+.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}
+
+.py-3{padding-top:.75rem;padding-bottom:.75rem}
+
+.py-8{padding-top:2rem;padding-bottom:2rem}
+
+.text-center{text-align:center}
+
+.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}
+
+.text-2xl{font-size:1.5rem;line-height:2rem}
+
+.text-lg{font-size:1.125rem;line-height:1.75rem}
+
+.text-sm{font-size:.875rem;line-height:1.25rem}
+
+.text-xl{font-size:1.25rem;line-height:1.75rem}
+
+.text-xs{font-size:.75rem;line-height:1rem}
+
+.font-semibold{font-weight:600}
+
+.leading-relaxed{line-height:1.625}
+
+.leading-snug{line-height:1.375}
+
+.hover\:underline:hover{text-decoration-line:underline}
+
+.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}
+
+.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}
+
+.disabled\:opacity-40:disabled{opacity:.4}
+
+body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+
+.scrollbar-thin::-webkit-scrollbar { width: 10px; height: 12px; }
+
+.scrollbar-thin::-webkit-scrollbar-track { 
     background: #f1f5f9; 
     border-radius: 6px; 
     border: 2px solid #fff;
   }
-  .scrollbar-thin::-webkit-scrollbar-thumb { 
+
+.scrollbar-thin::-webkit-scrollbar-thumb { 
     background: #cbd5e1; 
     border-radius: 6px; 
     border: 2px solid #f1f5f9;
   }
-  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-  /* macOS 强制滚动条常显（避免 overlay 隐藏） */
-  .ann-table-scroll, .overflow-x-auto.scrollbar-thin {
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+.ann-table-scroll, .overflow-x-auto.scrollbar-thin {
     scrollbar-width: thin;
     scrollbar-color: #cbd5e1 #f1f5f9;
   }
-  @supports (-webkit-overflow-scrolling: touch) {
+
+@supports (-webkit-overflow-scrolling: touch) {
     .scrollbar-thin::-webkit-scrollbar { width: 10px; height: 12px; }
   }
-  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
-  .tag-green { background: #dcfce7; color: #166534; }
-  .tag-yellow { background: #fef9c3; color: #854d0e; }
-  .tag-blue { background: #dbeafe; color: #1e40af; }
-  .tag-red { background: #fee2e2; color: #991b1b; }
-  .tag-gray { background: #f3f4f6; color: #374151; }
-  .tag-purple { background: #f3e8ff; color: #7e22ce; }
-  .modal-bg { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
-  .fade-in { animation: fadeIn 0.2s ease-out; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-  .sidebar-item:hover { background: #f3f4f6; }
-  .sidebar-item.active { background: #eff6ff; color: #2563eb; }
-  .sidebar-item.active svg { stroke: #2563eb; }
-  .ann-row:hover { background: #f9fafb; }
-  .kw-del-cb:checked + .kw-del-label { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
-  .kw-del-pill { display: inline-block; }
-/* sticky 左右列阴影 */
+
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+
+.tag-green { background: #dcfce7; color: #166534; }
+
+.tag-yellow { background: #fef9c3; color: #854d0e; }
+
+.tag-blue { background: #dbeafe; color: #1e40af; }
+
+.tag-red { background: #fee2e2; color: #991b1b; }
+
+.tag-gray { background: #f3f4f6; color: #374151; }
+
+.tag-purple { background: #f3e8ff; color: #7e22ce; }
+
+.modal-bg { background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+
+.fade-in { animation: fadeIn 0.2s ease-out; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+.sidebar-item:hover { background: #f3f4f6; }
+
+.sidebar-item.active { background: #eff6ff; color: #2563eb; }
+
+.sidebar-item.active svg { stroke: #2563eb; }
+
+.ann-row:hover { background: #f9fafb; }
+
+.kw-del-cb:checked + .kw-del-label { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+
+.kw-del-pill { display: inline-block; }
+
 .ann-row-first{box-shadow:4px 0 6px -4px rgba(0,0,0,.08)}
+
 .ann-row-last{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
+
 .ann-row:hover .ann-row-first{background:#f9fafb}
+
 .ann-row:hover .ann-row-last{background:#f9fafb}
+
 thead th.sticky.left-0{box-shadow:4px 0 6px -4px rgba(0,0,0,.08)}
+
 thead th.sticky.right-0{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
-  /* 手动补 Tailwind 没编译的 overflow-y-auto / overflow-x-hidden */
-  main[class*="overflow-y-auto"] { overflow-y: auto !important; }
-  main[class*="overflow-x-hidden"] { overflow-x: hidden !important; }
-  .overflow-x-auto { overflow-x: auto !important; }
-  /* 关键：表格 card 锁死宽度，不让 flex min-content 撑爆 */
-  .bg-white.rounded-xl.shadow-sm.border-gray-100.style-width-100,
-  .bg-white.rounded-xl.shadow-sm.border-gray-100[style*="width:100%"] { width: 100% !important; max-width: 100%; }
 
+main[class*="overflow-y-auto"] { overflow-y: auto !important; }
 
-/* ===== 登录页 · 现代毛玻璃风格 ===== */
+main[class*="overflow-x-hidden"] { overflow-x: hidden !important; }
+
+.overflow-x-auto { overflow-x: auto !important; }
+
+.bg-white.rounded-xl.shadow-sm.border-gray-100[style*="width:100%"] { width: 100% !important; max-width: 100%; }
+
 .login-bg {
   background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 30%, #3b82f6 60%, #6366f1 100%);
   background-size: 400% 400%;
   animation: loginGradientShift 15s ease infinite;
 }
+
 @keyframes loginGradientShift {
   0%,100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
-/* 浮动装饰圆 */
 .login-blob {
   position: absolute;
   border-radius: 50%;
@@ -78,31 +2305,34 @@ thead th.sticky.right-0{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
   opacity: .5;
   animation: loginBlobFloat 20s ease-in-out infinite;
 }
+
 .login-blob-1 {
   width: 500px; height: 500px;
   background: radial-gradient(circle, #f472b6 0%, transparent 70%);
   top: -200px; left: -100px;
   animation-delay: 0s;
 }
+
 .login-blob-2 {
   width: 400px; height: 400px;
   background: radial-gradient(circle, #22d3ee 0%, transparent 70%);
   bottom: -150px; right: -100px;
   animation-delay: -5s;
 }
+
 .login-blob-3 {
   width: 300px; height: 300px;
   background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
   top: 40%; right: 20%;
   animation-delay: -10s;
 }
+
 @keyframes loginBlobFloat {
   0%,100% { transform: translate(0,0) scale(1); }
   33% { transform: translate(40px,-30px) scale(1.1); }
   66% { transform: translate(-30px,40px) scale(0.95); }
 }
 
-/* 毛玻璃卡片 */
 .login-card {
   position: relative;
   padding: 40px 36px 32px;
@@ -117,10 +2347,10 @@ thead th.sticky.right-0{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
   z-index: 10;
 }
 
-/* 输入框 */
 .login-input-wrap {
   position: relative;
 }
+
 .login-input-icon {
   position: absolute;
   left: 14px;
@@ -131,6 +2361,7 @@ thead th.sticky.right-0{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
   pointer-events: none;
   transition: color .2s;
 }
+
 .login-input {
   width: 100%;
   height: 46px;
@@ -142,17 +2373,20 @@ thead th.sticky.right-0{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
   color: #0f172a;
   transition: all .2s;
 }
+
 .login-input::placeholder { color: #cbd5e1; }
+
 .login-input:hover { border-color: #cbd5e1; background: #fff; }
+
 .login-input:focus {
   outline: none;
   border-color: #3b82f6;
   background: #fff;
   box-shadow: 0 0 0 4px rgba(59,130,246,.12);
 }
+
 .login-input-wrap:focus-within .login-input-icon { color: #3b82f6; }
 
-/* 登录按钮 */
 .login-btn {
   position: relative;
   width: 100%;
@@ -172,17 +2406,29 @@ thead th.sticky.right-0{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
   gap: 10px;
   box-shadow: 0 4px 14px rgba(59,130,246,.35);
 }
+
 .login-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(59,130,246,.45);
   background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
 }
+
 .login-btn:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(59,130,246,.3); }
+
 .login-btn-arrow {
   width: 18px; height: 18px;
   transition: transform .25s;
 }
+
 .login-btn:hover .login-btn-arrow { transform: translateX(3px); }
+
+
+/* safelist 漏网的 arbitrary values */
+.max-h-\[92vh\] { max-height: 92vh; }
+.gap-2\.5 { gap: 0.625rem; }
+.py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+.py-3\.5 { padding-top: 0.875rem; padding-bottom: 0.875rem; }
+.bg-gray-50\/40 { background-color: rgba(249, 250, 251, 0.4); }
 </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -191,7 +2437,1043 @@ thead th.sticky.right-0{box-shadow:-4px 0 6px -4px rgba(0,0,0,.08)}
 // ===== 数据层（由标讯助手demo.html 自动同步）=====
 
 // --- script[0] ---
-const INLINE_ANN = [{"id": "ANN202610214573", "title": "暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目（项目编号：0724-2631ST826480）招标公告", "projectName": "暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目", "projectCode": "0724-2631ST826480", "buyer": "暨南大学附属第一医院潮汕医院", "agency": "国义招标股份有限公司", "budget": "7,940,000.00元", "fundSource": "—", "district": "饶平", "annType": "采购意向公告", "pubDate": "2026-10-21", "deadline": "2026-11-11", "bidOpenDate": "2026-11-11", "summary": "项目概况 暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月11日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：0724-2631ST826480 项目名称：暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目 采购方式：公开招标 预算金额：7,940,000.00元 采购需求： 采购包1(CT维修保养服务3年): 采购包预算金额： 3,050,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目", "contact": "0768-8864153 020-37860531、020-37860521、0754 邓彩云、戴琨琳、马倩升 020-37860531、020-37860521、0754", "contacts": {"purchaser": {"name": "暨南大学附属第一医院潮汕医院", "address": "饶平县黄冈镇环城北路969号", "person": "", "phone": "0768-8864153"}, "agency": {"name": "国义招标股份有限公司", "address": "广州市越秀区东风东路726号18楼", "person": "戴琨琳", "phone": "020-37860531、020-37860521、0754"}, "project": {"person": "邓彩云、戴琨琳、马倩升", "phone": "020-37860531、020-37860521、0754"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=402e5eb5-daaa-4e22-a31b-6af059fa1996&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "系统"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610218174", "title": "新圩镇苗田村基础设施及人居环境提升工程竞争性磋商公告", "projectName": "新圩镇苗田村基础设施及人居环境提升工程", "projectCode": "445122-2026-01720", "buyer": "饶平县新圩镇人民政府", "agency": "驿大项目管理有限公司", "budget": "1,104,405.44元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-10-21", "deadline": "2026-11-03", "bidOpenDate": "2026-11-03", "summary": "项目概况 新圩镇苗田村基础设施及人居环境提升工程 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年11月03日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01720 项目名称：新圩镇苗田村基础设施及人居环境提升工程 采购方式：竞争性磋商 预算金额：1,104,405.44元 采购需求： 采购包1(新圩镇苗田村基础设施及人居环境提升工程): 采购包预算金额： 1,104,405.44元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元", "contact": "13690043319 15007684884 张工 15007684884", "contacts": {"purchaser": {"name": "饶平县新圩镇人民政府", "address": "广东省潮州市饶平县新圩镇团结路西70号", "person": "", "phone": "13690043319"}, "agency": {"name": "驿大项目管理有限公司", "address": "四川省成都市金牛区高新技术产业园区迎宾大道298号4栋603号", "person": "钟成莉", "phone": "15007684884"}, "project": {"person": "张工", "phone": "15007684884"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=fb2dfa8f-4bca-4a1f-b065-80ebd5afe626&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610163463", "title": "潮州市政务服务中心信息化建设(2026年)项目招标公告", "projectName": "潮州市政务服务中心信息化建设(2026年)项目", "projectCode": "CZC2026023", "buyer": "潮州市政务服务和数据管理局", "agency": "潮州市公共资源交易中心", "budget": "7,463,061.95元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-10-16", "deadline": "2026-11-10", "bidOpenDate": "2026-11-10", "summary": "项目概况 潮州市政务服务中心信息化建设(2026年)项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月10日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026023 项目名称：潮州市政务服务中心信息化建设(2026年)项目 采购方式：公开招标 预算金额：7,463,061.95元 采购需求： 采购包1(潮州市政务服务中心信息化建设（2026年）项目): 采购包预算金额： 7,463,061.95元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目", "contact": "0768-2331598 0768-2280181 卢雅琨 0768-2280181", "contacts": {"purchaser": {"name": "潮州市政务服务和数据管理局", "address": "潮州市潮州大道中段凤新大厦北翼第九至第十一层", "person": "", "phone": "0768-2331598"}, "agency": {"name": "潮州市公共资源交易中心", "address": "广东省潮州市潮州大道中段广发银行12楼", "person": "卢雅琨", "phone": "0768-2280181"}, "project": {"person": "卢雅琨", "phone": "0768-2280181"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=6e2bd30e-c281-4015-a19a-9402b1edd0a5&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["信息化", "智慧", "平台", "系统", "软件", "云", "机房", "网络"], "businessTags": ["平台", "机房"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610164171", "title": "潮安区庵埠镇综合养老服务中心建设项目竞争性磋商公告", "projectName": "潮安区庵埠镇综合养老服务中心建设项目", "projectCode": "CZZZ[2026]G002", "buyer": "潮州市潮安区庵埠镇人民政府", "agency": "潮州市中正招投标代理有限公司", "budget": "2,751,916.55元", "fundSource": "—", "district": "潮安", "annType": "采购公告", "pubDate": "2026-10-16", "deadline": "2026-10-27", "bidOpenDate": "2026-10-27", "summary": "项目概况 潮安区庵埠镇综合养老服务中心建设项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月27日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：CZZZ[2026]G002 项目名称：潮安区庵埠镇综合养老服务中心建设项目 采购方式：竞争性磋商 预算金额：2,751,916.55元 采购需求： 采购包1(潮安区庵埠镇综合养老服务中心建设项目): 采购包预算金额： 2,751,916.55元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价", "contact": "6611887 0768-6639666 郭锡壮 0768-6639666", "contacts": {"purchaser": {"name": "潮州市潮安区庵埠镇人民政府", "address": "广东省潮州市潮安区庵埠镇亨利北路", "person": "", "phone": "6611887"}, "agency": {"name": "潮州市中正招投标代理有限公司", "address": "广东省潮州市潮安区城区安盛花园26幢101号", "person": "郭锡雄", "phone": "0768-6639666"}, "project": {"person": "郭锡壮", "phone": "0768-6639666"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=9e25945d-82af-49cd-969f-fbd974be7362&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610151097", "title": "钱东镇道路清扫保洁及垃圾清运与绿化养护项目竞争性磋商公告", "projectName": "钱东镇道路清扫保洁及垃圾清运与绿化养护项目", "projectCode": "FHGJST269C2043", "buyer": "饶平县钱东镇人民政府", "agency": "丰汇国际项目管理有限公司", "budget": "2,553,272.08元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-10-15", "deadline": "2026-10-27", "bidOpenDate": "2026-10-27", "summary": "项目概况 钱东镇道路清扫保洁及垃圾清运与绿化养护项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月27日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：FHGJST269C2043 项目名称：钱东镇道路清扫保洁及垃圾清运与绿化养护项目 采购方式：竞争性磋商 预算金额：2,553,272.08元 采购需求： 采购包1(钱东镇道路清扫保洁及垃圾清运与绿化养护项目): 采购包预算金额： 2,553,272.08元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预", "contact": "0768-8718456 19866255606 马工 19866255606", "contacts": {"purchaser": {"name": "饶平县钱东镇人民政府", "address": "广东省潮州市饶平县钱东镇大陇公园前一横2号", "person": "", "phone": "0768-8718456"}, "agency": {"name": "丰汇国际项目管理有限公司", "address": "汕头市龙湖区黄河路19号智汇时代雅园4栋1701", "person": "马逸乐", "phone": "19866255606"}, "project": {"person": "马工", "phone": "19866255606"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=8586b284-2d87-4558-8070-735857c5ecad&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610151045", "title": "潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目招标公告", "projectName": "潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目", "projectCode": "04-17-04A-2026-D-F-E29972", "buyer": "潮州市公安局", "agency": "公诚管理咨询有限公司", "budget": "2,250,700.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-10-15", "deadline": "2026-11-06", "bidOpenDate": "2026-11-06", "summary": "项目概况 潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月06日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：04-17-04A-2026-D-F-E29972 项目名称：潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目 采购方式：公开招标 预算金额：2,250,700.00元 采购需求： 采购包1(潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目", "contact": "13500105437 07683269996 高丽珍、宗正月、戚琳 07683269996", "contacts": {"purchaser": {"name": "潮州市公安局", "address": "潮州市湘桥区城新西路81号", "person": "", "phone": "13500105437"}, "agency": {"name": "公诚管理咨询有限公司", "address": "广东省潮州市湘桥区潮枫路223号新时空大厦8楼", "person": "李成斌", "phone": "07683269996"}, "project": {"person": "高丽珍、宗正月、戚琳", "phone": "07683269996"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=6fcd65ac-0a67-4557-b44c-f6d34d6e0c32&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "软件", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610142978", "title": "潮州市金山中学后勤服务项目招标公告", "projectName": "潮州市金山中学后勤服务项目", "projectCode": "CZC2026024", "buyer": "潮州市金山中学", "agency": "潮州市公共资源交易中心", "budget": "5,663,433.60元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-10-14", "deadline": "2026-11-04", "bidOpenDate": "2026-11-04", "summary": "项目概况 潮州市金山中学后勤服务项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月04日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026024 项目名称：潮州市金山中学后勤服务项目 采购方式：公开招标 预算金额：5,663,433.60元 采购需求： 采购包1(潮州市金山中学后勤服务项目): 采购包预算金额： 5,663,433.60元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元) 1-1 其他商务服务 内宿及课余", "contact": "13632039080 0768-2280181 卢巧玲 0768-2280181", "contacts": {"purchaser": {"name": "潮州市金山中学", "address": "广东省潮州市湘桥区桥东东山路99号", "person": "", "phone": "13632039080"}, "agency": {"name": "潮州市公共资源交易中心", "address": "广东省潮州市潮州大道中段广发银行12楼", "person": "卢巧玲", "phone": "0768-2280181"}, "project": {"person": "卢巧玲", "phone": "0768-2280181"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=43be227d-2bb4-44a0-b5a2-f50901418553&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610143847", "title": "潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目招标公告", "projectName": "潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目", "projectCode": "CZZD[2026]A019", "buyer": "潮州市生态环境局", "agency": "潮州市正得项目管理咨询有限公司", "budget": "5,300,000.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-10-14", "deadline": "2026-11-04", "bidOpenDate": "2026-11-04", "summary": "项目概况 潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月04日 09时00分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZZD[2026]A019 项目名称：潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目 采购方式：公开招标 预算金额：5,300,000.00元 采购需求： 采购包1(潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目): 采购包预算金额： 5,300", "contact": "0768-3288399 0768-2303555 邱先生 0768-2303555", "contacts": {"purchaser": {"name": "潮州市生态环境局", "address": "潮州大道凤新东路市环境监控中心大楼", "person": "", "phone": "0768-3288399"}, "agency": {"name": "潮州市正得项目管理咨询有限公司", "address": "广东省潮州市湘桥区绿茵路金阳大厦202", "person": "王绵", "phone": "0768-2303555"}, "project": {"person": "邱先生", "phone": "0768-2303555"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=79a3589b-6c2c-4e3c-9826-15ba041908eb&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云", "监控"], "businessTags": ["监控", "平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610121683", "title": "饶平县新丰镇镇区环卫保洁项目竞争性磋商公告", "projectName": "饶平县新丰镇镇区环卫保洁项目", "projectCode": "445122-2026-01627", "buyer": "饶平县新丰镇人民政府", "agency": "建信大项目管理(广州)有限公司", "budget": "1,050,000.00元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-10-12", "deadline": "2026-10-23", "bidOpenDate": "2026-10-23", "summary": "项目概况 饶平县新丰镇镇区环卫保洁项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月23日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01627 项目名称：饶平县新丰镇镇区环卫保洁项目 采购方式：竞争性磋商 预算金额：1,050,000.00元 采购需求： 采购包1(饶平县新丰镇镇区环卫保洁项目): 采购包预算金额： 1,050,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元) 1-1 清", "contact": "0768-8629526 0768-8595834 林工 0768-8595834", "contacts": {"purchaser": {"name": "饶平县新丰镇人民政府", "address": "广东省潮州市饶平县新丰镇新丰大道128号", "person": "", "phone": "0768-8629526"}, "agency": {"name": "建信大项目管理", "address": "潮州市饶平县黄冈镇颐养居东北角办公楼4楼", "person": "陈敏婷", "phone": "0768-8595834"}, "project": {"person": "林工", "phone": "0768-8595834"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=e296dd01-7396-48a1-9802-34c180967ab1&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610105429", "title": "化学与精细化工广东省实验室潮州分中心实验室家具采购项目（项目编号：0724-2631ST825692）招标公告", "projectName": "化学与精细化工广东省实验室潮州分中心实验室家具采购项目", "projectCode": "0724-2631ST825692", "buyer": "化学与精细化工广东省实验室潮州分中心", "agency": "国义招标股份有限公司", "budget": "1,804,885.94元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-10-10", "deadline": "2026-11-02", "bidOpenDate": "2026-11-02", "summary": "项目概况 化学与精细化工广东省实验室潮州分中心实验室家具采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月02日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：0724-2631ST825692 项目名称：化学与精细化工广东省实验室潮州分中心实验室家具采购项目 采购方式：公开招标 预算金额：1,804,885.94元 采购需求： 采购包1(实验室家具): 采购包预算金额： 1,804,885.94元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(", "contact": "0768-3260221 020-37860531、020-37860521、0754 邓彩云、戴琨琳、马倩升 020-37860531、020-37860521、0754", "contacts": {"purchaser": {"name": "化学与精细化工广东省实验室潮州分中心", "address": "潮州市潮安区安丰东路21号韩江实验室", "person": "", "phone": "0768-3260221"}, "agency": {"name": "国义招标股份有限公司", "address": "广东省广州市越秀区广东省广州市越秀区东风东路726号18楼", "person": "戴琨琳", "phone": "020-37860531、020-37860521、0754"}, "project": {"person": "邓彩云、戴琨琳、马倩升", "phone": "020-37860531、020-37860521、0754"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=3b7e8559-c5bb-4b5c-b8ed-1f805250671d&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "数字", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610105656", "title": "饶平县民政局关于2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次)招标公告", "projectName": "2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次)", "projectCode": "LZZX-CZ-ZB-310426", "buyer": "饶平县民政局", "agency": "潮州市联正工程咨询有限公司", "budget": "1,096,000.00元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-10-10", "deadline": "2026-11-03", "bidOpenDate": "2026-11-03", "summary": "项目概况 2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次) 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月03日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：LZZX-CZ-ZB-310426 项目名称：2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次) 采购方式：公开招标 预算金额：1,096,000.00元 采购需求： 采购包1(2026年“银龄安康行动”老年人意外伤害综合保险采购项目): 采购包预算金额： 1,096,000.00元 品目号 ", "contact": "0768-7803920 0768-2228456 邱工 0768-2228456", "contacts": {"purchaser": {"name": "饶平县民政局", "address": "广东省潮州市饶平县饶平大道中段", "person": "", "phone": "0768-7803920"}, "agency": {"name": "潮州市联正工程咨询有限公司", "address": "广东省潮州市湘桥区潮州市湘桥区桥东街道卧石路浮堆西路4号综合楼301室", "person": "卢若清", "phone": "0768-2228456"}, "project": {"person": "邱工", "phone": "0768-2228456"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=37fc2a1e-f9db-48a5-9851-cc7b2eaf8702&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610099406", "title": "潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次)招标公告", "projectName": "潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次)", "projectCode": "HZJJCZCG2026007", "buyer": "潮州市政府项目建设中心", "agency": "惠州市建佳造价咨询事务所有限公司", "budget": "4,352,559.98元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-10-09", "deadline": "2026-10-30", "bidOpenDate": "2026-10-30", "summary": "项目概况 潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次) 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月30日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：HZJJCZCG2026007 项目名称：潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次) 采购方式：公开招标 预算金额：4,352,559.98元 采购需求： 采购包1(潮州市韩东新城防洪综合整", "contact": "0768-2393053 13631004418 邢工 13631004418", "contacts": {"purchaser": {"name": "潮州市政府项目建设中心", "address": "潮州大道南段建设大厦三楼", "person": "", "phone": "0768-2393053"}, "agency": {"name": "惠州市建佳造价咨询事务所有限公司", "address": "广东省潮州市枫溪区堤头村邱厝池如意楼701室", "person": "邱学馨", "phone": "13631004418"}, "project": {"person": "邢工", "phone": "13631004418"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=76635a49-e2ca-4457-bf42-87183b1f019e&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202610092487", "title": "饶平县新丰镇村级生活垃圾转运项目竞争性磋商公告", "projectName": "饶平县新丰镇村级生活垃圾转运项目", "projectCode": "GDYS-2026-FWCG289", "buyer": "饶平县新丰镇人民政府", "agency": "广东源胜招标采购有限公司", "budget": "1,300,000.00元", "fundSource": "—", "district": "饶平", "annType": "采购意向公告", "pubDate": "2026-10-09", "deadline": "2026-10-22", "bidOpenDate": "2026-10-22", "summary": "项目概况 饶平县新丰镇村级生活垃圾转运项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月22日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：GDYS-2026-FWCG289 项目名称：饶平县新丰镇村级生活垃圾转运项目 采购方式：竞争性磋商 预算金额：1,300,000.00元 采购需求： 采购包1(饶平县新丰镇村级生活垃圾转运项目): 采购包预算金额： 1,300,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元)", "contact": "13422001425 13172343312 黄工 13172343312", "contacts": {"purchaser": {"name": "饶平县新丰镇人民政府", "address": "广东省潮州市饶平县新丰镇新丰大道128号", "person": "", "phone": "13422001425"}, "agency": {"name": "广东源胜招标采购有限公司", "address": "潮州市饶平县黄冈镇2058电商创意园A区107号-108号", "person": "蔡建昌", "phone": "13172343312"}, "project": {"person": "黄工", "phone": "13172343312"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=ec622ebd-0a6b-4c98-850d-4dedf12202f1&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609305308", "title": "中共潮州市委、 潮州市人民政府接待办公室食材采购、食堂服务采购项目招标公告", "projectName": "中共潮州市委、潮州市人民政府接待办公室食材采购、食堂服务采购项目", "projectCode": "CZC2026022", "buyer": "中共潮州市委、潮州市人民政府接待办公室", "agency": "潮州市公共资源交易中心", "budget": "8,940,000.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-30", "deadline": "2026-10-21", "bidOpenDate": "2026-10-21", "summary": "项目概况 中共潮州市委、潮州市人民政府接待办公室食材采购、食堂服务采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月21日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026022 项目名称：中共潮州市委、潮州市人民政府接待办公室食材采购、食堂服务采购项目 采购方式：公开招标 预算金额：8,940,000.00元 采购需求： 采购包1(中共潮州市委、潮州市人民政府接待办公室食材采购、食堂服务采购项目): 采购包预算金额： 8,940,000.00元 品目号 品目名", "contact": "18023909925 0768-2280181 唐先生 0768-2280181", "contacts": {"purchaser": {"name": "中共潮州市委、潮州市人民政府接待办公室", "address": "广东省潮州市湘桥区潮枫路中段潮州迎宾馆玉兰楼", "person": "", "phone": "18023909925"}, "agency": {"name": "潮州市公共资源交易中心", "address": "广东省潮州市潮州大道中段广发银行12楼", "person": "卢雅琨", "phone": "0768-2280181"}, "project": {"person": "唐先生", "phone": "0768-2280181"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=c119937c-31b8-4768-b84e-f333ffabe198&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609293852", "title": "村道CD64潮安区安溪下角至羊肚村址单改双工程竞争性磋商公告", "projectName": "村道CD64潮安区安溪下角至羊肚村址单改双工程", "projectCode": "XHGCZX2026DL051", "buyer": "潮州市潮安区赤凤镇人民政府", "agency": "潮州市潮安区信和工程咨询有限公司", "budget": "2,252,564.00元", "fundSource": "—", "district": "潮安", "annType": "采购公告", "pubDate": "2026-09-29", "deadline": "2026-10-14", "bidOpenDate": "2026-10-14", "summary": "项目概况 村道CD64潮安区安溪下角至羊肚村址单改双工程 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月14日 14时00分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：XHGCZX2026DL051 项目名称：村道CD64潮安区安溪下角至羊肚村址单改双工程 采购方式：竞争性磋商 预算金额：2,252,564.00元 采购需求： 采购包1(村道CD64潮安区安溪下角至羊肚村址单改双工程): 采购包预算金额： 2,252,564.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数", "contact": "15559090830 0768-3905558 吴涵 0768-3905558", "contacts": {"purchaser": {"name": "潮州市潮安区赤凤镇人民政府", "address": "潮州市潮安区赤凤镇人民政府", "person": "", "phone": "15559090830"}, "agency": {"name": "潮州市潮安区信和工程咨询有限公司", "address": "潮州市潮安区大岭山产业园A区应急产业科创服务中心二楼", "person": "吴涵", "phone": "0768-3905558"}, "project": {"person": "吴涵", "phone": "0768-3905558"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=1aff8be4-c482-4aa2-964f-de860d0dc45b&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609237899", "title": "潮州市学校食堂智慧监管系统及市直、湘桥区学校食堂配套设施投资建设资格项目", "projectName": "潮州市学校食堂智慧监管系统及市直、", "projectCode": "CZCZ2026004", "buyer": "包组一：潮州市教育局", "agency": "潮州市公共资源交易中心", "budget": "—", "fundSource": "—", "district": "湘桥", "annType": "招标公告", "pubDate": "2026-09-23", "deadline": "2026-10-14", "bidOpenDate": "2026-10-14", "summary": " \n 1 \nCZCZ2026004 潮州市教育局“潮州市学校食堂智慧监管系统\n及市直、湘桥区学校食堂配套设施投资建设资格项目”招标\n公告 \n一、项目基本情况 \n项目编号：CZCZ2026004 \n项目名称：潮州市学校食堂智慧监管系统及市直、 湘桥区学校食堂配套设施\n投资建设资格项目 \n采购方式：公开招标 \n预算金额：本项目为服务资格招标， 无预算金额。 （具体金额以实际产生为\n准） \n项目内容及需求情况（采购项目技术规格、参数及要求）： \n采购包 1：潮州市学校食堂智慧监管系统及市直、 湘桥区学校食堂配套设施\n投资建设资格项目 \n采购包预算金额：本项目为服务资格招标， 无预算金额。 （具体金额", "contact": "联系人：李老师", "contacts": {"purchaser": {"name": "包组一：潮州市教育局", "address": "", "person": "", "phone": ""}, "agency": {"name": "潮州市公共资源交易中心", "address": "", "person": "", "phone": ""}, "project": {"person": "李老师", "phone": ""}}, "sourceUrl": "https://www.czggzy.com:8088/info.zu.jsp?id=2779&clsid=Z", "matchedKeywords": ["智慧", "系统"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "—", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609223581", "title": "潮州市潮安区储备粮中心库二期建设项目建设配套设施工程及保粮设备（绿色储粮设备等）招标公告", "projectName": "潮州市潮安区储备粮中心库二期建设项目建设配套设施工程及保粮设备（绿色储粮设备等）", "projectCode": "CZC2026021", "buyer": "潮州市潮安区粮食和物资管理服务中心", "agency": "潮州市公共资源交易中心", "budget": "14,448,472.00元", "fundSource": "—", "district": "潮安", "annType": "采购公告", "pubDate": "2026-09-22", "deadline": "2026-10-13", "bidOpenDate": "2026-10-13", "summary": "项目概况 潮州市潮安区储备粮中心库二期建设项目建设配套设施工程及保粮设备（绿色储粮设备等） 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月13日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026021 项目名称：潮州市潮安区储备粮中心库二期建设项目建设配套设施工程及保粮设备（绿色储粮设备等） 采购方式：公开招标 预算金额：14,448,472.00元 采购需求： 采购包1(潮州市潮安区储备粮中心库二期建设项目建设配套设施工程及保粮设备(绿色储粮设备等)): 采购包预算", "contact": "0768-5818737 0768-2280181 唐先生 0768-2280181", "contacts": {"purchaser": {"name": "潮州市潮安区粮食和物资管理服务中心", "address": "广东省潮州市潮安区安北路128号", "person": "", "phone": "0768-5818737"}, "agency": {"name": "潮州市公共资源交易中心", "address": "广东省潮州市潮州大道中段广发银行12楼", "person": "卢雅琨", "phone": "0768-2280181"}, "project": {"person": "唐先生", "phone": "0768-2280181"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=c0cbbea2-0db6-4762-8ca5-67d1059ad123&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["信息化", "系统", "机房", "安防", "视频", "无线覆盖", "通信", "门禁"], "businessTags": ["监控", "专线", "平台", "机房", "室分"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609212013", "title": "潮州市潮安区庵埠镇人民政府食堂物资采购配送及食堂服务项目(二次)竞争性磋商公告", "projectName": "潮州市潮安区庵埠镇人民政府食堂物资采购配送及食堂服务项目(二次)", "projectCode": "CZZZ[2026]F002", "buyer": "潮州市潮安区庵埠镇人民政府", "agency": "潮州市中正招投标代理有限公司", "budget": "2,281,000.00元", "fundSource": "—", "district": "潮安", "annType": "采购公告", "pubDate": "2026-09-21", "deadline": "2026-10-10", "bidOpenDate": "2026-10-10", "summary": "项目概况 潮州市潮安区庵埠镇人民政府食堂物资采购配送及食堂服务项目(二次) 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月10日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：CZZZ[2026]F002 项目名称：潮州市潮安区庵埠镇人民政府食堂物资采购配送及食堂服务项目(二次) 采购方式：竞争性磋商 预算金额：2,281,000.00元 采购需求： 采购包1(潮州市潮安区庵埠镇人民政府食堂物资采购配送及食堂服务项目): 采购包预算金额： 2,281,000.00元 品目号 品目", "contact": "18218485882 0768-6639666 郭锡壮 0768-6639666", "contacts": {"purchaser": {"name": "潮州市潮安区庵埠镇人民政府", "address": "广东省潮州市潮安区庵埠镇亨利北路", "person": "", "phone": "18218485882"}, "agency": {"name": "潮州市中正招投标代理有限公司", "address": "潮州市潮安区城区安盛花园26幢101号", "person": "郭锡雄", "phone": "0768-6639666"}, "project": {"person": "郭锡壮", "phone": "0768-6639666"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=0010cc02-abbc-4497-988b-dd6f210bfd8a&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609209007", "title": "潮州市湘桥区官塘镇创建典型镇“七个一”提升项目竞争性磋商公告", "projectName": "潮州市湘桥区官塘镇创建典型镇“七个一”提升项目", "projectCode": "CZKH2026034", "buyer": "潮州市湘桥区官塘镇人民政府", "agency": "潮州市坤辉工程管理有限公司", "budget": "2,673,165.41元", "fundSource": "—", "district": "湘桥", "annType": "采购公告", "pubDate": "2026-09-20", "deadline": "2026-10-10", "bidOpenDate": "2026-10-10", "summary": "项目概况 潮州市湘桥区官塘镇创建典型镇“七个一”提升项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月10日 14时50分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：CZKH2026034 项目名称：潮州市湘桥区官塘镇创建典型镇“七个一”提升项目 采购方式：竞争性磋商 预算金额：2,673,165.41元 采购需求： 采购包1(潮州市湘桥区官塘镇创建典型镇“七个一”提升项目): 采购包预算金额： 2,673,165.41元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 ", "contact": "0768-6721201 0768-2983637 林工 0768-2983637", "contacts": {"purchaser": {"name": "潮州市湘桥区官塘镇人民政府", "address": "潮州市湘桥区官塘镇", "person": "", "phone": "0768-6721201"}, "agency": {"name": "潮州市坤辉工程管理有限公司", "address": "广东省潮州市湘桥区潮州市湘桥区城西街道新南路嘉信华府7幢2梯203房之一（仅限办公）", "person": "舒晓林", "phone": "0768-2983637"}, "project": {"person": "林工", "phone": "0768-2983637"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=3e4d7ddc-6dca-4f7c-b951-a7b2a6164154&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609201169", "title": "潮州市湘桥区政务事务中心食材采购、配送项目招标公告", "projectName": "潮州市湘桥区政务事务中心食材采购、配送项目", "projectCode": "LZZX-CZ-ZB-1000926", "buyer": "潮州市湘桥区政务事务中心", "agency": "潮州市联正工程咨询有限公司", "budget": "3,600,000.00元", "fundSource": "—", "district": "湘桥", "annType": "采购意向公告", "pubDate": "2026-09-20", "deadline": "2026-10-13", "bidOpenDate": "2026-10-13", "summary": "项目概况 潮州市湘桥区政务事务中心食材采购、配送项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月13日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：LZZX-CZ-ZB-1000926 项目名称：潮州市湘桥区政务事务中心食材采购、配送项目 采购方式：公开招标 预算金额：3,600,000.00元 采购需求： 采购包1(潮州市湘桥区政务事务中心食材采购、配送项目): 采购包预算金额： 3,600,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 ", "contact": "0768-2207383 0768-2228456 邱工 0768-2228456", "contacts": {"purchaser": {"name": "潮州市湘桥区政务事务中心", "address": "潮州市新洋路北段湘桥区党政办公楼一楼", "person": "", "phone": "0768-2207383"}, "agency": {"name": "潮州市联正工程咨询有限公司", "address": "广东省潮州市湘桥区潮州市湘桥区桥东街道卧石路浮堆西路4号综合楼301室", "person": "卢若清", "phone": "0768-2228456"}, "project": {"person": "邱工", "phone": "0768-2228456"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=017037d5-71c2-4e0d-9bf5-f7c96c7aca72&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609186528", "title": "潮州市中心血站全自动样品处理系统项目招标公告", "projectName": "全自动样品处理系统项目", "projectCode": "CZZD[2026]A014", "buyer": "潮州市中心血站", "agency": "潮州市正得项目管理咨询有限公司", "budget": "1,100,000.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-18", "deadline": "2026-10-12", "bidOpenDate": "2026-10-12", "summary": "项目概况 全自动样品处理系统项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月12日 09时00分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZZD[2026]A014 项目名称：全自动样品处理系统项目 采购方式：公开招标 预算金额：1,100,000.00元 采购需求： 采购包1(全自动样品处理系统项目): 采购包预算金额： 1,100,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元) 1-1 其他医疗设备 全自动样品处理", "contact": "0768-2384800 0768-2303555 邱先生 0768-2303555", "contacts": {"purchaser": {"name": "潮州市中心血站", "address": "潮州市枫春路24号", "person": "", "phone": "0768-2384800"}, "agency": {"name": "潮州市正得项目管理咨询有限公司", "address": "广东省潮州市湘桥区绿茵路金阳大厦202", "person": "王绵", "phone": "0768-2303555"}, "project": {"person": "邱先生", "phone": "0768-2303555"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=ca1ae403-9f8d-4742-8ebd-d603eb802db6&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609170664", "title": "潮州市中心医院易地新建项目（二期）之传染病应急救治中心工程集中采购项目（含电气设备、智能化设备）招标公告", "projectName": "潮州市中心医院易地新建项目（二期）之传染病应急救治中心工程集中采购项目（含电气设备、智能化设备）", "projectCode": "CZC2026020", "buyer": "潮州市政府项目建设中心", "agency": "潮州市公共资源交易中心", "budget": "1,312,197.31元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-17", "deadline": "2026-10-09", "bidOpenDate": "2026-10-09", "summary": "项目概况 潮州市中心医院易地新建项目（二期）之传染病应急救治中心工程集中采购项目（含电气设备、智能化设备） 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月09日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026020 项目名称：潮州市中心医院易地新建项目（二期）之传染病应急救治中心工程集中采购项目（含电气设备、智能化设备） 采购方式：公开招标 预算金额：1,312,197.31元 采购需求： 采购包1(电气设备、智能化): 采购包预算金额： 1,312,197.31元", "contact": "0768-2393053 0768-2280181 卢巧玲 0768-2280181", "contacts": {"purchaser": {"name": "潮州市政府项目建设中心", "address": "潮州大道南段建设大厦三楼", "person": "", "phone": "0768-2393053"}, "agency": {"name": "潮州市公共资源交易中心", "address": "广东省潮州市潮州大道中段广发银行12楼", "person": "卢巧玲", "phone": "0768-2280181"}, "project": {"person": "卢巧玲", "phone": "0768-2280181"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=1b84612f-97d0-454d-9754-f9585c8016b7&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智能化", "智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609140086", "title": "饶平县自然资源局不动产数据迁移及系统运维服务（2025年-2028年度）竞争性磋商公告", "projectName": "饶平县自然资源局不动产数据迁移及系统运维服务（2025年-2028年度）", "projectCode": "445122-2026-01316", "buyer": "饶平县自然资源局", "agency": "驿大项目管理有限公司", "budget": "1,880,000.00元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-09-14", "deadline": "2026-09-29", "bidOpenDate": "2026-09-29", "summary": "项目概况 饶平县自然资源局不动产数据迁移及系统运维服务（2025年-2028年度） 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月29日 00时00分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01316 项目名称：饶平县自然资源局不动产数据迁移及系统运维服务（2025年-2028年度） 采购方式：竞争性磋商 预算金额：1,880,000.00元 采购需求： 采购包1(饶平县自然资源局不动产数据迁移及系统运维服务（2025-2028年度）项目): 采购包预算金额： ", "contact": "13670777273 18143331845 钟成莉 18143331845", "contacts": {"purchaser": {"name": "饶平县自然资源局", "address": "广东省潮州市饶平县黄冈镇饶平大道中段自然资源局", "person": "", "phone": "13670777273"}, "agency": {"name": "驿大项目管理有限公司", "address": "四川省成都市金牛区高新技术产业园区迎宾大道298号4栋603号", "person": "钟成莉", "phone": "18143331845"}, "project": {"person": "钟成莉", "phone": "18143331845"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=4c8eb211-973c-45c9-bab1-476009b70283&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609142927", "title": "新圩镇霞光村人居环境及绿化提升项目竞争性磋商公告", "projectName": "新圩镇霞光村人居环境及绿化提升项目", "projectCode": "445122-2026-01314", "buyer": "饶平县新圩镇人民政府", "agency": "永信建设管理有限公司", "budget": "1,258,033.58元", "fundSource": "—", "district": "饶平", "annType": "采购意向公告", "pubDate": "2026-09-14", "deadline": "2026-10-09", "bidOpenDate": "2026-10-09", "summary": "项目概况 新圩镇霞光村人居环境及绿化提升项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月09日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01314 项目名称：新圩镇霞光村人居环境及绿化提升项目 采购方式：竞争性磋商 预算金额：1,258,033.58元 采购需求： 采购包1(新圩镇霞光村人居环境及绿化提升项目): 采购包预算金额： 1,258,033.58元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价", "contact": "13829074330 18128173061 永信建设管理有限公司 18128173061", "contacts": {"purchaser": {"name": "饶平县新圩镇人民政府", "address": "广东省潮州市饶平县新圩镇团结路西70号", "person": "", "phone": "13829074330"}, "agency": {"name": "永信建设管理有限公司", "address": "广东省深圳市宝安区深圳市光明区凤凰街道东坑社区光明大道481号乐府广场1B901", "person": "陈正华", "phone": "18128173061"}, "project": {"person": "永信建设管理有限公司", "phone": "18128173061"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=2d92ab14-4db1-4faa-9e00-0d96e0817b4a&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609119267", "title": "钱东镇市港排洪沟镇区段整治项目（第二次）竞争性磋商公告", "projectName": "钱东镇市港排洪沟镇区段整治项目（第二次）", "projectCode": "GDHS2026104", "buyer": "饶平县钱东镇人民政府", "agency": "广东华穗工程咨询有限公司", "budget": "2,546,146.01元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-09-11", "deadline": "2026-09-23", "bidOpenDate": "2026-09-23", "summary": "项目概况 钱东镇市港排洪沟镇区段整治项目（第二次） 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月23日 16时00分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：GDHS2026104 项目名称：钱东镇市港排洪沟镇区段整治项目（第二次） 采购方式：竞争性磋商 预算金额：2,546,146.01元 采购需求： 采购包1(钱东镇市港排洪沟镇区段整治项目(第二次)): 采购包预算金额： 2,546,146.01元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最", "contact": "0768-8712330 020-87608254 王工 020-87608254", "contacts": {"purchaser": {"name": "饶平县钱东镇人民政府", "address": "广东省潮州市饶平县钱东镇大陇公园前一横2号", "person": "", "phone": "0768-8712330"}, "agency": {"name": "广东华穗工程咨询有限公司", "address": "广东省广州市越秀区广州市越秀区豪贤路102号1701、1702、1703、1704、1705、1706、1707房", "person": "邓韵瑜", "phone": "020-87608254"}, "project": {"person": "王工", "phone": "020-87608254"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=d40ed59d-f683-4857-87c2-bd3d59393ee4&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609111124", "title": "潮州市公安局禁毒支队毒品实验室建设项目招标公告", "projectName": "潮州市公安局禁毒支队毒品实验室建设项目", "projectCode": "CZZD[2026]A013", "buyer": "潮州市公安局", "agency": "潮州市正得项目管理咨询有限公司", "budget": "3,444,710.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-11", "deadline": "2026-10-09", "bidOpenDate": "2026-10-09", "summary": "项目概况 潮州市公安局禁毒支队毒品实验室建设项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月09日 09时00分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZZD[2026]A013 项目名称：潮州市公安局禁毒支队毒品实验室建设项目 采购方式：公开招标 预算金额：3,444,710.00元 采购需求： 采购包1(潮州市公安局禁毒支队毒品实验室建设项目): 采购包预算金额： 3,444,710.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高", "contact": "0768-2294292 0768-2303555 邱先生 0768-2303555", "contacts": {"purchaser": {"name": "潮州市公安局", "address": "潮州市湘桥区城新西路81号", "person": "", "phone": "0768-2294292"}, "agency": {"name": "潮州市正得项目管理咨询有限公司", "address": "广东省潮州市湘桥区绿茵路金阳大厦202", "person": "王绵", "phone": "0768-2303555"}, "project": {"person": "邱先生", "phone": "0768-2303555"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=1caaaae5-a573-414f-94ce-11f9ebd16430&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609113827", "title": "潮州市殡仪馆火化机大修及尾气布袋更换和设备维护保养项目招标公告", "projectName": "潮州市殡仪馆火化机大修及尾气布袋更换和设备维护保养项目", "projectCode": "445101-2026-01297", "buyer": "潮州市殡仪馆", "agency": "方宇工程咨询有限公司", "budget": "1,700,000.00元", "fundSource": "—", "district": "市区", "annType": "采购意向公告", "pubDate": "2026-09-11", "deadline": "2026-10-09", "bidOpenDate": "2026-10-09", "summary": "项目概况 潮州市殡仪馆火化机大修及尾气布袋更换和设备维护保养项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月09日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：445101-2026-01297 项目名称：潮州市殡仪馆火化机大修及尾气布袋更换和设备维护保养项目 采购方式：公开招标 预算金额：1,700,000.00元 采购需求： 采购包1(潮州市殡仪馆火化机大修及尾气布袋更换和设备维护保养项目): 采购包预算金额： 1,700,000.00元 品目号 品目名称 采购标的 数", "contact": "0768-6703347 0768-2188221 陈工、丁工 0768-2188221", "contacts": {"purchaser": {"name": "潮州市殡仪馆", "address": "广东省潮州市安黄公路中段潮州市殡仪馆", "person": "", "phone": "0768-6703347"}, "agency": {"name": "方宇工程咨询有限公司", "address": "潮州市湘桥区立信路中段朝晖华府一幢一梯202房", "person": "陈孝加", "phone": "0768-2188221"}, "project": {"person": "陈工、丁工", "phone": "0768-2188221"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=8699e92b-6b17-45a5-b779-a6fdec15f08e&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609095050", "title": "潮州市人民医院医用气体设备采购项目(二次)（项目编号：0724-2631ST825400）招标公告", "projectName": "潮州市人民医院医用气体设备采购项目(二次)", "projectCode": "0724-2631ST825400", "buyer": "潮州市人民医院", "agency": "国义招标股份有限公司", "budget": "1,380,079.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-09", "deadline": "2026-09-30", "bidOpenDate": "2026-09-30", "summary": "项目概况 潮州市人民医院医用气体设备采购项目(二次) 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年09月30日 14时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：0724-2631ST825400 项目名称：潮州市人民医院医用气体设备采购项目(二次) 采购方式：公开招标 预算金额：1,380,079.00元 采购需求： 采购包1(潮州市人民医院医用气体设备采购项目): 采购包预算金额： 1,380,079.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(", "contact": "0768-2262612 020-37860531、020-37860521、0754 邓彩云、戴琨琳、马倩升 020-37860531、020-37860521、0754", "contacts": {"purchaser": {"name": "潮州市人民医院", "address": "广东省潮州市湘桥区城新路8号", "person": "", "phone": "0768-2262612"}, "agency": {"name": "国义招标股份有限公司", "address": "广东省广州市越秀区东风东路726号18楼", "person": "戴琨琳", "phone": "020-37860531、020-37860521、0754"}, "project": {"person": "邓彩云、戴琨琳、马倩升", "phone": "020-37860531、020-37860521、0754"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=14d29c24-6676-4397-bbaa-323f35b4d632&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609099628", "title": "潮州市农业科学技术研究中心2026年中央农业防灾减灾资金（防灾救灾第二批） 潮州市红火蚁监测防控项目招标公告", "projectName": "2026年中央农业防灾减灾资金（防灾救灾第二批）潮州市红火蚁监测防控项目", "projectCode": "CZZD[2026]A015", "buyer": "潮州市农业科学技术研究中心", "agency": "潮州市正得项目管理咨询有限公司", "budget": "1,500,000.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-09", "deadline": "2026-09-30", "bidOpenDate": "2026-09-30", "summary": "项目概况 2026年中央农业防灾减灾资金（防灾救灾第二批）潮州市红火蚁监测防控项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年09月30日 09时00分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZZD[2026]A015 项目名称：2026年中央农业防灾减灾资金（防灾救灾第二批）潮州市红火蚁监测防控项目 采购方式：公开招标 预算金额：1,500,000.00元 采购需求： 采购包1(2026年中央农业防灾减灾资金（防灾救灾第二批）潮州市红火蚁监测防控项目): 采购包预算金额： 1,500", "contact": "0768-2389812 0768-2303555 邱先生 0768-2303555", "contacts": {"purchaser": {"name": "潮州市农业科学技术研究中心", "address": "潮州市饶平县钱东镇万山红", "person": "", "phone": "0768-2389812"}, "agency": {"name": "潮州市正得项目管理咨询有限公司", "address": "广东省潮州市湘桥区绿茵路金阳大厦202", "person": "王绵", "phone": "0768-2303555"}, "project": {"person": "邱先生", "phone": "0768-2303555"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=2f7d0268-d14b-4706-9812-def110a6948d&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609044927", "title": "广东省潮州卫生学校2026-2027年自营食堂劳务服务采购项目(三次)招标公告", "projectName": "广东省潮州卫生学校2026-2027年自营食堂劳务服务采购项目(三次)", "projectCode": "PZH026C001", "buyer": "广东省潮州卫生学校", "agency": "广东平正招标采购服务有限公司", "budget": "1,400,000.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-04", "deadline": "2026-09-28", "bidOpenDate": "2026-09-28", "summary": "项目概况 广东省潮州卫生学校2026-2027年自营食堂劳务服务采购项目(三次) 招标项目的潜在投标人应在 广东省政府采购网智慧云平台（https://gdgpo.czt.gd.gov.cn/） 获取招标文件，并于 2026年09月28日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：PZH026C001 项目名称：广东省潮州卫生学校2026-2027年自营食堂劳务服务采购项目(三次) 采购方式：公开招标 预算金额：1,400,000.00元 采购需求： 采购包1(广东省潮州卫生学校2026-2027年自营食堂劳务服务): 采购包预算金额： 1,400,000.00元", "contact": "0768-2310098 0754-88866333 广东平正招标采购服务有限公司 0754-88866333", "contacts": {"purchaser": {"name": "广东省潮州卫生学校", "address": "广东省潮州市湘桥区桥东砚峰路西侧", "person": "", "phone": "0768-2310098"}, "agency": {"name": "广东平正招标采购服务有限公司", "address": "广东省汕头市高新区科技中路11号经发大厦A座三楼", "person": "陈勋", "phone": "0754-88866333"}, "project": {"person": "广东平正招标采购服务有限公司", "phone": "0754-88866333"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=cbd96046-67d2-47ba-86c9-d2a669f92a4d&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609046396", "title": "潮州市人民医院医疗服务能力质量安全数据提取系统项目招标公告", "projectName": "潮州市人民医院医疗服务能力质量安全数据提取系统项目", "projectCode": "ZJZB-2026-20867", "buyer": "潮州市人民医院", "agency": "中捷通信有限公司", "budget": "1,580,000.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-04", "deadline": "2026-09-28", "bidOpenDate": "2026-09-28", "summary": "项目概况 潮州市人民医院医疗服务能力质量安全数据提取系统项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年09月28日 09时00分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：ZJZB-2026-20867 项目名称：潮州市人民医院医疗服务能力质量安全数据提取系统项目 采购方式：公开招标 预算金额：1,580,000.00元 采购需求： 采购包1(潮州市人民医院医疗服务能力质量安全数据提取系统项目): 采购包预算金额： 1,580,000.00元 品目号 品目名称 采购标的 数量（单位） 技术", "contact": "0768-2262612-3876 15976599577（ 苏侠帆、周杰、曾燕芳、高晓彬 15976599577（", "contacts": {"purchaser": {"name": "潮州市人民医院", "address": "广东省潮州市湘桥区城新路8号", "person": "", "phone": "0768-2262612-3876"}, "agency": {"name": "中捷通信有限公司", "address": "潮州市湘桥区凤新街道永安路陈桥十七米与电信路交汇处万德商厦4楼403", "person": "周杰", "phone": "15976599577（"}, "project": {"person": "苏侠帆、周杰、曾燕芳、高晓彬", "phone": "15976599577（"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=14519591-53a7-46f6-b843-f41bac5a9bf0&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "软件", "云", "通信"], "businessTags": ["专线", "平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609024146", "title": "潮州陶瓷产业人才振兴计划“创意梦工厂”（2025–2026年度）采购项目招标公告", "projectName": "潮州陶瓷产业人才振兴计划“创意梦工厂”（2025–2026年度）采购项目", "projectCode": "CZBYCG2026012", "buyer": "潮州市工业和信息化局", "agency": "潮州市博阳工程咨询有限公司", "budget": "2,660,000.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-02", "deadline": "2026-09-23", "bidOpenDate": "2026-09-23", "summary": "项目概况 潮州陶瓷产业人才振兴计划“创意梦工厂”（2025–2026年度）采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年09月23日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZBYCG2026012 项目名称：潮州陶瓷产业人才振兴计划“创意梦工厂”（2025–2026年度）采购项目 采购方式：公开招标 预算金额：2,660,000.00元 采购需求： 采购包1(潮州陶瓷产业人才振兴计划“创意梦工厂”（2025–2026年度）采购项目): 采购包预算金额： 2,660,", "contact": "0768-2120099 0768-2237789 林工 0768-2237789", "contacts": {"purchaser": {"name": "潮州市工业和信息化局", "address": "潮州市新洋路民主大厦", "person": "", "phone": "0768-2120099"}, "agency": {"name": "潮州市博阳工程咨询有限公司", "address": "潮州市潮安区枫溪镇护堤路铂顿元世纪酒店5楼504室", "person": "许晓燕", "phone": "0768-2237789"}, "project": {"person": "林工", "phone": "0768-2237789"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=f6710d79-ef87-40ab-a41d-2682818d4ee7&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["信息化", "智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609016765", "title": "潮州市人民医院医疗设备提升项目（DR等设备）（项目编号：0724-2631ST825238）招标公告", "projectName": "潮州市人民医院医疗设备提升项目（DR等设备）", "projectCode": "0724-2631ST825238", "buyer": "潮州市人民医院", "agency": "国义招标股份有限公司", "budget": "19,810,000.00元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-09-01", "deadline": "2026-09-22", "bidOpenDate": "2026-09-22", "summary": "项目概况 潮州市人民医院医疗设备提升项目（DR等设备） 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年09月22日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：0724-2631ST825238 项目名称：潮州市人民医院医疗设备提升项目（DR等设备） 采购方式：公开招标 预算金额：19,810,000.00元 采购需求： 采购包1(数字化X线机A、数字化移动X线机A): 采购包预算金额： 4,080,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目", "contact": "0768-2262612 020-37860531、020-37860521、0754 邓彩云、戴琨琳、马倩升 020-37860531、020-37860521、0754", "contacts": {"purchaser": {"name": "潮州市人民医院", "address": "广东省潮州市湘桥区城新路8号", "person": "", "phone": "0768-2262612"}, "agency": {"name": "国义招标股份有限公司", "address": "广东省广州市越秀区东风东路726号18楼", "person": "戴琨琳", "phone": "020-37860531、020-37860521、0754"}, "project": {"person": "邓彩云、戴琨琳、马倩升", "phone": "020-37860531、020-37860521、0754"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=e5276180-45bb-4b89-a63e-5f3cb8994b13&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["数字", "系统"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202609010367", "title": "潮州市饶平县樟溪镇县道X074线九洲桥危旧桥梁改造工程(二次)竞争性磋商公告", "projectName": "潮州市饶平县樟溪镇县道X074线九洲桥危旧桥梁改造工程(二次)", "projectCode": "CSJLRPZB2026-005", "buyer": "饶平县樟溪镇人民政府", "agency": "广州嘉联工程技术咨询有限公司", "budget": "2,121,928.00元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-09-01", "deadline": "2026-09-15", "bidOpenDate": "2026-09-15", "summary": "项目概况 潮州市饶平县樟溪镇县道X074线九洲桥危旧桥梁改造工程(二次) 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月14日 23时59分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：CSJLRPZB2026-005 项目名称：潮州市饶平县樟溪镇县道X074线九洲桥危旧桥梁改造工程(二次) 采购方式：竞争性磋商 预算金额：2,121,928.00元 采购需求： 采购包1(潮州市饶平县樟溪镇县道X074线九洲桥危旧桥梁改造工程): 采购包预算金额： 2,121,928.00元 品目号 品目名", "contact": "0768-8693110 020-32886946 郭海燕 020-32886946", "contacts": {"purchaser": {"name": "饶平县樟溪镇人民政府", "address": "广东省饶平县樟溪镇的府前路6号", "person": "", "phone": "0768-8693110"}, "agency": {"name": "广州嘉联工程技术咨询有限公司", "address": "广东省广州市增城区新城大道400号增城低碳总部园新城创业中心12号楼604房", "person": "郭海燕", "phone": "020-32886946"}, "project": {"person": "郭海燕", "phone": "020-32886946"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=2a5f0761-2622-4838-850b-f0378059fb99&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608319995", "title": "凤新街道西塘村及大园路道路提升改造项目竞争性磋商公告", "projectName": "凤新街道西塘村及大园路道路提升改造项目", "projectCode": "445102-2026-00818", "buyer": "潮州市湘桥区人民政府凤新街道办事处", "agency": "中洲宏腾工程管理有限公司潮州湘桥分公司", "budget": "1,997,074.43元", "fundSource": "—", "district": "湘桥", "annType": "采购公告", "pubDate": "2026-08-31", "deadline": "2026-09-11", "bidOpenDate": "2026-09-11", "summary": "项目概况 凤新街道西塘村及大园路道路提升改造项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月11日 09时00分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445102-2026-00818 项目名称：凤新街道西塘村及大园路道路提升改造项目 采购方式：竞争性磋商 预算金额：1,997,074.43元 采购需求： 采购包1(凤新街道西塘村及大园路道路提升改造项目): 采购包预算金额： 1,997,074.43元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元", "contact": "13172631663 0768-2216207 孙继坤 0768-2216207", "contacts": {"purchaser": {"name": "潮州市湘桥区人民政府凤新街道办事处", "address": "广东省潮州市潮州大道泰安路", "person": "", "phone": "13172631663"}, "agency": {"name": "中洲宏腾工程管理有限公司潮州湘桥分公司", "address": "广东省潮州市湘桥区潮州市湘桥区西荣路食品公司中心经理部宿舍楼三层301房（仅限办公）", "person": "申晓静", "phone": "0768-2216207"}, "project": {"person": "孙继坤", "phone": "0768-2216207"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=8abe7ce7-5c03-4e22-8040-13724e6691d0&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608282962", "title": "饶平县精神卫生中心（饶平县第三人民医院）后勤社会化服务项目招标公告", "projectName": "饶平县精神卫生中心（饶平县第三人民医院）后勤社会化服务项目", "projectCode": "CZC2026019", "buyer": "饶平县精神卫生中心（饶平县第三人民医院）", "agency": "潮州市公共资源交易中心", "budget": "6,414,200.00元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-08-28", "deadline": "2026-09-18", "bidOpenDate": "2026-09-18", "summary": "项目概况 饶平县精神卫生中心（饶平县第三人民医院）后勤社会化服务项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年09月18日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026019 项目名称：饶平县精神卫生中心（饶平县第三人民医院）后勤社会化服务项目 采购方式：公开招标 预算金额：6,414,200.00元 采购需求： 采购包1(饶平县精神卫生中心（饶平县第三人民医院）后勤社会化服务项目): 采购包预算金额： 6,414,200.00元 品目号 品目名称 采购标的 数量", "contact": "13553727171 0768-2280181 刘瑞娟 0768-2280181", "contacts": {"purchaser": {"name": "饶平县精神卫生中心", "address": "饶平县联饶镇葛口木棉路南13号", "person": "", "phone": "13553727171"}, "agency": {"name": "潮州市公共资源交易中心", "address": "广东省潮州市潮州大道中段广发银行12楼", "person": "刘瑞娟", "phone": "0768-2280181"}, "project": {"person": "刘瑞娟", "phone": "0768-2280181"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=de9f8d42-1c5f-4dde-a3db-b19a4c151c93&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608285048", "title": "广东省潮州市潮安区万峰林场冬瓜坪村后坎山地质灾害工程治理项目(二次)竞争性磋商公告", "projectName": "广东省潮州市潮安区万峰林场冬瓜坪村后坎山地质灾害工程治理项目(二次)", "projectCode": "中昕【采购】2026024", "buyer": "潮州市潮安区自然资源局", "agency": "中昕国际项目管理有限公司", "budget": "2,789,719.10元", "fundSource": "—", "district": "潮安", "annType": "采购公告", "pubDate": "2026-08-28", "deadline": "2026-09-08", "bidOpenDate": "2026-09-08", "summary": "项目概况 广东省潮州市潮安区万峰林场冬瓜坪村后坎山地质灾害工程治理项目(二次) 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月08日 15时00分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：中昕【采购】2026024 项目名称：广东省潮州市潮安区万峰林场冬瓜坪村后坎山地质灾害工程治理项目(二次) 采购方式：竞争性磋商 预算金额：2,789,719.10元 采购需求： 采购包1(广东省潮州市潮安区万峰林场冬瓜坪村后坎山地质灾害工程治理项目): 采购包预算金额： 2,789,719.10元 品", "contact": "0768-5818768 0768-3999338 江工 0768-3999338", "contacts": {"purchaser": {"name": "潮州市潮安区自然资源局", "address": "潮州市潮安区和信街4号", "person": "", "phone": "0768-5818768"}, "agency": {"name": "中昕国际项目管理有限公司", "address": "陕西省西安市未央区凤城十二路首创禧悦里25幢", "person": "李振华", "phone": "0768-3999338"}, "project": {"person": "江工", "phone": "0768-3999338"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=20234779-890a-47c9-8179-f8930c81a488&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608276565", "title": "2026年桥梁常规养护（定期检查）项目竞争性磋商公告", "projectName": "2026年桥梁常规养护（定期检查）项目", "projectCode": "CZBYCG2026003", "buyer": "潮州市城区桥梁管养中心", "agency": "潮州市博阳工程咨询有限公司", "budget": "2,270,894.88元", "fundSource": "—", "district": "市区", "annType": "采购公告", "pubDate": "2026-08-27", "deadline": "2026-09-10", "bidOpenDate": "2026-09-10", "summary": "项目概况 2026年桥梁常规养护（定期检查）项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月10日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：CZBYCG2026003 项目名称：2026年桥梁常规养护（定期检查）项目 采购方式：竞争性磋商 预算金额：2,270,894.88元 采购需求： 采购包1(2026年桥梁常规养护（定期检查）项目): 采购包预算金额： 2,270,894.88元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高", "contact": "0768-2233530 0768-2237789 林工 0768-2237789", "contacts": {"purchaser": {"name": "潮州市城区桥梁管养中心", "address": "潮州市环城西路130号", "person": "", "phone": "0768-2233530"}, "agency": {"name": "潮州市博阳工程咨询有限公司", "address": "潮州市潮安区枫溪镇护堤路铂顿元世纪酒店5楼504室", "person": "许晓燕", "phone": "0768-2237789"}, "project": {"person": "林工", "phone": "0768-2237789"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=50a69b48-2d38-4e1c-9c4a-e46fdbb17ce4&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608277507", "title": "饶平县大潮高速樟溪互通A匝道与地方道路平交口整改项目竞争性磋商公告", "projectName": "饶平县大潮高速樟溪互通A匝道与地方道路平交口整改项目", "projectCode": "445122-2026-01201", "buyer": "饶平县樟溪镇人民政府", "agency": "建信大项目管理(广州)有限公司", "budget": "2,149,507.42元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-08-27", "deadline": "2026-09-09", "bidOpenDate": "2026-09-09", "summary": "项目概况 饶平县大潮高速樟溪互通A匝道与地方道路平交口整改项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月09日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01201 项目名称：饶平县大潮高速樟溪互通A匝道与地方道路平交口整改项目 采购方式：竞争性磋商 预算金额：2,149,507.42元 采购需求： 采购包1(饶平县大潮高速樟溪互通A匝道与地方道路平交口整改项目): 采购包预算金额： 2,149,507.42元 品目号 品目名称 采购标的 数量（", "contact": "0768-8693110 0768-8595834 林工 0768-8595834", "contacts": {"purchaser": {"name": "饶平县樟溪镇人民政府", "address": "广东省饶平县樟溪镇人民政府前路6号", "person": "", "phone": "0768-8693110"}, "agency": {"name": "建信大项目管理", "address": "潮州市饶平县黄冈镇颐养居东北角办公楼4楼", "person": "陈敏婷", "phone": "0768-8595834"}, "project": {"person": "林工", "phone": "0768-8595834"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=21506f20-d39e-4834-a17d-f9be5b51493c&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608266468", "title": "饶平县樟溪卫生院医疗服务能力整体提升工程设备采购项目招标公告", "projectName": "饶平县樟溪卫生院医疗服务能力整体提升工程设备采购项目", "projectCode": "GZGK26D738A0738Z", "buyer": "饶平县樟溪卫生院", "agency": "广东国科招标有限公司", "budget": "1,559,200.00元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-08-26", "deadline": "2026-09-16", "bidOpenDate": "2026-09-16", "summary": "项目概况 饶平县樟溪卫生院医疗服务能力整体提升工程设备采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年09月16日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：GZGK26D738A0738Z 项目名称：饶平县樟溪卫生院医疗服务能力整体提升工程设备采购项目 采购方式：公开招标 预算金额：1,559,200.00元 采购需求： 采购包1(配套医疗设备): 采购包预算金额： 1,559,200.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元)", "contact": "15992377357 0754-87230486 江小姐、陈先生 0754-87230486", "contacts": {"purchaser": {"name": "饶平县樟溪卫生院", "address": "广东省潮州市饶平县樟溪镇镇政府西侧府前路66号（樟溪卫生院）", "person": "", "phone": "15992377357"}, "agency": {"name": "广东国科招标有限公司", "address": "广东省汕头市金霞街道高新区科技路25号聚盛大厦B座511", "person": "陈奕宇", "phone": "0754-87230486"}, "project": {"person": "江小姐、陈先生", "phone": "0754-87230486"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=95709b4b-9289-4bf2-8098-62ccb1338ea4&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "数字", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "公开招标", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608269538", "title": "高堂镇圩镇农房风貌及环境提升工程竞争性磋商公告", "projectName": "高堂镇圩镇农房风貌及环境提升工程", "projectCode": "445122-2026-01193", "buyer": "饶平县高堂镇人民政府", "agency": "建信大项目管理(广州)有限公司", "budget": "1,862,764.17元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-08-26", "deadline": "2026-09-08", "bidOpenDate": "2026-09-08", "summary": "项目概况 高堂镇圩镇农房风貌及环境提升工程 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月08日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01193 项目名称：高堂镇圩镇农房风貌及环境提升工程 采购方式：竞争性磋商 预算金额：1,862,764.17元 采购需求： 采购包1(高堂镇圩镇农房风貌及环境提升工程): 采购包预算金额： 1,862,764.17元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元)", "contact": "0768-8120575 0768-8595834 林工 0768-8595834", "contacts": {"purchaser": {"name": "饶平县高堂镇人民政府", "address": "广东省潮州市饶平县高堂镇高堂大道", "person": "", "phone": "0768-8120575"}, "agency": {"name": "建信大项目管理", "address": "潮州市饶平县黄冈镇颐养居东北角办公楼4楼", "person": "陈敏婷", "phone": "0768-8595834"}, "project": {"person": "林工", "phone": "0768-8595834"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=3574798f-0fa2-4bc4-892c-5abf5b0d2177&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608255022", "title": "新圩镇S222沿线三线整治项目竞争性磋商公告", "projectName": "新圩镇S222沿线三线整治项目", "projectCode": "445122-2026-01175", "buyer": "饶平县新圩镇人民政府", "agency": "汕头市勤健工程管理有限公司", "budget": "1,903,953.69元", "fundSource": "—", "district": "饶平", "annType": "采购公告", "pubDate": "2026-08-25", "deadline": "2026-09-08", "bidOpenDate": "2026-09-08", "summary": "项目概况 新圩镇S222沿线三线整治项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年09月08日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01175 项目名称：新圩镇S222沿线三线整治项目 采购方式：竞争性磋商 预算金额：1,903,953.69元 采购需求： 采购包1(新圩镇S222沿线三线整治项目): 采购包预算金额： 1,903,953.69元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元) 1-", "contact": "0768-8931101 0754-88117557 陈工 0754-88117557", "contacts": {"purchaser": {"name": "饶平县新圩镇人民政府", "address": "广东省潮州市饶平县新圩镇团结路西70号", "person": "", "phone": "0768-8931101"}, "agency": {"name": "汕头市勤健工程管理有限公司", "address": "汕头市龙湖区黄河路万商大厦1幢701-A2", "person": "刘建卫", "phone": "0754-88117557"}, "project": {"person": "陈工", "phone": "0754-88117557"}}, "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=8f73d5e6-41d9-466e-af10-a88e4187b5ee&channel=fca71be5-fc0c-45db-96af-f513e9abda9d", "matchedKeywords": ["智慧", "数字", "平台", "系统", "云"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "竞争性磋商", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}, {"id": "ANN202608241737", "title": "潮州市学校食堂智慧监管系统及配套设施投资建设资格项目", "projectName": "潮州市学校食堂智慧监管系统及配套设施投资建设资格项目", "projectCode": "CZCZ2026003", "buyer": "包组一：潮州市教育局 包组二：潮州市教育局 包组三：潮州市教育局", "agency": "潮州市公共资源交易中心", "budget": "—", "fundSource": "—", "district": "湘桥", "annType": "招标公告", "pubDate": "2026-08-24", "deadline": "2026-09-15", "bidOpenDate": "2026-09-15", "summary": " \n 1 \nCZCZ2026003 潮州市教育局“潮州市学校食堂智慧监管系统\n及配套设施投资建设资格项目”招标公告 \n一、项目基本情况 \n项目编号：CZCZ2026003 \n项目名称：潮州市学校食堂智慧监管系统及配套设施投资建设资格项目 \n采购方式：公开招标 \n预算金额：本项目为服务资格招标， 无预算金额。 （具体金额以实际产生为\n准） \n项目内容及需求情况（采购项目技术规格、参数及要求）： \n采购包 1：潮州市学校食堂智慧监管系统及市直、 湘桥区学校食堂的配套设\n施投资建设资格 \n采购包预算金额：本采购包为服务资格招标， 无预算金额。 （具体金额以实\n际产生为准） \n品目名称 采购标的 数量", "contact": "联系人：李老师", "contacts": {"purchaser": {"name": "包组一：潮州市教育局 包组二：潮州市教育局 包组三：潮州市教育局", "address": "", "person": "", "phone": ""}, "agency": {"name": "潮州市公共资源交易中心", "address": "", "person": "", "phone": ""}, "project": {"person": "李老师", "phone": ""}}, "sourceUrl": "https://www.czggzy.com:8088/info.zu.jsp?id=2759&clsid=Z", "matchedKeywords": ["智慧", "系统"], "businessTags": ["平台"], "region": "潮州", "purchaseMethod": "—", "isValidOpportunity": "", "hasOperatorInvolvement": "", "opportunityCode": "", "opportunityStatus": "", "willBid": "", "treePlacement": "", "currentHandler": "佘淑娟", "createdAt": "2026-10-22", "nextFollowUp": "2026-10-24", "progress": "待分配", "progressRecords": [{"progress": "待分配", "follower": "系统", "followDate": "2026-10-22", "note": "新公告自动入库"}]}];
+const INLINE_ANN = [
+ {
+  "id": "ANN202610234478",
+  "title": "2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目竞争性磋商公告",
+  "projectName": "2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目",
+  "projectCode": "445121-2026-01715",
+  "buyer": "潮州市潮安区凤凰镇人民政府",
+  "agency": "潮州市中杰工程咨询有限公司",
+  "budget": "2,432,917.23元",
+  "fundSource": "—",
+  "district": "潮安",
+  "annType": "采购公告",
+  "pubDate": "2026-10-23",
+  "deadline": "2026-11-05",
+  "bidOpenDate": "2026-11-05",
+  "summary": "项目概况 2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年11月05日 15时00分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445121-2026-01715 项目名称：2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目 采购方式：竞争性磋商 预算金额：2,432,917.23元 采购需求： 采购包1(2026年潮安区凤凰镇镇区保洁、绿化管养及全镇垃圾转运服务采购项目): 采购包预算金额： 2,432,917.",
+  "contact": "0768-6782009 0768-2189045 陈先生 0768-2189045",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市潮安区凤凰镇人民政府",
+    "address": "广东省潮州市潮安区凤凰镇华园大道南路50号",
+    "person": "",
+    "phone": "0768-6782009"
+   },
+   "agency": {
+    "name": "潮州市中杰工程咨询有限公司",
+    "address": "广东省潮州市湘桥区北关村北美路中段土尾南片8号综合楼3楼",
+    "person": "洪歆杰",
+    "phone": "0768-2189045"
+   },
+   "project": {
+    "person": "陈先生",
+    "phone": "0768-2189045"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=536b5225-bf89-43a3-97ae-864bd3a6a71b&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610229446",
+  "title": "招标公告",
+  "projectName": "深圳能源环保股份有限公司下属发电厂2027年度飞灰螯合物吨袋采购项目",
+  "projectCode": "0310-ZBZX-",
+  "buyer": "—",
+  "agency": "—",
+  "budget": "—",
+  "fundSource": "—",
+  "district": "湘桥",
+  "annType": "招标公告",
+  "pubDate": "2026-10-22",
+  "deadline": "—",
+  "bidOpenDate": "—",
+  "summary": "深圳能源环保股份有限公司下属发电厂2027年度飞灰螯合物吨袋采购项目\n\n招 标 公 告\n\n项目名称： 深圳能源环保股份有限公司下属发电厂2027年度飞灰螯合物吨袋采购项目\n\n招标编号：0310-ZBZX-材料-20260218\n\n日 期：2026年10月22日\n\n1、深圳能源集团股份有限公司招标中心（以下简称“招标代理人”），受深圳能源环保股份有限公司（以下简称“招标人”或“买方”）的委托，就上述项目进行公开招标，现邀请能够满足本项目投标资格要求的潜在投标人（以下简称“投标人”或“卖方”）按照本公告的要求参与投标。\n\n2、项目概况和招标范围：\n\n2.1 项目规模及概况：\n\n规模：预计总量为__",
+  "contact": "—",
+  "contacts": {
+   "purchaser": {
+    "name": "",
+    "address": "",
+    "person": "",
+    "phone": ""
+   },
+   "agency": {
+    "name": "",
+    "address": "",
+    "person": "",
+    "phone": ""
+   },
+   "project": {
+    "person": "黄奕谋",
+    "phone": ""
+   }
+  },
+  "sourceUrl": "https://zb.sec.com.cn/zbgg/21461.jhtml",
+  "matchedKeywords": [
+   "数字",
+   "平台",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610213790",
+  "title": "暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目（项目编号：0724-2631ST826480）招标公告",
+  "projectName": "暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目",
+  "projectCode": "0724-2631ST826480",
+  "buyer": "暨南大学附属第一医院潮汕医院",
+  "agency": "国义招标股份有限公司",
+  "budget": "7,940,000.00元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-21",
+  "deadline": "2026-11-11",
+  "bidOpenDate": "2026-11-11",
+  "summary": "项目概况 暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月11日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：0724-2631ST826480 项目名称：暨南大学附属第一医院潮汕医院医疗设备维保服务采购项目 采购方式：公开招标 预算金额：7,940,000.00元 采购需求： 采购包1(CT维修保养服务3年): 采购包预算金额： 3,050,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目",
+  "contact": "0768-8864153 020-37860531、020-37860521、0754 邓彩云、戴琨琳、马倩升 020-37860531、020-37860521、0754",
+  "contacts": {
+   "purchaser": {
+    "name": "暨南大学附属第一医院潮汕医院",
+    "address": "饶平县黄冈镇环城北路969号",
+    "person": "",
+    "phone": "0768-8864153"
+   },
+   "agency": {
+    "name": "国义招标股份有限公司",
+    "address": "广州市越秀区东风东路726号18楼",
+    "person": "戴琨琳",
+    "phone": "020-37860531、020-37860521、0754"
+   },
+   "project": {
+    "person": "邓彩云、戴琨琳、马倩升",
+    "phone": "020-37860531、020-37860521、0754"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=402e5eb5-daaa-4e22-a31b-6af059fa1996&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "系统"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610211563",
+  "title": "新圩镇苗田村基础设施及人居环境提升工程竞争性磋商公告",
+  "projectName": "新圩镇苗田村基础设施及人居环境提升工程",
+  "projectCode": "445122-2026-01720",
+  "buyer": "饶平县新圩镇人民政府",
+  "agency": "驿大项目管理有限公司",
+  "budget": "1,104,405.44元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-21",
+  "deadline": "2026-11-03",
+  "bidOpenDate": "2026-11-03",
+  "summary": "项目概况 新圩镇苗田村基础设施及人居环境提升工程 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年11月03日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01720 项目名称：新圩镇苗田村基础设施及人居环境提升工程 采购方式：竞争性磋商 预算金额：1,104,405.44元 采购需求： 采购包1(新圩镇苗田村基础设施及人居环境提升工程): 采购包预算金额： 1,104,405.44元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元",
+  "contact": "13690043319 15007684884 张工 15007684884",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县新圩镇人民政府",
+    "address": "广东省潮州市饶平县新圩镇团结路西70号",
+    "person": "",
+    "phone": "13690043319"
+   },
+   "agency": {
+    "name": "驿大项目管理有限公司",
+    "address": "四川省成都市金牛区高新技术产业园区迎宾大道298号4栋603号",
+    "person": "钟成莉",
+    "phone": "15007684884"
+   },
+   "project": {
+    "person": "张工",
+    "phone": "15007684884"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=fb2dfa8f-4bca-4a1f-b065-80ebd5afe626&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610202016",
+  "title": "韩江北溪（铁铺-官塘段）村庄河塘渠道生态整治项目-铁铺片区勘察设计",
+  "projectCode": "潮公易建招字[2026]170号",
+  "buyer": "潮州市湘桥区铁铺镇人民政府",
+  "agency": "广东永固工程管理有限公司",
+  "budget": "￥4,351,910.48元",
+  "fundSource": "—",
+  "district": "湘桥",
+  "annType": "建设工程招标公告",
+  "pubDate": "2026-10-20",
+  "deadline": "2026-10-31",
+  "bidOpenDate": "2026-11-12",
+  "summary": "广东省工程建设项目招标公告\n| “〈交货) 地点                                         / 尔 |\n                           项目建设所需资金通过积极争取上级专项资金| 在直。 4\n资金来源       财政资金      资金来源构成 | 项债、超长期特别国债、中央预算内投资等各类专\n项资金支持，不足部分由地方财政资金统筹解决。\n(一) 污染治理工程: 主要为新建种养结合资源化回用系统 12 个片区，对养殖尾水进行资源\n化回用，配套类污收集系统、引水及灌溉系统等，〈二) 人居环境整治工程: 包括农村生活\n污水治理约 15.",
+  "contact": "—",
+  "contacts": {
+   "purchaser": {
+    "name": "",
+    "address": "",
+    "person": "",
+    "phone": ""
+   },
+   "agency": {
+    "name": "",
+    "address": "",
+    "person": "",
+    "phone": ""
+   },
+   "project": {
+    "person": "",
+    "phone": ""
+   }
+  },
+  "sourceUrl": "https://www.czggzy.com:8088/info.u.jsp?id=2016&clsid=J",
+  "matchedKeywords": [
+   "系统"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610166900",
+  "title": "潮州市政务服务中心信息化建设(2026年)项目招标公告",
+  "projectName": "潮州市政务服务中心信息化建设(2026年)项目",
+  "projectCode": "CZC2026023",
+  "buyer": "潮州市政务服务和数据管理局",
+  "agency": "潮州市公共资源交易中心",
+  "budget": "7,463,061.95元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-16",
+  "deadline": "2026-11-10",
+  "bidOpenDate": "2026-11-10",
+  "summary": "项目概况 潮州市政务服务中心信息化建设(2026年)项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月10日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026023 项目名称：潮州市政务服务中心信息化建设(2026年)项目 采购方式：公开招标 预算金额：7,463,061.95元 采购需求： 采购包1(潮州市政务服务中心信息化建设（2026年）项目): 采购包预算金额： 7,463,061.95元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目",
+  "contact": "0768-2331598 0768-2280181 卢雅琨 0768-2280181",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市政务服务和数据管理局",
+    "address": "潮州市潮州大道中段凤新大厦北翼第九至第十一层",
+    "person": "",
+    "phone": "0768-2331598"
+   },
+   "agency": {
+    "name": "潮州市公共资源交易中心",
+    "address": "广东省潮州市潮州大道中段广发银行12楼",
+    "person": "卢雅琨",
+    "phone": "0768-2280181"
+   },
+   "project": {
+    "person": "卢雅琨",
+    "phone": "0768-2280181"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=6e2bd30e-c281-4015-a19a-9402b1edd0a5&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "信息化",
+   "智慧",
+   "平台",
+   "系统",
+   "软件",
+   "云",
+   "机房",
+   "网络"
+  ],
+  "businessTags": [
+   "平台",
+   "机房"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610168716",
+  "title": "潮安区庵埠镇综合养老服务中心建设项目竞争性磋商公告",
+  "projectName": "潮安区庵埠镇综合养老服务中心建设项目",
+  "projectCode": "CZZZ[2026]G002",
+  "buyer": "潮州市潮安区庵埠镇人民政府",
+  "agency": "潮州市中正招投标代理有限公司",
+  "budget": "2,751,916.55元",
+  "fundSource": "—",
+  "district": "潮安",
+  "annType": "采购公告",
+  "pubDate": "2026-10-16",
+  "deadline": "2026-10-27",
+  "bidOpenDate": "2026-10-27",
+  "summary": "项目概况 潮安区庵埠镇综合养老服务中心建设项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月27日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：CZZZ[2026]G002 项目名称：潮安区庵埠镇综合养老服务中心建设项目 采购方式：竞争性磋商 预算金额：2,751,916.55元 采购需求： 采购包1(潮安区庵埠镇综合养老服务中心建设项目): 采购包预算金额： 2,751,916.55元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价",
+  "contact": "6611887 0768-6639666 郭锡壮 0768-6639666",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市潮安区庵埠镇人民政府",
+    "address": "广东省潮州市潮安区庵埠镇亨利北路",
+    "person": "",
+    "phone": "6611887"
+   },
+   "agency": {
+    "name": "潮州市中正招投标代理有限公司",
+    "address": "广东省潮州市潮安区城区安盛花园26幢101号",
+    "person": "郭锡雄",
+    "phone": "0768-6639666"
+   },
+   "project": {
+    "person": "郭锡壮",
+    "phone": "0768-6639666"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=9e25945d-82af-49cd-969f-fbd974be7362&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610158698",
+  "title": "钱东镇道路清扫保洁及垃圾清运与绿化养护项目竞争性磋商公告",
+  "projectName": "钱东镇道路清扫保洁及垃圾清运与绿化养护项目",
+  "projectCode": "FHGJST269C2043",
+  "buyer": "饶平县钱东镇人民政府",
+  "agency": "丰汇国际项目管理有限公司",
+  "budget": "2,553,272.08元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-15",
+  "deadline": "2026-10-27",
+  "bidOpenDate": "2026-10-27",
+  "summary": "项目概况 钱东镇道路清扫保洁及垃圾清运与绿化养护项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月27日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：FHGJST269C2043 项目名称：钱东镇道路清扫保洁及垃圾清运与绿化养护项目 采购方式：竞争性磋商 预算金额：2,553,272.08元 采购需求： 采购包1(钱东镇道路清扫保洁及垃圾清运与绿化养护项目): 采购包预算金额： 2,553,272.08元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预",
+  "contact": "0768-8718456 19866255606 马工 19866255606",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县钱东镇人民政府",
+    "address": "广东省潮州市饶平县钱东镇大陇公园前一横2号",
+    "person": "",
+    "phone": "0768-8718456"
+   },
+   "agency": {
+    "name": "丰汇国际项目管理有限公司",
+    "address": "汕头市龙湖区黄河路19号智汇时代雅园4栋1701",
+    "person": "马逸乐",
+    "phone": "19866255606"
+   },
+   "project": {
+    "person": "马工",
+    "phone": "19866255606"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=8586b284-2d87-4558-8070-735857c5ecad&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610151994",
+  "title": "潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目招标公告",
+  "projectName": "潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目",
+  "projectCode": "04-17-04A-2026-D-F-E29972",
+  "buyer": "潮州市公安局",
+  "agency": "公诚管理咨询有限公司",
+  "budget": "2,250,700.00元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-15",
+  "deadline": "2026-11-06",
+  "bidOpenDate": "2026-11-06",
+  "summary": "项目概况 潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月06日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：04-17-04A-2026-D-F-E29972 项目名称：潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目 采购方式：公开招标 预算金额：2,250,700.00元 采购需求： 采购包1(潮州市公安局社会治安巡防管控“四个一”体系建设应用提档升级（2026年）项目",
+  "contact": "13500105437 07683269996 高丽珍、宗正月、戚琳 07683269996",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市公安局",
+    "address": "潮州市湘桥区城新西路81号",
+    "person": "",
+    "phone": "13500105437"
+   },
+   "agency": {
+    "name": "公诚管理咨询有限公司",
+    "address": "广东省潮州市湘桥区潮枫路223号新时空大厦8楼",
+    "person": "李成斌",
+    "phone": "07683269996"
+   },
+   "project": {
+    "person": "高丽珍、宗正月、戚琳",
+    "phone": "07683269996"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=6fcd65ac-0a67-4557-b44c-f6d34d6e0c32&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "软件",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610146392",
+  "title": "潮州市金山中学后勤服务项目招标公告",
+  "projectName": "潮州市金山中学后勤服务项目",
+  "projectCode": "CZC2026024",
+  "buyer": "潮州市金山中学",
+  "agency": "潮州市公共资源交易中心",
+  "budget": "5,663,433.60元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-14",
+  "deadline": "2026-11-04",
+  "bidOpenDate": "2026-11-04",
+  "summary": "项目概况 潮州市金山中学后勤服务项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月04日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZC2026024 项目名称：潮州市金山中学后勤服务项目 采购方式：公开招标 预算金额：5,663,433.60元 采购需求： 采购包1(潮州市金山中学后勤服务项目): 采购包预算金额： 5,663,433.60元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元) 1-1 其他商务服务 内宿及课余",
+  "contact": "13632039080 0768-2280181 卢巧玲 0768-2280181",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市金山中学",
+    "address": "广东省潮州市湘桥区桥东东山路99号",
+    "person": "",
+    "phone": "13632039080"
+   },
+   "agency": {
+    "name": "潮州市公共资源交易中心",
+    "address": "广东省潮州市潮州大道中段广发银行12楼",
+    "person": "卢巧玲",
+    "phone": "0768-2280181"
+   },
+   "project": {
+    "person": "卢巧玲",
+    "phone": "0768-2280181"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=43be227d-2bb4-44a0-b5a2-f50901418553&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610143487",
+  "title": "潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目招标公告",
+  "projectName": "潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目",
+  "projectCode": "CZZD[2026]A019",
+  "buyer": "潮州市生态环境局",
+  "agency": "潮州市正得项目管理咨询有限公司",
+  "budget": "5,300,000.00元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-14",
+  "deadline": "2026-11-04",
+  "bidOpenDate": "2026-11-04",
+  "summary": "项目概况 潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月04日 09时00分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：CZZD[2026]A019 项目名称：潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目 采购方式：公开招标 预算金额：5,300,000.00元 采购需求： 采购包1(潮州市枫江流域水环境综合整治成效评估与水生态环境质量改善驻点技术支撑项目): 采购包预算金额： 5,300",
+  "contact": "0768-3288399 0768-2303555 邱先生 0768-2303555",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市生态环境局",
+    "address": "潮州大道凤新东路市环境监控中心大楼",
+    "person": "",
+    "phone": "0768-3288399"
+   },
+   "agency": {
+    "name": "潮州市正得项目管理咨询有限公司",
+    "address": "广东省潮州市湘桥区绿茵路金阳大厦202",
+    "person": "王绵",
+    "phone": "0768-2303555"
+   },
+   "project": {
+    "person": "邱先生",
+    "phone": "0768-2303555"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=79a3589b-6c2c-4e3c-9826-15ba041908eb&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云",
+   "监控"
+  ],
+  "businessTags": [
+   "监控",
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610125608",
+  "title": "饶平县新丰镇镇区环卫保洁项目竞争性磋商公告",
+  "projectName": "饶平县新丰镇镇区环卫保洁项目",
+  "projectCode": "445122-2026-01627",
+  "buyer": "饶平县新丰镇人民政府",
+  "agency": "建信大项目管理(广州)有限公司",
+  "budget": "1,050,000.00元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-12",
+  "deadline": "2026-10-23",
+  "bidOpenDate": "2026-10-23",
+  "summary": "项目概况 饶平县新丰镇镇区环卫保洁项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月23日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：445122-2026-01627 项目名称：饶平县新丰镇镇区环卫保洁项目 采购方式：竞争性磋商 预算金额：1,050,000.00元 采购需求： 采购包1(饶平县新丰镇镇区环卫保洁项目): 采购包预算金额： 1,050,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元) 1-1 清",
+  "contact": "0768-8629526 0768-8595834 林工 0768-8595834",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县新丰镇人民政府",
+    "address": "广东省潮州市饶平县新丰镇新丰大道128号",
+    "person": "",
+    "phone": "0768-8629526"
+   },
+   "agency": {
+    "name": "建信大项目管理",
+    "address": "潮州市饶平县黄冈镇颐养居东北角办公楼4楼",
+    "person": "陈敏婷",
+    "phone": "0768-8595834"
+   },
+   "project": {
+    "person": "林工",
+    "phone": "0768-8595834"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=e296dd01-7396-48a1-9802-34c180967ab1&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610102912",
+  "title": "化学与精细化工广东省实验室潮州分中心实验室家具采购项目（项目编号：0724-2631ST825692）招标公告",
+  "projectName": "化学与精细化工广东省实验室潮州分中心实验室家具采购项目",
+  "projectCode": "0724-2631ST825692",
+  "buyer": "化学与精细化工广东省实验室潮州分中心",
+  "agency": "国义招标股份有限公司",
+  "budget": "1,804,885.94元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-10",
+  "deadline": "2026-11-02",
+  "bidOpenDate": "2026-11-02",
+  "summary": "项目概况 化学与精细化工广东省实验室潮州分中心实验室家具采购项目 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月02日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：0724-2631ST825692 项目名称：化学与精细化工广东省实验室潮州分中心实验室家具采购项目 采购方式：公开招标 预算金额：1,804,885.94元 采购需求： 采购包1(实验室家具): 采购包预算金额： 1,804,885.94元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(",
+  "contact": "0768-3260221 020-37860531、020-37860521、0754 邓彩云、戴琨琳、马倩升 020-37860531、020-37860521、0754",
+  "contacts": {
+   "purchaser": {
+    "name": "化学与精细化工广东省实验室潮州分中心",
+    "address": "潮州市潮安区安丰东路21号韩江实验室",
+    "person": "",
+    "phone": "0768-3260221"
+   },
+   "agency": {
+    "name": "国义招标股份有限公司",
+    "address": "广东省广州市越秀区广东省广州市越秀区东风东路726号18楼",
+    "person": "戴琨琳",
+    "phone": "020-37860531、020-37860521、0754"
+   },
+   "project": {
+    "person": "邓彩云、戴琨琳、马倩升",
+    "phone": "020-37860531、020-37860521、0754"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=3b7e8559-c5bb-4b5c-b8ed-1f805250671d&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "数字",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610107398",
+  "title": "饶平县民政局关于2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次)招标公告",
+  "projectName": "2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次)",
+  "projectCode": "LZZX-CZ-ZB-310426",
+  "buyer": "饶平县民政局",
+  "agency": "潮州市联正工程咨询有限公司",
+  "budget": "1,096,000.00元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-10",
+  "deadline": "2026-11-03",
+  "bidOpenDate": "2026-11-03",
+  "summary": "项目概况 2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次) 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年11月03日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：LZZX-CZ-ZB-310426 项目名称：2026年“银龄安康行动”老年人意外伤害综合保险采购项目(三次) 采购方式：公开招标 预算金额：1,096,000.00元 采购需求： 采购包1(2026年“银龄安康行动”老年人意外伤害综合保险采购项目): 采购包预算金额： 1,096,000.00元 品目号 ",
+  "contact": "0768-7803920 0768-2228456 邱工 0768-2228456",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县民政局",
+    "address": "广东省潮州市饶平县饶平大道中段",
+    "person": "",
+    "phone": "0768-7803920"
+   },
+   "agency": {
+    "name": "潮州市联正工程咨询有限公司",
+    "address": "广东省潮州市湘桥区潮州市湘桥区桥东街道卧石路浮堆西路4号综合楼301室",
+    "person": "卢若清",
+    "phone": "0768-2228456"
+   },
+   "project": {
+    "person": "邱工",
+    "phone": "0768-2228456"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=37fc2a1e-f9db-48a5-9851-cc7b2eaf8702&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610090265",
+  "title": "潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次)招标公告",
+  "projectName": "潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次)",
+  "projectCode": "HZJJCZCG2026007",
+  "buyer": "潮州市政府项目建设中心",
+  "agency": "惠州市建佳造价咨询事务所有限公司",
+  "budget": "4,352,559.98元",
+  "fundSource": "—",
+  "district": "市区",
+  "annType": "采购公告",
+  "pubDate": "2026-10-09",
+  "deadline": "2026-10-30",
+  "bidOpenDate": "2026-10-30",
+  "summary": "项目概况 潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次) 招标项目的潜在投标人应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取招标文件，并于 2026年10月30日 09时30分 （北京时间）前递交投标文件。 一、项目基本情况 项目编号：HZJJCZCG2026007 项目名称：潮州市韩东新城防洪综合整治二期工程（堤围工程）非集中采购设备部分-房建建筑部分设备、水利部分设备采购项目(二次) 采购方式：公开招标 预算金额：4,352,559.98元 采购需求： 采购包1(潮州市韩东新城防洪综合整",
+  "contact": "0768-2393053 13631004418 邢工 13631004418",
+  "contacts": {
+   "purchaser": {
+    "name": "潮州市政府项目建设中心",
+    "address": "潮州大道南段建设大厦三楼",
+    "person": "",
+    "phone": "0768-2393053"
+   },
+   "agency": {
+    "name": "惠州市建佳造价咨询事务所有限公司",
+    "address": "广东省潮州市枫溪区堤头村邱厝池如意楼701室",
+    "person": "邱学馨",
+    "phone": "13631004418"
+   },
+   "project": {
+    "person": "邢工",
+    "phone": "13631004418"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=76635a49-e2ca-4457-bf42-87183b1f019e&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "公开招标",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ },
+ {
+  "id": "ANN202610098659",
+  "title": "饶平县新丰镇村级生活垃圾转运项目竞争性磋商公告",
+  "projectName": "饶平县新丰镇村级生活垃圾转运项目",
+  "projectCode": "GDYS-2026-FWCG289",
+  "buyer": "饶平县新丰镇人民政府",
+  "agency": "广东源胜招标采购有限公司",
+  "budget": "1,300,000.00元",
+  "fundSource": "—",
+  "district": "饶平",
+  "annType": "采购公告",
+  "pubDate": "2026-10-09",
+  "deadline": "2026-10-22",
+  "bidOpenDate": "2026-10-22",
+  "summary": "项目概况 饶平县新丰镇村级生活垃圾转运项目 采购项目的潜在供应商应在 广东省政府采购网https://gdgpo.czt.gd.gov.cn/ 获取采购文件，并于 2026年10月22日 09时30分 （北京时间）前提交响应文件。 一、项目基本情况 项目编号：GDYS-2026-FWCG289 项目名称：饶平县新丰镇村级生活垃圾转运项目 采购方式：竞争性磋商 预算金额：1,300,000.00元 采购需求： 采购包1(饶平县新丰镇村级生活垃圾转运项目): 采购包预算金额： 1,300,000.00元 品目号 品目名称 采购标的 数量（单位） 技术规格、参数及要求 品目预算(元) 最高限价(元)",
+  "contact": "13422001425 13172343312 黄工 13172343312",
+  "contacts": {
+   "purchaser": {
+    "name": "饶平县新丰镇人民政府",
+    "address": "广东省潮州市饶平县新丰镇新丰大道128号",
+    "person": "",
+    "phone": "13422001425"
+   },
+   "agency": {
+    "name": "广东源胜招标采购有限公司",
+    "address": "潮州市饶平县黄冈镇2058电商创意园A区107号-108号",
+    "person": "蔡建昌",
+    "phone": "13172343312"
+   },
+   "project": {
+    "person": "黄工",
+    "phone": "13172343312"
+   }
+  },
+  "sourceUrl": "https://gdgpo.czt.gd.gov.cn/maincms-web/noticeGd?type=notice&id=ec622ebd-0a6b-4c98-850d-4dedf12202f1&channel=fca71be5-fc0c-45db-96af-f513e9abda9d",
+  "matchedKeywords": [
+   "智慧",
+   "平台",
+   "系统",
+   "云"
+  ],
+  "businessTags": [
+   "平台"
+  ],
+  "region": "潮州",
+  "purchaseMethod": "竞争性磋商",
+  "isValidOpportunity": "",
+  "hasOperatorInvolvement": "",
+  "opportunityCode": "",
+  "opportunityStatus": "",
+  "willBid": "",
+  "treePlacement": "",
+  "currentHandler": "佘淑娟",
+  "createdAt": "2026-10-23",
+  "nextFollowUp": "2026-10-25",
+  "progress": "待分配",
+  "progressRecords": [
+   {
+    "progress": "待分配",
+    "follower": "系统",
+    "followDate": "2026-10-23",
+    "note": "新公告自动入库"
+   }
+  ]
+ }
+];
 const INLINE_SITE = [
   {
     "name": "中洲宏腾工程管理有限公司",
@@ -1206,7 +4488,8 @@ let state = {
   selectedReminderIds: new Set(),
   filters: { keyword: '', region: '', district: '', progress: '', bidStatus: '', businessTag: '' },
   detailId: null,
-  modal: null, // 'assign' | 'batch-assign' | 'reminder-batch-assign' | 'progress' | 'add-group' | 'edit-group' | null
+  modal: null, // 'assign' | 'batch-assign' | 'reminder-batch-assign' | 'progress' | 'add-group' | 'edit-group' | 'kw-delete' | 'ann-form' | null
+  formAnnId: null,  // null=新增，非null=编辑
   assignAnnId: null,
   progressAnnId: null,
   editGroupId: null,
@@ -1310,6 +4593,14 @@ function confirmOpportunity() {
 
 async function init() {
   state.announcements = await loadAnnouncements();
+  // 离线版：本地新增/修改/删除优先，JSON 作为原始源
+  try {
+    const saved = localStorage.getItem('announcements_offline');
+    if (saved) {
+      const arr = JSON.parse(saved);
+      if (Array.isArray(arr) && arr.length > 0) state.announcements = arr;
+    }
+  } catch (e) {}
   state.siteResults = await loadSiteResults();
   state.reminders = generateReminders(state.announcements);
   restoreOpportunities();
@@ -1367,6 +4658,7 @@ function render() {
     ${state.modal === 'progress' ? renderProgressModal() : ''}
     ${state.modal === 'add-group' ? renderAddGroupModal() : ''}
     ${state.modal === 'edit-group' ? renderEditGroupModal() : ''}
+    ${state.modal === 'ann-form' ? renderAnnFormModal() : ''}
   `;
   bindEvents();
 }
@@ -1633,6 +4925,15 @@ function renderAnnouncementList() {
           : `<button class="px-3 py-1 text-xs bg-gray-300 text-white rounded cursor-not-allowed" id="batchAssignBtn" disabled title="仅集团客户部可批量分配">批量分配</button>`}
           <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-gray-50" id="batchClearBtn">清空选择</button>
         </div>
+
+        <!-- 集团客户部专属：新增/修改/删除（不跟选中态耦合，独立按钮） -->
+        ${state.currentUser && state.currentUser.group === '集团客户部'
+        ? `<div class="flex items-center gap-1.5 ml-auto" id="annCrudBar">
+             <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="annAddBtn">+ 新增公告</button>
+             <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-blue-50" id="annEditBtn">修改</button>
+             <button class="px-3 py-1 text-xs border border-gray-200 text-red-500 rounded hover:bg-red-50 hover:border-red-200" id="annDeleteBtn">删除</button>
+           </div>`
+        : ''}
       </div>
     </div>
 
@@ -2589,6 +5890,165 @@ function renderSchedule() {
 }
 
 // ============ Modal ============
+
+// ========== 公告 · 新增 / 编辑 共用表单弹窗（离线版 localStorage 持久化） ==========
+const ANN_FORM_FIELDS = [
+  { section: '基本信息', wide: true, rows: [
+    [{ key: 'title', label: '公告标题', width: 'col-span-3', type: 'text' }],
+    [{ key: 'projectName', label: '项目名称', width: 'col-span-2', type: 'text' },
+     { key: 'projectCode', label: '项目编码', width: 'col-span-1', type: 'text' }],
+    [{ key: 'annType', label: '公告类型', width: 'col-span-1', type: 'select',
+       options: ['招标公告','中标公告','单一来源公示','询价公告','竞争性谈判','意向公开','资格预审','更正公告'] },
+     { key: 'purchaseMethod', label: '采购方式', width: 'col-span-1', type: 'select',
+       options: ['公开招标','邀请招标','竞争性谈判','竞争性磋商','询价','单一来源','框架协议','协议供货'] },
+     { key: 'summary', label: '项目概况', width: 'col-span-3', type: 'textarea', rows: 2 }],
+  ]},
+  { section: '采购方 / 预算', rows: [
+    [{ key: 'buyer', label: '采购人', width: 'col-span-1', type: 'text' },
+     { key: 'agency', label: '代理机构', width: 'col-span-1', type: 'text' },
+     { key: 'contact', label: '联系电话', width: 'col-span-1', type: 'text' }],
+    [{ key: 'budget', label: '预算金额', width: 'col-span-1', type: 'text', placeholder: '如 120万元' },
+     { key: 'fundSource', label: '资金来源', width: 'col-span-1', type: 'text', placeholder: '如 财政资金' },
+     { key: 'sourceUrl', label: '来源链接', width: 'col-span-3', type: 'text', placeholder: 'https://...' }],
+  ]},
+  { section: '区域 / 时间', rows: [
+    [{ key: 'region', label: '所属区域', width: 'col-span-1', type: 'text' },
+     { key: 'district', label: '所属区县', width: 'col-span-1', type: 'text' },
+     { key: 'pubDate', label: '发布日期', width: 'col-span-1', type: 'date' }],
+    [{ key: 'deadline', label: '报名截止', width: 'col-span-1', type: 'date' },
+     { key: 'bidOpenDate', label: '开标日期', width: 'col-span-1', type: 'date' }],
+  ]},
+  { section: '商机管理', wide: true, rows: [
+    [{ key: 'isValidOpportunity', label: '有效商机', width: 'col-span-1', type: 'select',
+       options: ['', '是', '否'], optionLabels: { '': '请选择', '是': '是', '否': '否' } },
+     { key: 'hasOperatorInvolvement', label: '运营商参与', width: 'col-span-1', type: 'select',
+       options: ['', '是', '否'], optionLabels: { '': '请选择', '是': '是', '否': '否' } },
+     { key: 'willBid', label: '是否应标', width: 'col-span-1', type: 'select',
+       options: ['', '准备应标', '已经应标', '弃标'], optionLabels: { '': '请选择', '准备应标': '准备应标', '已经应标': '已经应标', '弃标': '弃标' } }],
+    [{ key: 'opportunityCode', label: '商机编码', width: 'col-span-1', type: 'text' },
+     { key: 'treePlacement', label: '挂树选择', width: 'col-span-1', type: 'text' },
+     { key: 'progress', label: '进度', width: 'col-span-1', type: 'select',
+       options: ['待分配', '已分配', '已确认'] }],
+    [{ key: 'handlerGroup', label: '负责小组', width: 'col-span-1', type: 'text', placeholder: '可留空' },
+     { key: 'currentHandler', label: '当前处理人', width: 'col-span-1', type: 'text', placeholder: '可留空' },
+     { key: 'nextFollowUp', label: '下次跟进', width: 'col-span-1', type: 'date' }],
+    [{ key: 'opportunityStatus', label: '商机了解情况', width: 'col-span-3', type: 'textarea', rows: 2 }],
+  ]},
+];
+function renderAnnFormModal() {
+  const isEdit = !!state.formAnnId;
+  const ann = isEdit ? state.announcements.find(a => a.id === state.formAnnId) || {} : {};
+  const title = isEdit ? '修改招标公告' : '新增招标公告';
+
+  function renderField(field) {
+    const val = ann[field.key] !== undefined ? ann[field.key] : '';
+    const valueAttr = String(val).replace(/"/g, '&quot;');
+    const labelHtml = `<label class="text-sm text-gray-700 mb-2 block font-medium">${field.label}</label>`;
+    if (field.type === 'textarea') {
+      return `
+        <div class="${field.width || 'col-span-1'}">
+          ${labelHtml}
+          <textarea name="${field.key}" rows="${field.rows || 3}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none leading-relaxed"
+            placeholder="${field.placeholder || ''}">${val}</textarea>
+        </div>`;
+    }
+    if (field.type === 'select') {
+      const labels = field.optionLabels || {};
+      const opts = (field.options || []).map(o => {
+        const label = labels[o] !== undefined ? labels[o] : o;
+        return `<option value="${o}" ${valueAttr == o ? 'selected' : ''}>${label}</option>`;
+      }).join('');
+      return `
+        <div class="${field.width || 'col-span-1'}">
+          ${labelHtml}
+          <select name="${field.key}"
+            class="w-full h-10 px-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-white">
+            ${opts}
+          </select>
+        </div>`;
+    }
+    const inputType = field.type === 'date' ? 'date' : 'text';
+    return `
+      <div class="${field.width || 'col-span-1'}">
+        ${labelHtml}
+        <input type="${inputType}" name="${field.key}" value="${valueAttr}"
+          class="w-full h-10 px-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+          placeholder="${field.placeholder || ''}">
+      </div>`;
+  }
+
+  function renderSection(section) {
+    const rowsHtml = section.rows.map(row => {
+      return `<div class="grid grid-cols-3 gap-x-6 gap-y-5">${row.map(renderField).join('')}</div>`;
+    }).join('');
+    return `
+      <div class="mb-6">
+        <div class="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-0.5 h-3.5 bg-blue-500 rounded-sm"></span>
+          ${section.section}
+        </div>
+        ${rowsHtml}
+      </div>`;
+  }
+
+  const sectionsHtml = ANN_FORM_FIELDS.map(renderSection).join('');
+
+  return `
+    <div id="annFormModal" class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-lg w-[860px] max-h-[92vh] flex flex-col shadow-2xl" data-stop>
+        <div class="px-6 py-4 border-b border-gray-100 shrink-0 flex items-center justify-between">
+          <h3 class="font-semibold text-gray-900 text-base leading-none">${title}</h3>
+          <button data-close-modal class="text-gray-400 hover:text-gray-600 transition w-6 h-6 flex items-center justify-center rounded hover:bg-gray-100 text-lg leading-none">✕</button>
+        </div>
+        <div class="overflow-y-auto scrollbar-thin flex-1 min-h-0 px-8 py-6">
+          ${sectionsHtml}
+        </div>
+        <div class="px-6 py-3 border-t border-gray-100 shrink-0 flex justify-end gap-2 bg-gray-50 rounded-lg">
+          <button id="annFormCancel"
+            class="px-5 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition">取消</button>
+          <button id="annFormSave"
+            class="px-5 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 active:bg-blue-800 transition shadow-sm">保存</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function collectAnnFormData() {
+  const body = {};
+  document.querySelectorAll('#annFormModal [name]').forEach(el => {
+    body[el.name] = el.value;
+  });
+  body.matchedKeywords = [];
+  body.businessTags = [];
+  body.contacts = {};
+  return body;
+}
+
+function annFormMissingFields(body) {
+  const skipEmpty = new Set(['summary', 'matchedKeywords', 'businessTags', 'contacts']);
+  const missing = [];
+  for (const section of ANN_FORM_FIELDS) {
+    for (const row of section.rows) {
+      for (const f of row) {
+        if (skipEmpty.has(f.key)) continue;
+        const v = body[f.key];
+        if (v === undefined || v === null || String(v).trim() === '') missing.push(f.label);
+      }
+    }
+  }
+  return missing;
+}
+
+
+function saveAnnouncementsToLocal() {
+  try {
+    localStorage.setItem('announcements_offline', JSON.stringify(state.announcements));
+  } catch(e) {}
+}
+
+
 function renderAssignModal() {
   const ann = state.announcements.find(a => a.id === state.assignAnnId);
   if (!ann) return '';
@@ -2791,6 +6251,88 @@ function bindEvents() {
   });
 
   // 返回列表
+  document.querySelectorAll('[data-back]').forEach(el => {
+    el.onclick = () => { state.detailId = null; render(); };
+  });
+
+  // ---- 集团客户部 · 新增 / 修改 / 删除（离线版 localStorage 持久化） ----
+  document.querySelectorAll('#annAddBtn').forEach(el => {
+    el.onclick = () => {
+      state.formAnnId = null;
+      state.modal = 'ann-form';
+      render();
+    };
+  });
+  document.querySelectorAll('#annEditBtn').forEach(el => {
+    el.onclick = () => {
+      const ids = Array.from(state.selectedAnnIds);
+      if (ids.length === 0) { alert('请先勾选一条公告再修改'); return; }
+      if (ids.length > 1) { alert('修改只能选择单条，不能多选'); return; }
+      state.formAnnId = ids[0];
+      state.modal = 'ann-form';
+      render();
+    };
+  });
+  document.querySelectorAll('#annDeleteBtn').forEach(el => {
+    el.onclick = () => {
+      const ids = Array.from(state.selectedAnnIds);
+      if (ids.length === 0) { alert('请先勾选要删除的公告'); return; }
+      const preview = state.announcements
+        .filter(a => ids.includes(a.id))
+        .map(a => '· ' + (a.projectName || a.title) + '（' + a.id + '）')
+        .join('\n');
+      if (!confirm('确认删除以下 ' + ids.length + ' 条公告？\n\n' + preview + '\n\n⚠ 删除后无法恢复（本地演示版为物理删除）。')) return;
+      state.announcements = state.announcements.filter(a => !ids.includes(a.id));
+      state.selectedAnnIds.clear();
+      state.detailId = null;
+      saveAnnouncementsToLocal();
+      applyFilters();
+      alert('已删除 ' + ids.length + ' 条');
+      render();
+    };
+  });
+  document.querySelectorAll('#annFormCancel').forEach(el => {
+    el.onclick = () => { state.modal = null; state.formAnnId = null; render(); };
+  });
+  document.querySelectorAll('#annFormSave').forEach(el => {
+    el.onclick = () => {
+      const body = collectAnnFormData();
+      const missing = annFormMissingFields(body);
+      if (missing.length > 0) {
+        const ok = confirm('以下 ' + missing.length + ' 个字段未填写：\n' + missing.map(m => '· ' + m).join('\n') + '\n\n确认仍然保存？');
+        if (!ok) return;
+      }
+      if (state.formAnnId) {
+        // 修改
+        const idx_a = state.announcements.findIndex(a => a.id === state.formAnnId);
+        if (idx_a >= 0) {
+          const old = state.announcements[idx_a];
+          state.announcements[idx_a] = Object.assign({}, old, body, { updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' ') });
+        }
+      } else {
+        // 新增：生成 ANN 编号
+        const now = new Date();
+        const suffix = String(now.getFullYear()) + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + String(Math.floor(Math.random()*1e6)).padStart(6,'0');
+        const newId = 'ANN' + suffix;
+        const created = Object.assign({
+          id: newId,
+          bidStatus: '挂网',
+          progressRecords: [],
+          assignmentRecords: [],
+          createdAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+          updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' '),
+        }, body);
+        state.announcements.unshift(created);
+      }
+      state.modal = null;
+      state.formAnnId = null;
+      state.selectedAnnIds.clear();
+      saveAnnouncementsToLocal();
+      applyFilters();
+      render();
+    };
+  });
+
   document.querySelectorAll('[data-back]').forEach(el => {
     el.onclick = () => { state.detailId = null; render(); };
   });
@@ -3316,6 +6858,8 @@ function bindEvents() {
 
 
 init();</script>
+
+
 
 </body>
 </html>

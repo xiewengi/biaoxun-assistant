@@ -1,0 +1,19 @@
+# =============================================================================
+# 标讯助手 · 定时采集触发器
+# 安装位置：/etc/systemd/system/biaoxun-collect.timer
+# 频率：每 2 小时的第 15 分钟（与页面「定时任务1 每2小时」对齐）
+# 查看：systemctl list-timers biaoxun-collect.timer
+# 手动跑：systemctl start biaoxun-collect.service
+# 改频率：改本文件 OnCalendar 后 systemctl daemon-reload && systemctl restart biaoxun-collect.timer
+# =============================================================================
+[Unit]
+Description=标讯助手 每2小时采集招标公告
+
+[Timer]
+OnCalendar=*-*-* 00/2:15:00
+Persistent=true
+RandomizedDelaySec=5min
+Unit=biaoxun-collect.service
+
+[Install]
+WantedBy=timers.target

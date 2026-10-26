@@ -3,38 +3,20 @@
 // --- script[2] ---
 // 标讯助手 Demo - 主应用逻辑
 
-// 登录账号（由 TEAM_GROUPS 自动派生，统一密码 123456）
-const USERS = TEAM_GROUPS.map(g => ({
-  account: g.adminAccount,
-  name: g.admin,
-  phone: g.adminContact,
-  group: g.name,
-  groupId: g.id,
-  password: '123456'
-}));
-
-// 登录持久化 key
-const LS_USER = 'currentUser';
-
-// 商机管理必填字段（老大 2026-10-23 定案）
-const REQUIRED_OPP_FIELDS = [
-  { key: 'isValidOpportunity', label: '是否有效商机' },
-  { key: 'hasOperatorInvolvement', label: '是否有运营商参与' },
-  { key: 'opportunityCode', label: '商机编码' },
-  { key: 'willBid', label: '是否应标' },
-];
-
+// 登录态由后端会话（localStorage: bx_token）维持，currentUser 来自 /api/auth/me
 let state = {
   currentUser: null,      // { account, name, phone, group, groupId }
   page: 'announcements',
   announcements: [],
   siteResults: [],        // 真实站点采集结果
+  latestRun: null,        // 最近一次采集运行（GET /api/collect/runs）
   filteredList: [],
   reminders: [],
   selectedReminderIds: new Set(),
   filters: { keyword: '', region: '', district: '', progress: '', bidStatus: '', businessTag: '' },
   detailId: null,
-  modal: null, // 'assign' | 'batch-assign' | 'reminder-batch-assign' | 'progress' | 'add-group' | 'edit-group' | null
+  modal: null, // 'assign' | 'batch-assign' | 'reminder-batch-assign' | 'progress' | 'add-group' | 'edit-group' | 'kw-delete' | 'ann-form' | null
+  formAnnId: null,  // ann-form 模式下：null=新增，非 null=编辑
   assignAnnId: null,
   progressAnnId: null,
   editGroupId: null,
@@ -45,39 +27,39 @@ let state = {
   reminderDistrictFilter: '',  // 任务提醒页专属区县筛选
 };
 
-// ============ 初始化 ============
-// ============ 商机管理 localStorage 持久化 ============
-function restoreOpportunities() {
-  try {
-    const saved = JSON.parse(localStorage.getItem('opp_fields') || '{}');
-    for (const ann of state.announcements) {
-      const s = saved[ann.id];
-      if (s) {
-        for (const [k, v] of Object.entries(s)) {
-          // 数组字段: 存时是JSON字符串, 读时parse
-          if (k === 'progressRecords' && typeof v === 'string') {
-            try { ann.progressRecords = JSON.parse(v); } catch { ann.progressRecords = []; }
-          } else {
-            ann[k] = v;
-          }
-        }
-      }
-    }
-  } catch (e) {}
+// ============ 初始化 / 登录态 ============
+// 商机字段：本地即时更新 + 防抖 PATCH 持久化
+const oppPatchTimers = new Map();
+const oppPendingPatches = new Map();
+
+function scheduleOppPatch(annId, field, value) {
+  const key = annId + '|' + field;
+  if (oppPatchTimers.has(key)) clearTimeout(oppPatchTimers.get(key));
+  oppPendingPatches.set(key, { annId, field, value });
+  const timer = setTimeout(() => {
+    oppPatchTimers.delete(key);
+    const pending = oppPendingPatches.get(key);
+    oppPendingPatches.delete(key);
+    if (!pending) return;
+    API.patchAnnouncement(pending.annId, { [pending.field]: pending.value }).catch(e => {
+      alert(e.message || '商机信息保存失败');
+    });
+  }, 500);
+  oppPatchTimers.set(key, timer);
 }
-function saveOpportunityField(annId, field, value) {
-  try {
-    const saved = JSON.parse(localStorage.getItem('opp_fields') || '{}');
-    saved[annId] = saved[annId] || {};
-    // 数组字段自动JSON序列化
-    if (Array.isArray(value)) {
-      saved[annId][field] = JSON.stringify(value);
-    } else {
-      saved[annId][field] = value;
+
+function cancelOppPatches(annId) {
+  for (const key of Array.from(oppPatchTimers.keys())) {
+    if (annId === undefined || key.indexOf(annId + '|') === 0) {
+      clearTimeout(oppPatchTimers.get(key));
+      oppPatchTimers.delete(key);
     }
-    localStorage.setItem('opp_fields', JSON.stringify(saved));
-  } catch (e) {}
+  }
+  for (const key of Array.from(oppPendingPatches.keys())) {
+    if (annId === undefined || key.indexOf(annId + '|') === 0) oppPendingPatches.delete(key);
+  }
 }
+
 function bindOpportunityEvents() {
   document.querySelectorAll('[data-opp-field]').forEach(el => {
     const annId = state.detailId;
@@ -87,67 +69,195 @@ function bindOpportunityEvents() {
     el.addEventListener(ev, () => {
       const ann = state.announcements.find(x => x.id === annId);
       if (ann) ann[field] = el.value;
-      saveOpportunityField(annId, field, el.value);
+      scheduleOppPatch(annId, field, el.value);
     });
   });
 }
 
-// ============ 商机管理 · 信息已确认（校验 + 保存） ============
-function confirmOpportunity() {
+// 把后端返回的单条公告合并回列表（保留当前页码）
+function mergeAnnouncement(updated) {
+  if (!updated || !updated.id) return;
+  const idx = state.announcements.findIndex(a => a.id === updated.id);
+  if (idx >= 0) state.announcements[idx] = Object.assign({}, state.announcements[idx], updated);
+  else state.announcements.unshift(updated);
+  const page = state.currentPage;
+  applyFilters();
+  state.currentPage = page;
+}
+
+async function reloadReminders() {
+  const data = await API.listReminders({ scope: 'me' });
+  state.reminders = (data && data.items) || [];
+}
+
+// 写操作成功后刷新公告 + 提醒（保留当前页码）
+async function refreshAfterMutation() {
+  const page = state.currentPage;
+  const [anns, reminders] = await Promise.all([
+    loadAnnouncements(),
+    API.listReminders({ scope: 'me' }),
+  ]);
+  state.announcements = anns;
+  state.reminders = (reminders && reminders.items) || [];
+  applyFilters();
+  state.currentPage = page;
+}
+
+// 首屏数据：公告 / 提醒 / 小组 / 数据源 / 定时配置 并发加载
+async function loadInitialData() {
+  const [anns, reminders, runs] = await Promise.all([
+    loadAnnouncements(),
+    API.listReminders({ scope: 'me' }),
+    API.collectRuns(1).catch(e => { alert(e.message || '采集记录加载失败'); return null; }),
+    loadGroups(),
+    loadSources(),
+    loadSchedule(),
+  ]);
+  state.announcements = anns;
+  state.reminders = (reminders && reminders.items) || [];
+  state.siteResults = SOURCES_DATA.map(mapSourceToSiteResult);
+  state.latestRun = (runs && runs.items && runs.items[0]) || null;
+}
+
+function handleUnauthorized() {
+  state.currentUser = null;
+  state.detailId = null;
+  state.modal = null;
+  state.selectedAnnIds.clear();
+  state.selectedReminderIds.clear();
+  render();
+}
+
+// 打开公告详情：列表接口不带进度记录，详情单独拉取
+async function openAnnouncementDetail(id) {
+  state.detailId = id;
+  state.modal = null;
+  render();
+  try {
+    const detail = await API.getAnnouncement(id);
+    if (state.detailId !== id) return;
+    mergeAnnouncement(detail);
+    render();
+  } catch (e) {
+    if (state.detailId === id) {
+      alert(e.message || '公告详情加载失败');
+      state.detailId = null;
+      render();
+    }
+  }
+}
+
+// 数据来源 + 站点状态
+async function reloadSourcesAndStatus() {
+  const [, siteResults] = await Promise.all([loadSources(), loadSiteResults()]);
+  state.siteResults = siteResults;
+}
+
+// 触发采集 → 提示已启动 → 轮询 collectRuns → 完成后刷新数据
+async function triggerCollect() {
+  let result;
+  try {
+    result = await API.collect();
+  } catch (e) {
+    alert(e.message || '启动采集失败');
+    return;
+  }
+  alert('已启动采集任务，完成后会自动刷新数据');
+  pollCollect(result && result.runId);
+}
+
+async function pollCollect(runId) {
+  let attempts = 0;
+  while (attempts < 40) {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    attempts++;
+    let data;
+    try {
+      data = await API.collectRuns(5);
+    } catch (e) {
+      alert(e.message || '采集状态查询失败');
+      try {
+        await refreshAfterMutation();
+        await reloadSourcesAndStatus();
+        render();
+      } catch (e2) {
+        alert(e2.message || '数据刷新失败');
+      }
+      return;
+    }
+    const items = (data && data.items) || [];
+    const current = runId
+      ? items.find(x => String(x.id) === String(runId))
+      : items[0];
+    if (current) state.latestRun = current;
+    if (!current || current.status !== 'running') {
+      try {
+        await refreshAfterMutation();
+        await reloadSourcesAndStatus();
+        render();
+      } catch (e) {
+        alert(e.message || '数据刷新失败');
+      }
+      return;
+    }
+  }
+  try {
+    await refreshAfterMutation();
+    await reloadSourcesAndStatus();
+    render();
+  } catch (e) {
+    alert(e.message || '数据刷新失败');
+  }
+}
+
+async function init() {
+  API.onUnauthorized(handleUnauthorized);
+  if (!API.hasToken()) {
+    state.currentUser = null;
+    render();
+    return;
+  }
+  try {
+    state.currentUser = await API.me();
+    await loadInitialData();
+    applyFilters();
+    render();
+  } catch (e) {
+    alert(e.message || '数据加载失败');
+    render();
+  }
+}
+
+// ============ 商机管理 · 信息已确认（后端校验必填项） ============
+async function confirmOpportunity() {
   const annId = state.detailId;
   if (!annId) return;
   const ann = state.announcements.find(x => x.id === annId);
   if (!ann) return;
 
-  // 先从 DOM 同步商机字段到 ann 对象（防止用户填了表单但对象没更新）
+  // 先从 DOM 同步商机字段到 ann 对象，再统一持久化（防止防抖未触发）
+  const fields = {};
   document.querySelectorAll('[data-opp-field]').forEach(el => {
     const field = el.dataset.oppField;
     ann[field] = el.value;
-    saveOpportunityField(annId, field, el.value);
+    fields[field] = el.value;
   });
+  cancelOppPatches(annId);
 
-  // 校验 4 个必填字段
-  const missing = [];
-  REQUIRED_OPP_FIELDS.forEach(f => {
-    const v = (ann[f.key] || '').trim();
-    if (!v) missing.push(f.label);
-  });
-  if (missing.length > 0) {
-    alert('请先完善以下必填项：\n  - ' + missing.join('\n  - '));
-    return;
-  }
-
-  // 保存为「已确认」
-  ann.progress = '已确认';
-  ann.progressRecords = ann.progressRecords || [];
-  ann.progressRecords.push({
-    progress: '已确认',
-    follower: state.currentUser ? state.currentUser.name : '当前用户',
-    followDate: new Date().toISOString().slice(0, 10),
-    note: '商机信息已完整确认'
-  });
-  saveOpportunityField(annId, 'progress', '已确认');
-  saveOpportunityField(annId, 'progressRecords', ann.progressRecords);
-
-  // 重新生成提醒（过滤掉已确认）
-  state.reminders = generateReminders(state.announcements);
-
-  alert('✅ 商机信息已确认！');
-  render();
-}
-
-async function init() {
-  state.announcements = await loadAnnouncements();
-  state.siteResults = await loadSiteResults();
-  state.reminders = generateReminders(state.announcements);
-  restoreOpportunities();
-  // 恢复登录态
   try {
-    const saved = localStorage.getItem(LS_USER);
-    if (saved) state.currentUser = JSON.parse(saved);
-  } catch (e) {}
-  applyFilters();
-  render();
+    if (Object.keys(fields).length > 0) await API.patchAnnouncement(annId, fields);
+    const updated = await API.confirmAnnouncement(annId);
+    mergeAnnouncement(updated);
+    try {
+      await reloadReminders();
+    } catch (e) {
+      alert(e.message || '提醒刷新失败');
+    }
+    render();
+    alert('✅ 商机信息已确认！');
+  } catch (e) {
+    alert(e.message || '确认失败');
+  }
 }
 
 // ============ 筛选逻辑 ============
@@ -193,8 +303,8 @@ function render() {
     </div>
     ${state.modal === 'assign' ? renderAssignModal() : state.modal === 'batch-assign' ? renderBatchAssignModal() : state.modal === 'reminder-batch-assign' ? renderReminderBatchAssignModal() : state.modal === 'kw-delete' ? renderKwDeleteModal() : ''}
     ${state.modal === 'progress' ? renderProgressModal() : ''}
-    ${state.modal === 'add-group' ? renderAddGroupModal() : ''}
     ${state.modal === 'edit-group' ? renderEditGroupModal() : ''}
+    ${state.modal === 'ann-form' ? renderAnnFormModal() : ''}
   `;
   bindEvents();
 }
@@ -261,10 +371,6 @@ function renderLoginPage() {
             </svg>
             <span>演示环境</span>
           </div>
-          <div class="text-center text-xs text-gray-300 mt-2 leading-relaxed">
-            账号：sheshujuan / lixiaoyi / huangxinchong / linxiaoyu2 / linxuxun<br>
-            密码统一：<span class="font-mono text-gray-400">123456</span>
-          </div>
         </div>
       </div>
     </div>
@@ -280,23 +386,37 @@ function bindLoginEvents() {
   });
 }
 
-function doLogin() {
+async function doLogin() {
   const account = document.getElementById('login-account').value.trim();
   const password = document.getElementById('login-password').value.trim();
   if (!account || !password) { alert('请输入账号和密码'); return; }
-  const u = USERS.find(x => x.account === account && x.password === password);
-  if (!u) { alert('账号或密码错误'); return; }
-  // 登录成功
-  const user = { account: u.account, name: u.name, phone: u.phone, group: u.group, groupId: u.groupId };
-  state.currentUser = user;
-  localStorage.setItem(LS_USER, JSON.stringify(user));
+  let data;
+  try {
+    data = await API.login(account, password);
+  } catch (e) {
+    alert(e.message || '账号或密码错误');
+    return;
+  }
+  state.currentUser = data.user;
+  state.detailId = null;
+  state.modal = null;
+  try {
+    await loadInitialData();
+  } catch (e) {
+    alert(e.message || '数据加载失败');
+  }
+  applyFilters();
   render();
 }
 
-function doLogout() {
+async function doLogout() {
   if (!confirm('确认退出登录？')) return;
+  try {
+    await API.logout();
+  } catch (e) {
+    alert(e.message || '退出登录失败');
+  }
   state.currentUser = null;
-  localStorage.removeItem(LS_USER);
   state.selectedReminderIds.clear();
   state.selectedAnnIds.clear();
   state.detailId = null;
@@ -461,6 +581,15 @@ function renderAnnouncementList() {
           : `<button class="px-3 py-1 text-xs bg-gray-300 text-white rounded cursor-not-allowed" id="batchAssignBtn" disabled title="仅集团客户部可批量分配">批量分配</button>`}
           <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-gray-50" id="batchClearBtn">清空选择</button>
         </div>
+
+        <!-- 集团客户部专属：新增/修改/删除（不跟选中态耦合，独立按钮） -->
+        ${state.currentUser && state.currentUser.group === '集团客户部'
+        ? `<div class="flex items-center gap-1.5 ml-auto" id="annCrudBar">
+             <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="annAddBtn">+ 新增公告</button>
+             <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-blue-50" id="annEditBtn">修改</button>
+             <button class="px-3 py-1 text-xs border border-gray-200 text-red-500 rounded hover:bg-red-50 hover:border-red-200" id="annDeleteBtn">删除</button>
+           </div>`
+        : ''}
       </div>
     </div>
 
@@ -781,20 +910,8 @@ function renderAnnouncementDetail() {
 // ---- 任务提醒 ----
 // 任务提醒页的"有效提醒"过滤：排除已分配 + 按区县筛选
 function getFilteredReminders() {
-  const user = state.currentUser;
+  // 提醒数据由后端按 scope=me 计算，前端不再做权限 / 进度过滤
   return state.reminders.filter(r => {
-    const ann = state.announcements.find(a => a.id === r.targetId);
-    // 已确认的公告 → 不再显示提醒
-    if (ann && ann.progress === '已确认') return false;
-    // 权限过滤：只看分配给当前登录人的
-    if (user && r.annCurrentHandler !== user.name) return false;
-    // 进度过滤
-    if (r.type === 'admin-assign') {
-      if (!(ann && ann.progress === '待分配')) return false;
-    }
-    if (r.type === 'sales-follow') {
-      if (!(ann && ann.progress === '已分配')) return false;
-    }
     // 区县过滤
     if (state.reminderDistrictFilter && r.district !== state.reminderDistrictFilter) return false;
     return true;
@@ -1055,6 +1172,14 @@ function renderTeam() {
 function renderEditGroupModal() {
   const g = TEAM_GROUPS.find(x => x.id === state.editGroupId);
   if (!g) return '';
+  const memberDetails = (Array.isArray(g.memberDetails) && g.memberDetails.length > 0)
+    ? g.memberDetails
+    : (g.members || []).map((name, i) => ({
+        name: name,
+        contact: (g.memberContacts || [])[i] || '',
+        namePinyin: (g.memberPinyin || [])[i] || '',
+        position: '成员',
+      }));
   return `
     <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
       <div class="bg-white rounded-xl w-[560px] max-h-[80vh] p-6 shadow-xl flex flex-col" data-stop>
@@ -1102,12 +1227,12 @@ function renderEditGroupModal() {
               <button class="text-xs text-blue-600 hover:text-blue-800" data-add-member-line>＋ 加一行</button>
             </div>
             <div id="edit-members" class="space-y-2">
-              ${g.members.length > 0 ? g.members.map((m, i) => `
-                <div class="flex items-center gap-2 member-row" data-idx="${i}">
-                  <div class="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">${m[0]}</div>
-                  <input value="${m}" class="member-name flex-1 min-w-0 h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="姓名">
-                  <input value="${g.memberContacts[i] || ''}" class="member-contact w-[140px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="联系方式">
-                  <input value="${g.memberPinyin[i] || ''}" class="member-pinyin w-[130px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="账号">
+              ${memberDetails.length > 0 ? memberDetails.map((m, i) => `
+                <div class="flex items-center gap-2 member-row" data-idx="${i}" data-position="${m.position || '成员'}">
+                  <div class="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">${(m.name || '?')[0]}</div>
+                  <input value="${m.name || ''}" class="member-name flex-1 min-w-0 h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="姓名">
+                  <input value="${m.contact || ''}" class="member-contact w-[140px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="联系方式">
+                  <input value="${m.namePinyin || ''}" class="member-pinyin w-[130px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="账号">
                   <button class="text-red-500 hover:text-red-700 text-sm px-2 remove-member flex-shrink-0" title="删除">✕</button>
                 </div>
               `).join('') : `
@@ -1117,9 +1242,14 @@ function renderEditGroupModal() {
           </div>
         </div>
         
-        <div class="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-100">
-          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
-          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-save-group>保存</button>
+        <div class="flex items-center justify-between mt-5 pt-4 border-t border-gray-100">
+          <div>
+            ${g.name !== '集团客户部' ? `<button class="px-3 py-2 text-sm text-red-500 hover:text-red-700" data-delete-group="${g.id}">删除小组</button>` : ''}
+          </div>
+          <div class="flex justify-end gap-2">
+            <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+            <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-save-group>保存</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1178,9 +1308,9 @@ function renderSources() {
               <th class="px-4 py-3 text-left font-medium">网站名称</th>
               <th class="px-4 py-3 text-left font-medium">网址</th>
               <th class="px-4 py-3 text-left font-medium w-24">sourceCode</th>
-              <th class="px-4 py-3 text-center font-medium w-20">适配器</th>
-              <th class="px-4 py-3 text-center font-medium w-16">启用</th>
-              <th class="px-4 py-3 text-center font-medium w-28">操作</th>
+              <th class="px-4 py-3 text-center font-medium w-20 whitespace-nowrap">适配器</th>
+              <th class="px-4 py-3 text-center font-medium w-16 whitespace-nowrap">启用</th>
+              <th class="px-4 py-3 text-center font-medium w-36 whitespace-nowrap">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -1199,13 +1329,14 @@ function renderSources() {
                 <td class="px-4 py-3">
                   <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">${s.sourceCode}</code>
                 </td>
-                <td class="px-4 py-3 text-center">${statusDot}</td>
+                <td class="px-4 py-3 text-center whitespace-nowrap">${statusDot}</td>
                 <td class="px-4 py-3 text-center">
                   <label class="inline-flex items-center cursor-pointer">
                     <input type="checkbox" ${s.enabled ? 'checked' : ''} class="source-toggle w-4 h-4 text-blue-600" data-idx="${i}">
                   </label>
                 </td>
-                <td class="px-4 py-3 text-center">
+                <td class="px-4 py-3 text-center whitespace-nowrap">
+                  <button class="text-xs text-gray-500 hover:text-blue-600 mr-2 source-refresh" data-idx="${i}">刷新</button>
                   <button class="text-xs text-gray-500 hover:text-blue-600 mr-2 source-edit" data-idx="${i}">编辑</button>
                   <button class="text-xs text-gray-500 hover:text-red-600 source-del" data-idx="${i}">删除</button>
                 </td>
@@ -1246,7 +1377,7 @@ function renderKwDeleteModal() {
         <!-- 选择列表：横向 tag 风格 -->
         <div id="kw-del-list" class="max-h-80 overflow-y-auto scrollbar-thin border border-gray-100 rounded-lg p-4">
           <div class="flex flex-wrap gap-2">
-            ${SCHEDULE_CONFIG.keywordList.map((k,i) => `
+            ${(SCHEDULE_CONFIG.keywordList || []).map((k,i) => `
               <label class="kw-del-pill cursor-pointer">
                 <input type="checkbox" class="kw-del-cb" data-kw="${i}">
                 <span class="kw-del-label inline-block px-3 py-1.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700 border border-purple-200 hover:bg-purple-200 transition-colors">
@@ -1268,6 +1399,12 @@ function renderKwDeleteModal() {
   `;
 }
 
+function parseScheduleInterval(text) {
+  const m = String(text || '').match(/(\d+(?:\.\d+)?)\s*(小时|分钟|天)/);
+  if (m) return { value: m[1], unit: m[2] };
+  return { value: text || '—', unit: '' };
+}
+
 function renderSchedule() {
   const successSites = state.siteResults.filter(r => r.ok);
   const failSites = state.siteResults.filter(r => !r.ok);
@@ -1276,12 +1413,14 @@ function renderSchedule() {
   const successRate = total > 0 ? (siteOk / total * 100).toFixed(1) : 0;
   const totalMatched = successSites.reduce((s, r) => s + r.matched_links, 0);
   const totalFound = successSites.reduce((s, r) => s + r.found_links, 0);
+  const interval = parseScheduleInterval(SCHEDULE_CONFIG.crawlInterval);
+  const isRunning = SCHEDULE_CONFIG.crawlStatus !== '已暂停';
   
   // 按匹配数排序 Top 站点
   const topSites = [...successSites].sort((a, b) => b.matched_links - a.matched_links).slice(0, 10);
   
-  const lastCrawlTime = state.siteResults.length > 0 
-    ? new Date().toLocaleString('zh-CN')
+  const lastCrawlTime = state.latestRun
+    ? (state.latestRun.finishedAt || state.latestRun.startedAt || '—')
     : '—';
 
   return `
@@ -1289,8 +1428,8 @@ function renderSchedule() {
       <div class="bg-white rounded-xl border border-gray-100 p-5">
         <div class="text-xs text-gray-500 mb-1">运行状态</div>
         <div class="flex items-center gap-2 mt-1">
-          <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          <div class="font-semibold text-green-600">${SCHEDULE_CONFIG.crawlStatus}</div>
+          <div class="w-2 h-2 ${isRunning ? 'bg-green-500 animate-pulse' : 'bg-gray-400'} rounded-full"></div>
+          <button type="button" class="font-semibold ${isRunning ? 'text-green-600' : 'text-gray-500'}" style="background:none;border:none;padding:0;cursor:pointer" data-schedule-toggle="crawlStatus" title="点击启用 / 暂停">${SCHEDULE_CONFIG.crawlStatus || '—'}</button>
         </div>
         <div class="text-xs text-gray-400 mt-1">上次运行：${lastCrawlTime}</div>
       </div>
@@ -1306,7 +1445,7 @@ function renderSchedule() {
       </div>
       <div class="bg-white rounded-xl border border-gray-100 p-5">
         <div class="text-xs text-gray-500 mb-1">采集间隔</div>
-        <div class="text-2xl font-bold text-gray-800">2<span class="text-sm text-gray-400 font-normal">小时</span></div>
+        <div class="text-2xl font-bold text-gray-800">${interval.value}<span class="text-sm text-gray-400 font-normal">${interval.unit}</span></div>
         <div class="text-xs text-gray-400 mt-1">定时任务1</div>
       </div>
     </div>
@@ -1315,12 +1454,12 @@ function renderSchedule() {
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-semibold text-gray-900">🔑 定时任务1 - 关键词设定</h3>
         <div class="flex items-center gap-2">
-          <span class="text-xs text-gray-400">共 ${SCHEDULE_CONFIG.keywordList.length} 个</span>
+          <span class="text-xs text-gray-400">共 ${(SCHEDULE_CONFIG.keywordList || []).length} 个</span>
           <button id="kw-delete-open" class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-colors">批量删除</button>
         </div>
       </div>
       <div class="flex flex-wrap gap-2 items-center">
-        ${SCHEDULE_CONFIG.keywordList.map((k, idx) => `
+        ${(SCHEDULE_CONFIG.keywordList || []).map((k, idx) => `
           <span class="px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 text-xs font-medium border border-purple-200 hover:bg-purple-200 transition-colors">${k}</span>
         `).join('')}
         <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-dashed border-gray-300 text-gray-400 text-xs hover:border-blue-400 hover:text-blue-500 transition-colors" id="kw-add-btn">
@@ -1393,7 +1532,7 @@ function renderSchedule() {
             <span class="text-gray-800">实际耗时 ${state.siteResults.reduce((s, r) => s + r.latency_ms, 0)}ms · 提取 ${totalFound} 条候选 · 命中关键词 ${totalMatched} 条</span>
           </div>
         </div>
-        <button class="mt-6 w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">手动触发一次抓取</button>
+        <button id="btn-manual-collect" class="mt-6 w-full px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50">手动触发一次抓取</button>
       </div>
 
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -1417,6 +1556,159 @@ function renderSchedule() {
 }
 
 // ============ Modal ============
+// ========== 公告 · 新增 / 编辑 共用表单弹窗 ==========
+// 保存时不做强校验，但空字段超过 0 个时给确认提示。
+// 字段按详情页顺序排，尽量不跟后端 schema 强耦合（JSON/contact 这种嵌套先做最简版）。
+const ANN_FORM_FIELDS = [
+  { section: '基本信息', wide: true, rows: [
+    [{ key: 'title', label: '公告标题', width: 'col-span-3', type: 'text' }],
+    [{ key: 'projectName', label: '项目名称', width: 'col-span-2', type: 'text' },
+     { key: 'projectCode', label: '项目编码', width: 'col-span-1', type: 'text' }],
+    [{ key: 'annType', label: '公告类型', width: 'col-span-1', type: 'select',
+       options: ['招标公告','中标公告','单一来源公示','询价公告','竞争性谈判','意向公开','资格预审','更正公告'] },
+     { key: 'purchaseMethod', label: '采购方式', width: 'col-span-1', type: 'select',
+       options: ['公开招标','邀请招标','竞争性谈判','竞争性磋商','询价','单一来源','框架协议','协议供货'] },
+     { key: 'summary', label: '项目概况', width: 'col-span-3', type: 'textarea', rows: 2 }],
+  ]},
+  { section: '采购方 / 预算', rows: [
+    [{ key: 'buyer', label: '采购人', width: 'col-span-1', type: 'text' },
+     { key: 'agency', label: '代理机构', width: 'col-span-1', type: 'text' },
+     { key: 'contact', label: '联系电话', width: 'col-span-1', type: 'text' }],
+    [{ key: 'budget', label: '预算金额', width: 'col-span-1', type: 'text', placeholder: '如 120万元' },
+     { key: 'fundSource', label: '资金来源', width: 'col-span-1', type: 'text', placeholder: '如 财政资金' },
+     { key: 'sourceUrl', label: '来源链接', width: 'col-span-3', type: 'text', placeholder: 'https://...' }],
+  ]},
+  { section: '区域 / 时间', rows: [
+    [{ key: 'region', label: '所属区域', width: 'col-span-1', type: 'text' },
+     { key: 'district', label: '所属区县', width: 'col-span-1', type: 'text' },
+     { key: 'pubDate', label: '发布日期', width: 'col-span-1', type: 'date' }],
+    [{ key: 'deadline', label: '报名截止', width: 'col-span-1', type: 'date' },
+     { key: 'bidOpenDate', label: '开标日期', width: 'col-span-1', type: 'date' }],
+  ]},
+  { section: '商机管理', wide: true, rows: [
+    [{ key: 'isValidOpportunity', label: '有效商机', width: 'col-span-1', type: 'select',
+       options: ['', '是', '否'], optionLabels: { '': '请选择', '是': '是', '否': '否' } },
+     { key: 'hasOperatorInvolvement', label: '运营商参与', width: 'col-span-1', type: 'select',
+       options: ['', '是', '否'], optionLabels: { '': '请选择', '是': '是', '否': '否' } },
+     { key: 'willBid', label: '是否应标', width: 'col-span-1', type: 'select',
+       options: ['', '准备应标', '已经应标', '弃标'], optionLabels: { '': '请选择', '准备应标': '准备应标', '已经应标': '已经应标', '弃标': '弃标' } }],
+    [{ key: 'opportunityCode', label: '商机编码', width: 'col-span-1', type: 'text' },
+     { key: 'treePlacement', label: '挂树选择', width: 'col-span-1', type: 'text' },
+     { key: 'progress', label: '进度', width: 'col-span-1', type: 'select',
+       options: ['待分配', '已分配', '已确认'] }],
+    [{ key: 'handlerGroup', label: '负责小组', width: 'col-span-1', type: 'text', placeholder: '可留空' },
+     { key: 'currentHandler', label: '当前处理人', width: 'col-span-1', type: 'text', placeholder: '可留空' },
+     { key: 'nextFollowUp', label: '下次跟进', width: 'col-span-1', type: 'date' }],
+    [{ key: 'opportunityStatus', label: '商机了解情况', width: 'col-span-3', type: 'textarea', rows: 2 }],
+  ]},
+];
+function renderAnnFormModal() {
+  const isEdit = !!state.formAnnId;
+  const ann = isEdit ? state.announcements.find(a => a.id === state.formAnnId) || {} : {};
+  const title = isEdit ? '修改招标公告' : '新增招标公告';
+
+  function renderField(field) {
+    const val = ann[field.key] !== undefined ? ann[field.key] : '';
+    const valueAttr = String(val).replace(/"/g, '&quot;');
+    const labelHtml = `<label class="text-sm text-gray-700 mb-2 block font-medium">${field.label}</label>`;
+    if (field.type === 'textarea') {
+      return `
+        <div class="${field.width || 'col-span-1'}">
+          ${labelHtml}
+          <textarea name="${field.key}" rows="${field.rows || 3}"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none leading-relaxed"
+            placeholder="${field.placeholder || ''}">${val}</textarea>
+        </div>`;
+    }
+    if (field.type === 'select') {
+      const labels = field.optionLabels || {};
+      const opts = (field.options || []).map(o => {
+        const label = labels[o] !== undefined ? labels[o] : o;
+        return `<option value="${o}" ${valueAttr == o ? 'selected' : ''}>${label}</option>`;
+      }).join('');
+      return `
+        <div class="${field.width || 'col-span-1'}">
+          ${labelHtml}
+          <select name="${field.key}"
+            class="w-full h-10 px-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-white">
+            ${opts}
+          </select>
+        </div>`;
+    }
+    const inputType = field.type === 'date' ? 'date' : 'text';
+    return `
+      <div class="${field.width || 'col-span-1'}">
+        ${labelHtml}
+        <input type="${inputType}" name="${field.key}" value="${valueAttr}"
+          class="w-full h-10 px-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+          placeholder="${field.placeholder || ''}">
+      </div>`;
+  }
+
+  function renderSection(section) {
+    const rowsHtml = section.rows.map(row => {
+      return `<div class="grid grid-cols-3 gap-x-6 gap-y-5">${row.map(renderField).join('')}</div>`;
+    }).join('');
+    return `
+      <div class="mb-6">
+        <div class="text-base font-semibold text-gray-800 mb-4 flex items-center gap-2">
+          <span class="w-0.5 h-3.5 bg-blue-500 rounded-sm"></span>
+          ${section.section}
+        </div>
+        ${rowsHtml}
+      </div>`;
+  }
+
+  const sectionsHtml = ANN_FORM_FIELDS.map(renderSection).join('');
+
+  return `
+    <div id="annFormModal" class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-lg w-[860px] max-h-[92vh] flex flex-col shadow-2xl" data-stop>
+        <div class="px-6 py-4 border-b border-gray-100 shrink-0 flex items-center justify-between">
+          <h3 class="font-semibold text-gray-900 text-base leading-none">${title}</h3>
+          <button data-close-modal class="text-gray-400 hover:text-gray-600 transition w-6 h-6 flex items-center justify-center rounded hover:bg-gray-100 text-lg leading-none">✕</button>
+        </div>
+        <div class="overflow-y-auto scrollbar-thin flex-1 min-h-0 px-8 py-6">
+          ${sectionsHtml}
+        </div>
+        <div class="px-6 py-3 border-t border-gray-100 shrink-0 flex justify-end gap-2 bg-gray-50 rounded-lg">
+          <button id="annFormCancel"
+            class="px-5 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50 transition">取消</button>
+          <button id="annFormSave"
+            class="px-5 py-2 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 active:bg-blue-800 transition shadow-sm">保存</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function collectAnnFormData() {
+  const body = {};
+  document.querySelectorAll('#annFormModal [name]').forEach(el => {
+    body[el.name] = el.value;
+  });
+  body.matchedKeywords = [];
+  body.businessTags = [];
+  body.contacts = {};
+  return body;
+}
+
+function annFormMissingFields(body) {
+  const skipEmpty = new Set(['summary', 'matchedKeywords', 'businessTags', 'contacts']);
+  const missing = [];
+  for (const section of ANN_FORM_FIELDS) {
+    for (const row of section.rows) {
+      for (const f of row) {
+        if (skipEmpty.has(f.key)) continue;
+        const v = body[f.key];
+        if (v === undefined || v === null || String(v).trim() === '') missing.push(f.label);
+      }
+    }
+  }
+  return missing;
+}
+
+
 function renderAssignModal() {
   const ann = state.announcements.find(a => a.id === state.assignAnnId);
   if (!ann) return '';
@@ -1623,6 +1915,82 @@ function bindEvents() {
     el.onclick = () => { state.detailId = null; render(); };
   });
 
+  // ---- 集团客户部 · 新增 / 修改 / 删除 ----
+  document.querySelectorAll('#annAddBtn').forEach(el => {
+    el.onclick = () => {
+      state.formAnnId = null;
+      state.modal = 'ann-form';
+      render();
+    };
+  });
+  document.querySelectorAll('#annEditBtn').forEach(el => {
+    el.onclick = () => {
+      const ids = Array.from(state.selectedAnnIds);
+      if (ids.length === 0) { alert('请先勾选一条公告再修改'); return; }
+      if (ids.length > 1) { alert('修改只能选择单条，不能多选'); return; }
+      state.formAnnId = ids[0];
+      state.modal = 'ann-form';
+      render();
+    };
+  });
+  document.querySelectorAll('#annDeleteBtn').forEach(el => {
+    el.onclick = async () => {
+      const ids = Array.from(state.selectedAnnIds);
+      if (ids.length === 0) { alert('请先勾选要删除的公告'); return; }
+      const preview = state.announcements
+        .filter(a => ids.includes(a.id))
+        .map(a => '· ' + (a.projectName || a.title) + '（' + a.id + '）')
+        .join('\n');
+      if (!confirm('确认删除以下 ' + ids.length + ' 条公告？\n\n' + preview + '\n\n⚠ 删除后无法恢复（后台为逻辑删除）。')) return;
+      let ok = 0, fail = [];
+      for (const id of ids) {
+        try {
+          await API.deleteAnnouncement(id);
+          ok++;
+        } catch (e) {
+          fail.push(id + '：' + (e.message || '删除失败'));
+        }
+      }
+      state.selectedAnnIds.clear();
+      try { await refreshAfterMutation(); } catch (e) { alert(e.message || '刷新失败'); }
+      let msg = '删除成功 ' + ok + ' 条';
+      if (fail.length) msg += '\n失败 ' + fail.length + ' 条：\n' + fail.join('\n');
+      if (fail.length) alert(msg); else alert(msg);
+      render();
+    };
+  });
+  // ann-form 弹窗保存 / 取消
+  document.querySelectorAll('#annFormCancel').forEach(el => {
+    el.onclick = () => { state.modal = null; state.formAnnId = null; render(); };
+  });
+  document.querySelectorAll('#annFormSave').forEach(el => {
+    el.onclick = async () => {
+      const body = collectAnnFormData();
+      const missing = annFormMissingFields(body);
+      if (missing.length > 0) {
+        const ok = confirm('以下 ' + missing.length + ' 个字段未填写：\n' + missing.map(m => '· ' + m).join('\n') + '\n\n确认仍然保存？');
+        if (!ok) return;
+      }
+      try {
+        let updated;
+        if (state.formAnnId) {
+          updated = await API.updateAnnouncement(state.formAnnId, body);
+        } else {
+          updated = await API.createAnnouncement(body);
+        }
+        state.modal = null;
+        state.formAnnId = null;
+        state.selectedAnnIds.clear();
+        mergeAnnouncement(updated);
+        await reloadReminders();
+      } catch (e) {
+        alert(e.message || '保存失败');
+        return;
+      }
+      render();
+    };
+  });
+
   // 筛选
   document.querySelectorAll('[data-filter]').forEach(el => {
     el.oninput = el.onchange = () => {
@@ -1635,7 +2003,7 @@ function bindEvents() {
 
   // 查看详情
   document.querySelectorAll('[data-detail]').forEach(el => {
-    el.onclick = () => { state.detailId = el.dataset.detail; render(); };
+    el.onclick = () => { openAnnouncementDetail(el.dataset.detail); };
   });
 
   // 分配按钮
@@ -1714,23 +2082,33 @@ function bindEvents() {
   }
   // ---- 批量确认分配 ----
   const bConfirm = document.querySelectorAll('[data-confirm-batch-assign]');
-  bConfirm.forEach(el => el.onclick = () => {
+  bConfirm.forEach(el => el.onclick = async () => {
     const group = document.getElementById('batch-assign-group').value;
     const receiver = document.getElementById('batch-assign-receiver').value;
     if (!group || !receiver) { alert('请选择小组和接收人'); return; }
-    state.selectedAnnIds.forEach(id => {
-      const ann = state.announcements.find(a => a.id === id);
-      if (ann) {
-        ann.currentHandler = receiver;
-        ann.progress = '已分配';
-        ann.progressRecords = ann.progressRecords || [];
-        ann.progressRecords.push({ progress: '已分配', follower: '管理员', followDate: new Date().toISOString().slice(0,10), note: `批量分配给 ${group} - ${receiver}` });
-      }
-    });
-    alert('已批量分配 ' + state.selectedAnnIds.size + ' 条给 ' + receiver);
+    const ids = Array.from(state.selectedAnnIds);
+    if (ids.length === 0) return;
+    let res;
+    try {
+      res = await API.batchAssign(ids, group, receiver);
+    } catch (e) {
+      alert(e.message || '批量分配失败');
+      return;
+    }
+    const updated = (res && typeof res.updated === 'number') ? res.updated : ids.length;
+    let msg = '已批量分配 ' + updated + ' 条给 ' + group;
+    if (res && Array.isArray(res.skipped) && res.skipped.length > 0) {
+      msg += '\n跳过 ' + res.skipped.length + ' 条：' +
+        res.skipped.map(s => `${s.id}（${s.reason || '不可分配'}）`).join('、');
+    }
+    alert(msg);
     state.selectedAnnIds.clear();
     state.modal = null;
-    state.reminders = generateReminders(state.announcements);
+    try {
+      await refreshAfterMutation();
+    } catch (e) {
+      alert(e.message || '数据刷新失败');
+    }
     render();
   });
 
@@ -1745,14 +2123,20 @@ function bindEvents() {
   }
   // ---- 关键词管理 ----  });
   document.querySelectorAll('#kw-add-btn').forEach(el => {
-    el.onclick = () => {
+    el.onclick = async () => {
       const v = prompt('新增关键词（多个用顿号、空格或逗号分隔）');
       if (v && v.trim()) {
         const parts = v.split(/[、,，\s]+/).filter(x => x.trim());
+        const list = Array.from(SCHEDULE_CONFIG.keywordList || []);
         parts.forEach(p => {
-          if (p && !SCHEDULE_CONFIG.keywordList.includes(p)) SCHEDULE_CONFIG.keywordList.push(p);
+          if (p && !list.includes(p)) list.push(p);
         });
-        render();
+        try {
+          SCHEDULE_CONFIG = await API.updateSchedule({ keywordList: list });
+          render();
+        } catch (e) {
+          alert(e.message || '关键词保存失败');
+        }
       }
     };
   });
@@ -1783,71 +2167,146 @@ function bindEvents() {
     if (btn) btn.disabled = n === 0;
   }
   document.querySelectorAll('#kw-del-confirm').forEach(el => {
-    el.onclick = () => {
+    el.onclick = async () => {
       const cbs = [...document.querySelectorAll('.kw-del-cb:checked')];
       const idxs = cbs.map(c => parseInt(c.dataset.kw)).sort((a,b)=>b-a);
       if (idxs.length === 0) return;
       if (!confirm('确认删除选中的 ' + idxs.length + ' 个关键词？')) return;
-      idxs.forEach(i => SCHEDULE_CONFIG.keywordList.splice(i, 1));
-      state.modal = null;
-      render();
+      const list = Array.from(SCHEDULE_CONFIG.keywordList || []);
+      idxs.forEach(i => list.splice(i, 1));
+      try {
+        SCHEDULE_CONFIG = await API.updateSchedule({ keywordList: list });
+        state.modal = null;
+        render();
+      } catch (e) {
+        alert(e.message || '关键词删除失败');
+      }
     };
   });
+  // ---- 定时任务启用 / 暂停 ----
+  document.querySelectorAll('[data-schedule-toggle]').forEach(el => {
+    el.onclick = async () => {
+      const field = el.dataset.scheduleToggle;
+      const current = SCHEDULE_CONFIG[field];
+      let next;
+      if (field === 'crawlStatus') next = current === '已暂停' ? '运行中' : '已暂停';
+      else next = current ? '' : '1';
+      try {
+        SCHEDULE_CONFIG = await API.updateSchedule({ [field]: next });
+        render();
+      } catch (e) {
+        alert(e.message || '定时任务状态更新失败');
+      }
+    };
+  });
+
   // ---- 数据源管理事件 ----
   document.querySelectorAll('.source-toggle').forEach(el => {
-    el.onchange = () => {
-      SOURCES_DATA[parseInt(el.dataset.idx)].enabled = el.checked;
-      render();
+    el.onchange = async () => {
+      const s = SOURCES_DATA[parseInt(el.dataset.idx)];
+      if (!s) return;
+      try {
+        await API.patchSource(s.id, { enabled: el.checked });
+        await reloadSourcesAndStatus();
+        render();
+      } catch (e) {
+        el.checked = !el.checked;
+        alert(e.message || '数据源状态更新失败');
+      }
     };
   });
   document.querySelectorAll('.source-edit').forEach(el => {
-    el.onclick = () => {
+    el.onclick = async () => {
       const i = parseInt(el.dataset.idx);
       const s = SOURCES_DATA[i];
+      if (!s) return;
       const name = prompt('网站名称', s.name);
       if (name === null) return;
       const url = prompt('网址', s.url);
       if (url === null) return;
       const code = prompt('sourceCode (czggzy / ccgp / gdgpo / generic)', s.sourceCode);
       if (code === null) return;
-      const u = new URL(url);
-      SOURCES_DATA[i] = {
-        ...s, name: name.trim(), url: url.trim(),
-        domain: u.netloc.toLowerCase(), sourceCode: (code.trim() || 'generic')
-      };
-      render();
+      let domain;
+      try {
+        domain = new URL(url.trim()).hostname.toLowerCase();
+      } catch (e) {
+        alert('网址格式错误');
+        return;
+      }
+      try {
+        await API.patchSource(s.id, {
+          name: name.trim(),
+          url: url.trim(),
+          domain: domain,
+          sourceCode: (code.trim() || 'generic'),
+        });
+        await reloadSourcesAndStatus();
+        render();
+      } catch (e) {
+        alert(e.message || '数据源保存失败');
+      }
     };
   });
   document.querySelectorAll('.source-del').forEach(el => {
-    el.onclick = () => {
-      if (!confirm('确认删除该数据源？此操作仅影响 Demo 内存显示，不会改动 sources.json。')) return;
-      SOURCES_DATA.splice(parseInt(el.dataset.idx), 1);
-      render();
+    el.onclick = async () => {
+      const s = SOURCES_DATA[parseInt(el.dataset.idx)];
+      if (!s) return;
+      if (!confirm('确认删除该数据源？')) return;
+      try {
+        await API.deleteSource(s.id);
+        await reloadSourcesAndStatus();
+        render();
+      } catch (e) {
+        alert(e.message || '数据源删除失败');
+      }
+    };
+  });
+  document.querySelectorAll('.source-refresh').forEach(el => {
+    el.onclick = async () => {
+      const s = SOURCES_DATA[parseInt(el.dataset.idx)];
+      if (!s) return;
+      try {
+        await API.refreshSource(s.id);
+        await reloadSourcesAndStatus();
+        render();
+      } catch (e) {
+        alert(e.message || '站点探活失败');
+      }
     };
   });
   document.querySelectorAll('#btn-add-source').forEach(el => {
-    el.onclick = () => {
+    el.onclick = async () => {
       const name = prompt('网站名称');
       if (!name) return;
       const url = prompt('网址');
       if (!url) return;
       const code = prompt('sourceCode (czggzy / ccgp / gdgpo / generic)', 'generic') || 'generic';
+      let domain;
       try {
-        const u = new URL(url);
-        SOURCES_DATA.push({
-          name: name.trim(), url: url.trim(), domain: u.netloc.toLowerCase(),
-          sourceCode: (code.trim() || 'generic'), enabled: true
+        domain = new URL(url.trim()).hostname.toLowerCase();
+      } catch (e) {
+        alert('网址格式错误');
+        return;
+      }
+      try {
+        await API.createSource({
+          name: name.trim(),
+          url: url.trim(),
+          domain: domain,
+          sourceCode: (code.trim() || 'generic'),
+          enabled: true,
         });
+        await reloadSourcesAndStatus();
         render();
-      } catch(e) { alert('网址格式错误'); }
+      } catch (e) {
+        alert(e.message || '数据源新增失败');
+      }
     };
   });
 
-  // 刷新
-  document.querySelectorAll('#btn-refresh').forEach(el => {
-    el.onclick = () => {
-      alert('模拟手动触发抓取：已启动定时任务1（真实环境会抓取 49 个网站）');
-    };
+  // 刷新抓取（公告页头部 / 定时任务页手动触发）
+  document.querySelectorAll('#btn-refresh, #btn-manual-collect').forEach(el => {
+    el.onclick = () => { triggerCollect(); };
   });
 
   // 退出登录
@@ -1911,8 +2370,34 @@ function bindEvents() {
 
   // 新增小组
   document.querySelectorAll('[data-add-group]').forEach(el => {
-    el.onclick = () => {
-      alert('Demo 模式：新增小组功能略过，数据写死在 data.js 中');
+    el.onclick = async () => {
+      const name = prompt('小组名称');
+      if (!name || !name.trim()) return;
+      const region = prompt('所属区域', name.trim()) || name.trim();
+      const admin = prompt('负责人姓名');
+      if (!admin || !admin.trim()) return;
+      const adminContact = prompt('负责人联系方式') || '';
+      const adminAccount = prompt('负责人登录账号');
+      if (!adminAccount || !adminAccount.trim()) return;
+      const password = prompt('初始密码（留空使用系统默认密码）') || '';
+
+      const body = {
+        name: name.trim(),
+        region: region.trim(),
+        admin: admin.trim(),
+        adminContact: adminContact.trim(),
+        adminAccount: adminAccount.trim(),
+        position: '负责人',
+        members: [],
+      };
+      if (password.trim()) body.password = password.trim();
+      try {
+        await API.createGroup(body);
+        await loadGroups();
+        render();
+      } catch (e) {
+        alert(e.message || '新增小组失败');
+      }
     };
   });
 
@@ -1947,30 +2432,59 @@ function bindEvents() {
 
   // 保存修改
   document.querySelectorAll('[data-save-group]').forEach(el => {
-    el.onclick = () => {
+    el.onclick = async () => {
       const g = TEAM_GROUPS.find(x => x.id === state.editGroupId);
       if (!g) return;
-      g.name = document.getElementById('edit-name').value.trim() || g.name;
-      g.region = document.getElementById('edit-region').value.trim() || g.region;
-      g.admin = document.getElementById('edit-admin').value.trim() || g.admin;
-      g.adminContact = document.getElementById('edit-admin-contact').value.trim() || g.adminContact;
-      g.adminAccount = document.getElementById('edit-admin-account').value.trim() || g.adminAccount;
-      const rows = document.querySelectorAll('#edit-members .member-row');
-      const newMembers = [];
-      const newContacts = [];
-      const newPinyin = [];
-      rows.forEach(row => {
+      const body = {
+        name: document.getElementById('edit-name').value.trim() || g.name,
+        region: document.getElementById('edit-region').value.trim() || g.region,
+        admin: document.getElementById('edit-admin').value.trim() || g.admin,
+        adminContact: document.getElementById('edit-admin-contact').value.trim() || g.adminContact,
+        adminAccount: document.getElementById('edit-admin-account').value.trim() || g.adminAccount,
+        position: g.position || '负责人',
+        members: [],
+      };
+      document.querySelectorAll('#edit-members .member-row').forEach(row => {
         const name = row.querySelector('.member-name').value.trim();
-        const ct = row.querySelector('.member-contact').value.trim();
-        const py = row.querySelector('.member-pinyin').value.trim();
-        if (name) { newMembers.push(name); newContacts.push(ct); newPinyin.push(py); }
+        const contact = row.querySelector('.member-contact').value.trim();
+        const namePinyin = row.querySelector('.member-pinyin').value.trim();
+        if (name) {
+          body.members.push({
+            name: name,
+            namePinyin: namePinyin,
+            contact: contact,
+            position: row.dataset.position || '成员',
+          });
+        }
       });
-      g.members = newMembers;
-      g.memberContacts = newContacts;
-      g.memberPinyin = newPinyin;
-      state.modal = null;
-      state.editGroupId = null;
-      render();
+      try {
+        await API.updateGroup(g.id, body);
+        await loadGroups();
+        state.modal = null;
+        state.editGroupId = null;
+        render();
+      } catch (e) {
+        alert(e.message || '小组保存失败');
+      }
+    };
+  });
+
+  // 删除小组（集团客户部由后端禁止删除）
+  document.querySelectorAll('[data-delete-group]').forEach(el => {
+    el.onclick = async () => {
+      const id = parseInt(el.dataset.deleteGroup);
+      const g = TEAM_GROUPS.find(x => x.id === id);
+      if (!g) return;
+      if (!confirm(`确认删除小组「${g.name}」？`)) return;
+      try {
+        await API.deleteGroup(id);
+        await loadGroups();
+        state.modal = null;
+        state.editGroupId = null;
+        render();
+      } catch (e) {
+        alert(e.message || '删除小组失败');
+      }
     };
   });
 
@@ -1997,46 +2511,51 @@ function bindEvents() {
 
   // 确认分配
   document.querySelectorAll('[data-confirm-assign]').forEach(el => {
-    el.onclick = () => {
+    el.onclick = async () => {
       const group = document.getElementById('assign-group').value;
       const receiver = document.getElementById('assign-receiver').value;
       if (!group || !receiver) { alert('请选择小组和接收人'); return; }
-      const ann = state.announcements.find(a => a.id === state.assignAnnId);
-      ann.currentHandler = receiver;
-      ann.progress = '已分配';
-      ann.progressRecords = ann.progressRecords || [];
-      ann.progressRecords.push({
-        progress: '已分配',
-        follower: '管理员',
-        followDate: new Date().toISOString().slice(0,10),
-        note: `已分配给 ${group} - ${receiver}`
-      });
+      const id = state.assignAnnId;
+      let updated;
+      try {
+        updated = await API.assign(id, group, receiver);
+      } catch (e) {
+        alert(e.message || '分配失败');
+        return;
+      }
+      mergeAnnouncement(updated);
       state.modal = null;
       state.assignAnnId = null;
-      state.reminders = generateReminders(state.announcements);
+      try {
+        await reloadReminders();
+      } catch (e) {
+        alert(e.message || '提醒刷新失败');
+      }
       render();
     };
   });
 
   // 确认进度更新
   document.querySelectorAll('[data-confirm-progress]').forEach(el => {
-    el.onclick = () => {
+    el.onclick = async () => {
       const progress = document.getElementById('progress-select').value;
       const note = document.getElementById('progress-note').value;
-      const next = document.getElementById('progress-next').value;
-      const ann = state.announcements.find(a => a.id === state.progressAnnId);
-      ann.progress = progress;
-      ann.nextFollowUp = next;
-      ann.progressRecords = ann.progressRecords || [];
-      ann.progressRecords.push({
-        progress: progress,
-        follower: ann.currentHandler || '当前用户',
-        followDate: new Date().toISOString().slice(0,10),
-        note: note || '更新进度'
-      });
+      const id = state.progressAnnId;
+      let updated;
+      try {
+        updated = await API.setProgress(id, progress, note);
+      } catch (e) {
+        alert(e.message || '进度更新失败');
+        return;
+      }
+      mergeAnnouncement(updated);
       state.modal = null;
       state.progressAnnId = null;
-      state.reminders = generateReminders(state.announcements);
+      try {
+        await reloadReminders();
+      } catch (e) {
+        alert(e.message || '提醒刷新失败');
+      }
       render();
     };
   });
@@ -2065,7 +2584,7 @@ function bindEvents() {
   // 单行勾选
   document.querySelectorAll('.reminder-row-check').forEach(cb => {
     cb.onchange = () => {
-      const id = parseInt(cb.dataset.id);
+      const id = cb.dataset.id;
       if (cb.checked) state.selectedReminderIds.add(id);
       else state.selectedReminderIds.delete(id);
       render();
@@ -2100,38 +2619,34 @@ function bindEvents() {
 
   // 确认批量分配
   document.querySelectorAll('[data-confirm-reminder-batch-assign]').forEach(el => {
-    el.onclick = () => {
+    el.onclick = async () => {
       const group = document.getElementById('reminder-batch-group').value;
       const receiver = document.getElementById('reminder-batch-receiver').value;
-      const noteEl = document.getElementById('reminder-batch-note');
-      const note = noteEl ? noteEl.value : '';
       if (!group || !receiver) { alert('请选择小组和接收人'); return; }
 
-      const filteredRems = getFilteredReminders();
       const annIds = [...state.selectedReminderIds]
-        .map(rid => filteredRems.find(r => r.id === rid))
+        .map(rid => state.reminders.find(r => String(r.id) === String(rid)))
         .filter(Boolean)
         .map(r => r.targetId);
       const uniqueAnnIds = [...new Set(annIds)];
-      let updatedCount = 0;
-      for (const id of uniqueAnnIds) {
-        const a = state.announcements.find(x => x.id === id);
-        if (!a) continue;
-        a.currentHandler = receiver;
-        a.progress = '已分配';
-        a.progressRecords = a.progressRecords || [];
-        a.progressRecords.push({
-          progress: '已分配',
-          follower: '管理员',
-          followDate: new Date().toISOString().slice(0,10),
-          note: `批量分配 · ${group} - ${receiver}${note ? '：' + note : ''}`
-        });
-        updatedCount++;
+      if (uniqueAnnIds.length === 0) return;
+
+      let res;
+      try {
+        res = await API.batchAssignReminders(uniqueAnnIds, group);
+      } catch (e) {
+        alert(e.message || '批量分配失败');
+        return;
       }
+      const updated = (res && typeof res.updated === 'number') ? res.updated : uniqueAnnIds.length;
       state.selectedReminderIds.clear();
       state.modal = null;
-      alert(`✅ 批量分配成功：共更新 ${updatedCount} 条公告的分配状态`);
-      state.reminders = generateReminders(state.announcements);
+      alert(`✅ 批量分配成功：共更新 ${updated} 条公告的分配状态`);
+      try {
+        await refreshAfterMutation();
+      } catch (e) {
+        alert(e.message || '数据刷新失败');
+      }
       render();
     };
   });

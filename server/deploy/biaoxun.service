@@ -1,0 +1,32 @@
+# =============================================================================
+# 标讯助手 · systemd 服务单元
+# 安装位置：/etc/systemd/system/biaoxun.service
+# 说明：
+#   - deploy.sh 会自动把 /opt/biaoxun 和 8000 替换为实际部署目录/端口
+#   - 应用只监听 127.0.0.1，由 nginx 对外提供 80/443
+#   - 数据目录与前端目录通过环境变量显式指定
+# =============================================================================
+[Unit]
+Description=标讯助手 FastAPI 服务
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=biaoxun
+Group=biaoxun
+WorkingDirectory=/opt/biaoxun/server
+Environment=BX_DATA_DIR=/opt/biaoxun/data
+Environment=BX_STATIC_DIR=/opt/biaoxun/web
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/biaoxun/server/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 2
+Restart=always
+RestartSec=3
+TimeoutStopSec=20
+KillSignal=SIGINT
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=biaoxun
+
+[Install]
+WantedBy=multi-user.target

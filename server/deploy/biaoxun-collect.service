@@ -1,0 +1,25 @@
+# =============================================================================
+# 标讯助手 · 定时采集服务（由 biaoxun-collect.timer 触发）
+# 安装位置：/etc/systemd/system/biaoxun-collect.service
+# 说明：deploy.sh / install.sh 会把 /opt/biaoxun 替换为实际目录
+# =============================================================================
+[Unit]
+Description=标讯助手 招标公告采集
+After=network-online.target biaoxun.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=biaoxun
+Group=biaoxun
+WorkingDirectory=/opt/biaoxun/server
+Environment=BX_DATA_DIR=/opt/biaoxun/data
+Environment=BX_STATIC_DIR=/opt/biaoxun/web
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/opt/biaoxun/server/.venv/bin/python -m app.cli collect --days 30
+TimeoutStartSec=3600
+Nice=10
+IOSchedulingClass=best-effort
+
+[Install]
+WantedBy=multi-user.target

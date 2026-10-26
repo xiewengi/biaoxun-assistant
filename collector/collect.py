@@ -17,6 +17,7 @@
 """
 import argparse
 import datetime as dt
+import hashlib
 import http.cookiejar
 import json
 import os
@@ -35,6 +36,12 @@ try:
     HAS_PDF = True
 except Exception:
     HAS_PDF = False
+
+try:
+    import trafilatura
+    HAS_TRAFILATURA = True
+except Exception:
+    HAS_TRAFILATURA = False
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
@@ -136,6 +143,48 @@ def clean_title(t):
     return t.strip()
 
 
+# ---------- trafilatura 正文提取（2026-10-23 引入） ----------
+# 用 trafilatura 替代手工 strip_tags 做通用 HTML 正文提取：
+#   - 自动剔除 nav/footer/sidebar，只留公告主内容
+#   - 输出 Markdown 格式，标题/段落/编号结构保留
+#   - 修复 CMS 常见的 CJK 字符间插空格 bug（"采 购 预 算" → "采购预算"）
+#   - regex 在干净文本上命中率大幅提升
+# 旧 strip_tags 保留给列表页的小片段和结构化字段（不受干扰）
+
+def html_to_markdown(html):
+    """HTML → trafilatura markdown，失败回退 strip_tags。"""
+    if not html:
+        return ""
+    if HAS_TRAFILATURA:
+        try:
+            md = trafilatura.extract(
+                html,
+                output_format="markdown",
+                include_links=False,
+                include_images=False,
+                deduplicate=True,
+            )
+            if md and len(md) > 50:
+                return md
+        except Exception:
+            pass
+    return strip_tags(html)
+
+
+def html_to_clean_text(html):
+    """HTML → trafilatura 纯文本（无格式），失败回退 strip_tags。"""
+    if not html:
+        return ""
+    if HAS_TRAFILATURA:
+        try:
+            txt = trafilatura.extract(html, output_format="txt", deduplicate=True)
+            if txt and len(txt) > 50:
+                return txt
+        except Exception:
+            pass
+    return strip_tags(html)
+
+
 # ---------- 过滤器 ----------
 
 def city_filter(*texts):
@@ -152,6 +201,40 @@ def city_filter(*texts):
     return False
 
 
+GENERIC_TITLES = {
+    "招标公告", "采购公告", "采购意向公告", "竞争性磋商公告",
+    "结果公告", "中标公告", "竞争性谈判公告",
+}
+
+
+def looks_like_announcement(title, summary, source_name="", project_name=""):
+    """排除「首页/列表页被当成公告」的噪声。
+
+    - 标题等于站点名称（抓到了平台首页）
+    - 标题只是「招标公告」且正文里提取不到项目名
+    - 正文开头是导航（登录/注册、首页、资讯中心…）
+    """
+    t = (title or "").strip()
+    if not t:
+        return False
+    if source_name and t == source_name.strip():
+        return False
+    if t in GENERIC_TITLES and not (project_name or "").strip():
+        return False
+    head = (summary or "")[:200]
+    nav_markers = ("登录/注册", "用户中心", "退出", "首页", "资讯中心", "交易大厅", "资产所在地")
+    if sum(1 for m in nav_markers if m in head) >= 2:
+        return False
+    return True
+
+
+def stable_ann_id(pub_date, key):
+    """跨进程稳定的公告 ID（不能用 Python hash，每次启动盐不同）。"""
+    digest = hashlib.md5((key or "").encode("utf-8")).hexdigest()[:6].upper()
+    day = (pub_date or dt.date.today().isoformat()).replace("-", "")
+    return "ANN" + day + digest
+
+
 def match_keywords(text):
     return [k for k in KEYWORDS if k in text]
 
@@ -163,9 +246,11 @@ def guess_business_tags(text):
 
 
 def guess_district(text):
-    for d in ["湘桥", "潮安", "饶平", "枫溪"]:
-        if d in text:
-            return d
+    hits = [d for d in ["湘桥", "潮安", "饶平", "枫溪"] if d in text]
+    if len(hits) >= 2:
+        return "市区"  # 多区县（如多电厂联合采购）统一归市区，避免随机落一个区
+    if hits:
+        return hits[0]
     if "潮州市" in text or "潮州" in text:
         return "市区"  # 市本级/未标区县的归市区（对齐昨天口径）
     return ""
@@ -693,7 +778,8 @@ def run_gdgpo(days, with_detail=True):
         deadline = end_time or open_time  # 兜底：报名截止=开标时间
         rec = build_record(
             title=title,
-            summary=(content[:300] or f"{buyer} {row.get('catalogueNameList') or ''}"),
+            # 关键词匹配需要看正文；存储进库时 build_record 仍只保留前 300 字
+            summary=(content[:3000] or f"{buyer} {row.get('catalogueNameList') or ''}"),
             source_url=detail_url,
             pub_date=pub,
             deadline=deadline or "—",
@@ -780,25 +866,34 @@ def build_record(title, summary, source_url, pub_date, deadline="", bid_open="",
                  buyer="", agency="", budget="", project_code="", contact="",
                  contacts=None,
                  ann_type="招标公告", fund_source="", extra_text="",
-                 purchase_method=""):
+                 purchase_method="", source_name=""):
     """组装 demo 公告记录（字段见 PRD 招标公告展示）。返回 None 表示未通过过滤。
 
     contacts: 结构化联系方式对象 {purchaser:{name,address,person,phone},
                agency:{...}, project:{...}}，前端详情页分三方展示。
     """
-    blob = " ".join([title, summary, buyer, agency, extra_text])
-    if not city_filter(title, summary, buyer, extra_text):
+    now = dt.date.today().isoformat()
+    project_name = extract_project_name(title, summary)
+    # 标题只解析出「招标公告」时，用项目名回填，避免列表/详情显示成通用词
+    if title.strip() in GENERIC_TITLES and project_name.strip():
+        title = project_name.strip()
+    # 城市判断只看标题/项目名/采购人/正文前 1500 字；不能拿整页导航文本判断，
+    # 否则「城市列表里出现潮州」的全国页面也会被误收。
+    if not city_filter(title, project_name, buyer, (summary or "")[:1500]):
         return None
+    if not looks_like_announcement(title, summary, source_name, project_name):
+        return None
+    blob = " ".join([title, (summary or "")[:3000], buyer, agency])
     kws = match_keywords(blob)
     if not kws:
         return None
-    now = dt.date.today().isoformat()
-    project_name = extract_project_name(title, summary)
+    stable_key = project_code or source_url or project_name or title
+    fallback_code = "P" + hashlib.md5(stable_key.encode("utf-8")).hexdigest()[:8].upper()
     return dict(
-        id="ANN" + (pub_date or now).replace("-", "") + f"{abs(hash(title)) % 10000:04d}",
+        id=stable_ann_id(pub_date, stable_key),
         title=title,
         projectName=project_name,
-        projectCode=project_code or f"P{abs(hash(title + source_url)) % 900000 + 100000}",
+        projectCode=project_code or fallback_code,
         buyer=buyer or "—",
         agency=agency or "—",
         budget=budget or "—",
@@ -1133,29 +1228,133 @@ def _parse_deadline(html):
     return ""
 
 def _parse_detail_fields(html):
+    """从详情页抽取结构化字段。
+
+    2026-10-23 改造：先在 trafilatura markdown（无 CJK 空格、无导航污染）上跑，
+    再在原始 HTML 上跑兜底（覆盖 td>label<td>value 这种表格结构）。
+    """
+    def _clean(v):
+        return (v or "").strip().strip("_*`").strip()
+
     title_m = re.search(r"<title>([^<]{10,150})</title>", html or "", re.I)
     title = title_m.group(1).strip() if title_m else ""
     if " - " in title: title = title.rsplit(" - ", 1)[0].strip()
     fields = dict(title=title, project_code="", buyer="", agency="", budget="",
                   purchase_method="", ann_type="采购公告")
-    pc = re.search(r"(?:项目编号|招标编号|采购编号|项目代码)[：:]\s*([A-Z0-9\-【】\[\]()（）]{3,40})", html or "")
-    if pc: fields["project_code"] = pc.group(1)
-    b = re.search(r"(?:预算金额|最高限价|预算|采购预算|控制价)[^0-9]{0,15}([\d,]+(?:\.\d+)?)\s*元", html or "")
-    if not b:
+
+    # 准备干净的 markdown 文本优先抽：先剥掉 markdown 格式标记（__粗体__/**粗体**/`code`），
+    # 这样 regex 不用处理前缀下划线截断问题
+    md_raw = html_to_markdown(html)
+    md_text = re.sub(r'[*_`]{1,3}', '', md_raw or '')  # 剥掉 markdown bold/italic/code 标记
+
+    # ---- project_code ----
+    pc_pats = [
+        r"(?:代理机构项目编号|项目编号|招标编号|采购编号|项目代码)[^\w]{0,3}([A-Z0-9\-【】\[\]()（）]{3,40})",
+        r"(?:代理机构项目编号|项目编号|招标编号|采购编号)[：:]\s*([A-Z0-9\-【】\[\]()（）]{3,40})",
+    ]
+    for pat in pc_pats:
+        pc = re.search(pat, md_text) or re.search(pat, html or "")
+        if pc:
+            # 剥掉尾部的标点（如 `07-15-...E28663C01）` 里的右括号）
+            fields["project_code"] = _clean(pc.group(1).rstrip("）)】】"))
+            break
+
+    # ---- budget（补最高总价限价、最高限价、预算金额等变体） ----
+    budget_pats = [
+        r"(?:采购预算|预算金额|最高总价限价|最高限价|最高控制价|控制价|预算)[^0-9]{0,15}([\d,]+(?:\.\d+)?)\s*元",
+    ]
+    for pat in budget_pats:
+        b = re.search(pat, md_text) or re.search(pat, html or "")
+        if b:
+            fields["budget"] = b.group(1).replace(",", "")
+            break
+    if not fields["budget"]:
         b = re.search(r"<td[^>]*>[^<]*(?:预算|限价|控制价)[^<]*</td>\s*<td[^>]*>\s*([\d,]+(?:\.\d+)?)\s*元?", html or "", re.I)
-    if b: fields["budget"] = b.group(1).replace(",", "")
-    buy = re.search(r"(?:采购人|招标人|采购单位|业主|建设单位)[：:]\s*([^\s，,。；;（）()<]{2,40})", html or "")
-    if not buy: buy = re.search(r"<td[^>]*>[^<]*(?:采购人|招标人|业主)[^<]*</td>\s*<td[^>]*>([^<]{2,40})", html or "", re.I)
-    if buy: fields["buyer"] = buy.group(1).strip()
-    ag = re.search(r"(?:代理机构|招标代理|采购代理|招标机构)[：:]\s*([^\s，,。；;（）()<]{2,40})", html or "")
-    if not ag: ag = re.search(r"<td[^>]*>[^<]*(?:代理机构|招标代理)[^<]*</td>\s*<td[^>]*>([^<]{2,40})", html or "", re.I)
-    if ag: fields["agency"] = ag.group(1).strip()
-    fields["purchase_method"] = _extract_purchase_method(html or "") or ""
+        if b: fields["budget"] = b.group(1).replace(",", "")
+
+    # ---- buyer（采购人/招标人/业主/采购单位/建设单位） ----
+    buyer_pats = [
+        # 先匹配"采购人为XXX公司。"这种无冒号的正文结构（trafilatura markdown 里常见）
+        r"(?:采购人|招标人|采购单位|业主|建设单位)[为是][^\s，,。；;]{1,40}",
+        r"(?:采购人|招标人|采购单位|业主|建设单位)[：:]\s*[^\s，,。；;]{1,40}",
+    ]
+    for pat in buyer_pats:
+        buy = re.search(pat, md_text) or re.search(pat, html or "")
+        if buy:
+            raw = buy.group(0)  # 整个匹配 "采购人为南宁威宁资产经营集团有限责任公司。"
+            # 抽取冒号/为是后面的值
+            m2 = re.search(r"[为是：:]\s*([^\s，,。；;]{2,40})", raw)
+            if m2:
+                fields["buyer"] = _clean(m2.group(1))
+            break
+    if not fields["buyer"]:
+        buy = re.search(r"<td[^>]*>[^<]*(?:采购人|招标人|业主)[^<]*</td>\s*<td[^>]*>([^<]{2,40})", html or "", re.I)
+        if buy: fields["buyer"] = buy.group(1).strip()
+
+    # ---- agency（代理机构/招标代理/采购代理） ----
+    ag_pats = [
+        r"现委托\s*[^\s，,。；;]{2,40}?\s*(?:代理|咨询|招标|采购)[^\s，,。；;]{0,40}",
+        r"(?:代理机构|招标代理|采购代理|招标机构)[为是][^\s，,。；;]{1,40}",
+        r"(?:代理机构|招标代理|采购代理|招标机构)[：:]\s*[^\s，,。；;]{1,40}",
+    ]
+    for pat in ag_pats:
+        ag = re.search(pat, md_text) or re.search(pat, html or "")
+        if ag:
+            raw = ag.group(0)
+            m2 = re.search(r"(?:现委托|[为是：:])\s*([^\s，,。；;]{2,40})", raw)
+            if m2:
+                # 用公司名后缀截断（"XX有限公司进行公开询比" → "XX有限公司"）
+                name = _clean(m2.group(1))
+                m3 = re.search(
+                    r"(.*?(?:有限公司|股份有限公司|集团公司|集团|分公司|事务所|研究院|中心|局|政府|医院|学校))",
+                    name,
+                )
+                if m3: name = m3.group(1).rstrip("，,。；;")
+                fields["agency"] = name
+            break
+    if not fields["agency"]:
+        ag = re.search(r"<td[^>]*>[^<]*(?:代理机构|招标代理)[^<]*</td>\s*<td[^>]*>([^<]{2,40})", html or "", re.I)
+        if ag: fields["agency"] = ag.group(1).strip()
+
+    # ---- purchase_method ----
+    # 先调 _extract_purchase_method，fallback 到扫全文找关键词
+    _purchase_words = ("公开询比", "公开招标", "竞争性磋商", "竞争性谈判",
+                       "单一来源", "询价", "邀请招标", "协议供货", "定点采购",
+                       "公开征集", "框架协议", "竞争性谈判")
+    fields["purchase_method"] = _extract_purchase_method(md_text) or _extract_purchase_method(html or "") or ""
+    if not fields["purchase_method"]:
+        for w in _purchase_words:
+            if w in md_text:
+                fields["purchase_method"] = w
+                break
+        if not fields["purchase_method"]:
+            m = re.search(r"([^\s，,。]{0,4})(公开询比|公开招标|竞争性磋商|竞争性谈判|询价|单一来源)", md_text)
+            if m:
+                fields["purchase_method"] = m.group(2)
+
     fields["ann_type"] = _guess_ann_type(title, html or "")
     return fields
 
 def run_generic(site, days=30):
-    from urllib.parse import urljoin
+    from urllib.parse import urljoin, urlparse, urlunparse, quote
+    def _encode_url(u):
+        """对 URL 中非 ASCII 的 path/query/fragment 做 percent-encode（urllib 不自动编码中文路径）。"""
+        try:
+            parsed = urlparse(u)
+            if all(ord(c) < 128 for c in (parsed.path + parsed.query + parsed.fragment)):
+                return u
+            # 只编码 path/query/fragment，保留 netloc 和 scheme
+            return urlunparse((
+                parsed.scheme,
+                parsed.netloc,
+                quote(parsed.path, safe="/-_.~"),
+                parsed.params,
+                quote(parsed.query, safe="=&-_.~"),
+                quote(parsed.fragment, safe="-_.~"),
+            ))
+        except Exception:
+            return u
+
     url = site["url"].rstrip("/")
     name = site["name"]
     results = []
@@ -1169,6 +1368,7 @@ def run_generic(site, days=30):
     for m in ANN_LINK_HREF_RE.finditer(html):
         href, txt = m.group(1), m.group(2).strip()
         if not href.startswith("http"): href = urljoin(url + "/", href)
+        href = _encode_url(href)
         if any(x in href for x in [".jpg", ".png", ".gif", ".css", ".js", "#", "javascript:", "mailto:"]):
             continue
         if not ZB_KEYWORD_RE.search(txt): continue
@@ -1186,7 +1386,9 @@ def run_generic(site, days=30):
             d2, ct2 = http_get(href, timeout=12)
             h2 = d2.decode("utf-8", errors="replace") if isinstance(d2, bytes) else str(d2)
         except Exception: continue
-        pub_date = _parse_date(h2)
+        # trafilatura 干净正文（供 summary / extra_text / contacts 解析）
+        md_body = html_to_markdown(h2)
+        pub_date = _parse_date(h2) or _parse_date(md_body)
         if not pub_date: continue
         try:
             pd = dt.date.fromisoformat(pub_date)
@@ -1195,14 +1397,15 @@ def run_generic(site, days=30):
         fields = _parse_detail_fields(h2)
         if not fields["title"]: continue
         rec = build_record(
-            title=fields["title"], summary=strip_tags(h2)[:800], source_url=href,
-            pub_date=pub_date, deadline=_parse_deadline(h2), bid_open="",
+            title=fields["title"], summary=(md_body or strip_tags(h2))[:800], source_url=href,
+            pub_date=pub_date, deadline=_parse_deadline(md_body) or _parse_deadline(h2), bid_open="",
             buyer=fields["buyer"], agency=fields["agency"],
             budget=fields["budget"], project_code=fields["project_code"],
-            contact="", contacts=_parse_contacts_from_content(h2),
+            contact="", contacts=_parse_contacts_from_content(md_body) or _parse_contacts_from_content(h2),
             ann_type=fields["ann_type"], fund_source="",
-            extra_text=strip_tags(h2)[:5000],
+            extra_text=(md_body or strip_tags(h2))[:5000],
             purchase_method=fields["purchase_method"],
+            source_name=name,
         )
         if rec: results.append(rec)
     log(f"  {name}: {len(anchors)} 候选 → {len(results)} 条通过")
