@@ -20,6 +20,8 @@ let state = {
   assignAnnId: null,
   progressAnnId: null,
   editGroupId: null,
+  users: [],
+  editingUser: null,
   selectedAnnIds: new Set(),
   // 翻页
   pageSize: 10,           // 10 / 50 / 100 / 0(全部)
@@ -313,6 +315,7 @@ function render() {
     ${state.modal === 'progress' ? renderProgressModal() : ''}
     ${state.modal === 'edit-group' ? renderEditGroupModal() : ''}
     ${state.modal === 'ann-form' ? renderAnnFormModal() : ''}
+    ${state.modal === 'user-form' ? renderUserFormModal(state.editingUser) : ''}
     ${state.modal === 'ann-import' ? renderAnnouncementImportModal() : ''}
     ${state.modal === 'bd-form' ? renderBuyerDistrictFormModal() : ''}
     ${state.modal === 'bd-import' ? renderBuyerDistrictImportModal() : ''}
@@ -441,6 +444,7 @@ function renderSidebar() {
     { key: 'announcements', label: '招标公告', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
     { key: 'reminders', label: '任务提醒', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' },
     { key: 'team', label: '团队管理', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
+    { key: 'users', label: '用户管理', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
     { key: 'schedule', label: '定时任务', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
     { key: 'buyer-districts', label: '区县映射', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', requireJitubu: true },
     { key: 'sources', label: '数据来源', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
@@ -474,7 +478,7 @@ function renderSidebar() {
 }
 
 function renderHeader() {
-  const pageTitle = { announcements: '招标公告', sources: '数据来源', reminders: '任务提醒', team: '团队管理', schedule: '定时任务配置', 'buyer-districts': '区县映射' }[state.page];
+  const pageTitle = { announcements: '招标公告', sources: '数据来源', reminders: '任务提醒', team: '团队管理', users: '用户管理', schedule: '定时任务配置', 'buyer-districts': '区县映射' }[state.page];
   const stats = getStats();
   const siteOk = state.siteResults.filter(r => r.ok).length;
   const lastCrawl = state.siteResults.length > 0 
@@ -529,6 +533,7 @@ function renderPage() {
     case 'sources': return renderSources();
     case 'reminders': return renderReminders();
     case 'team': return renderTeam();
+    case 'users': return renderUsers();
     case 'schedule': return renderSchedule();
     case 'buyer-districts': return renderBuyerDistricts();
   }
@@ -2161,8 +2166,177 @@ function bindMemberRow(row) {
   if (del) del.onclick = () => { row.remove(); };
 }
 
+
+// ---- 用户管理 ----
+function renderUsers() {
+  if (state.users.length === 0) {
+    API.listUsers().then(data => { state.users = data.items || []; render(); }).catch(e => alert(e.message || '加载用户失败'));
+    return `<div class="text-center text-gray-400 py-12">加载中...</div>`;
+  }
+  const stats = {
+    total: state.users.length,
+    admin: state.users.filter(u => u.role === 'admin').length,
+    member: state.users.filter(u => u.role === 'member').length,
+    nogroup: state.users.filter(u => !u.groupId).length,
+  };
+  const jitubu = state.currentUser && state.currentUser.group === '集团客户部';
+  return `
+    <div class="space-y-4">
+      <div class="grid grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">总账号数</div><div class="text-2xl font-bold text-gray-900">${stats.total}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">负责人（admin）</div><div class="text-2xl font-bold text-blue-600">${stats.admin}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">业务员（member）</div><div class="text-2xl font-bold text-green-600">${stats.member}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">未分组</div><div class="text-2xl font-bold text-orange-500">${stats.nogroup}</div></div>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="text-xs text-gray-400">统一由集团客户部维护账号；负责人在团队管理里可自由加减成员（从用户表选）</div>
+        <div class="flex gap-2">
+          <button class="px-3 py-1.5 text-xs text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50" id="btn-refresh-users">🔄 刷新</button>
+          ${jitubu ? `<button class="px-3 py-1.5 text-xs text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50" id="btn-add-user">+ 新建账号</button>` : ''}
+        </div>
+      </div>
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 text-gray-500 text-xs"><tr>
+            <th class="px-4 py-3 text-left font-medium w-12">#</th>
+            <th class="px-4 py-3 text-left font-medium">账号</th>
+            <th class="px-4 py-3 text-left font-medium">姓名</th>
+            <th class="px-4 py-3 text-left font-medium">联系方式</th>
+            <th class="px-4 py-3 text-left font-medium">所属小组</th>
+            <th class="px-4 py-3 text-center font-medium w-24">角色</th>
+            <th class="px-4 py-3 text-left font-medium">创建时间</th>
+            <th class="px-4 py-3 text-center font-medium w-44">操作</th>
+          </tr></thead>
+          <tbody>
+            ${state.users.map((u, i) => `
+              <tr class="border-b border-gray-50 hover:bg-gray-50/50">
+                <td class="px-4 py-3 text-gray-400 text-xs">${i+1}</td>
+                <td class="px-4 py-3 font-mono text-blue-600">${u.account}</td>
+                <td class="px-4 py-3 font-medium text-gray-800">${u.name}</td>
+                <td class="px-4 py-3 text-gray-500">${u.phone || '-'}</td>
+                <td class="px-4 py-3">${u.group ? `<span class="tag tag-blue">${u.group}</span>` : `<span class="tag tag-gray">未分组</span>`}</td>
+                <td class="px-4 py-3 text-center">${u.role === 'admin' ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-xs">负责人</span>` : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-green-50 text-green-700 text-xs">业务员</span>`}</td>
+                <td class="px-4 py-3 text-gray-400 text-xs">${u.createdAt || '-'}</td>
+                <td class="px-4 py-3 text-center">${jitubu ? `
+                  <button class="text-xs text-blue-600 hover:text-blue-800 mr-2 user-edit" data-id="${u.id}">编辑</button>
+                  <button class="text-xs text-gray-500 hover:text-blue-600 mr-2 user-reset" data-id="${u.id}">重置密码</button>
+                  <button class="text-xs text-red-500 hover:text-red-700 user-del" data-id="${u.id}">删除</button>
+                ` : `<span class="text-gray-300 text-xs">仅管理员可操作</span>`}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
+function renderUserFormModal(user) {
+  const isEdit = !!user;
+  const groups = (state.groups && state.groups.items) ? state.groups.items : [];
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-xl w-[520px] p-6 shadow-xl" data-stop>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-semibold text-gray-900">${isEdit ? '编辑账号：' + user.account : '新建账号'}</h3>
+          <button class="text-gray-400 hover:text-gray-600" data-close-modal>×</button>
+        </div>
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="text-xs text-gray-500 mb-1 block">登录账号 *</label>
+              <input id="u-account" value="${user ? user.account : ''}" ${isEdit ? 'readonly class="w-full h-10 px-3 border border-gray-100 bg-gray-50 rounded-lg text-sm text-gray-400"' : 'class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400"'} placeholder="英文/数字，唯一"></div>
+            <div><label class="text-xs text-gray-500 mb-1 block">姓名 *</label>
+              <input id="u-name" value="${user ? user.name : ''}" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="真实姓名"></div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="text-xs text-gray-500 mb-1 block">联系方式</label>
+              <input id="u-phone" value="${user ? (user.phone || '') : ''}" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="手机号"></div>
+            <div><label class="text-xs text-gray-500 mb-1 block">角色</label>
+              <select id="u-role" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+                <option value="member" ${!user || user.role === 'member' ? 'selected' : ''}>业务员（member）</option>
+                <option value="admin" ${user && user.role === 'admin' ? 'selected' : ''}>负责人（admin）</option>
+              </select></div>
+          </div>
+          <div><label class="text-xs text-gray-500 mb-1 block">归属小组</label>
+            <select id="u-group" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+              <option value="">— 先不分组 —</option>
+              ${groups.map(g => `<option value="${g.id}" ${user && user.groupId === g.id ? 'selected' : ''}>${g.name}</option>`).join('')}
+            </select>
+          </div>
+          <div><label class="text-xs text-gray-500 mb-1 block">${isEdit ? '重置密码（留空不改）' : '初始密码（留空使用默认 123456）'}</label>
+            <input id="u-password" type="text" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="${isEdit ? '留空则不修改密码' : '留空 = 默认密码 123456'}"></div>
+        </div>
+        <div class="flex justify-end gap-2 mt-6">
+          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" id="u-save">保存</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function bindUsersEvents() {
+  const add = document.getElementById('btn-add-user');
+  if (add) add.onclick = () => { state.editingUser = null; state.modal = 'user-form'; render(); };
+
+  const refresh = document.getElementById('btn-refresh-users');
+  if (refresh) refresh.onclick = async () => {
+    try { const data = await API.listUsers(); state.users = data.items || []; render(); }
+    catch (e) { alert(e.message || '刷新失败'); }
+  };
+
+  document.querySelectorAll('.user-edit').forEach(btn => {
+    btn.onclick = () => {
+      const id = parseInt(btn.dataset.id);
+      state.editingUser = state.users.find(x => x.id === id);
+      state.modal = 'user-form'; render();
+    };
+  });
+  document.querySelectorAll('.user-reset').forEach(btn => {
+    btn.onclick = async () => {
+      const id = parseInt(btn.dataset.id);
+      const u = state.users.find(x => x.id === id);
+      if (!confirm('确定给账号 ' + u.account + ' 重置密码？留空使用默认密码 123456')) return;
+      const pw = prompt('新密码（留空使用默认密码）') || '';
+      try { await API.resetUserPassword(id, pw); alert('密码已重置'); }
+      catch (e) { alert(e.message || '重置失败'); }
+    };
+  });
+  document.querySelectorAll('.user-del').forEach(btn => {
+    btn.onclick = async () => {
+      const id = parseInt(btn.dataset.id);
+      const u = state.users.find(x => x.id === id);
+      if (!confirm('确定删除账号 ' + u.account + '（' + u.name + '）？该账号会立即无法登录。')) return;
+      try { await API.deleteUser(id); state.users = state.users.filter(x => x.id !== id); render(); }
+      catch (e) { alert(e.message || '删除失败'); }
+    };
+  });
+
+  const saveBtn = document.getElementById('u-save');
+  if (saveBtn) saveBtn.onclick = async () => {
+    const account = document.getElementById('u-account').value.trim();
+    const name = document.getElementById('u-name').value.trim();
+    const phone = document.getElementById('u-phone').value.trim();
+    const role = document.getElementById('u-role').value;
+    const gid_str = document.getElementById('u-group').value;
+    const password = document.getElementById('u-password').value.trim();
+    if (!account || !name) { alert('账号和姓名必填'); return; }
+    const body = { account: account, name: name, phone: phone, role: role };
+    if (gid_str) body.groupId = parseInt(gid_str);
+    if (password) body.password = password;
+    try {
+      if (state.editingUser) await API.updateUser(state.editingUser.id, body);
+      else await API.createUser(body);
+      state.modal = null; state.editingUser = null;
+      const data = await API.listUsers(); state.users = data.items || []; render();
+    } catch (e) { alert(e.message || '保存失败'); }
+  };
+}
+
 // ============ 事件绑定 ============
 function bindEvents() {
+  bindUsersEvents();
+
   // 侧边栏切换
   document.querySelectorAll('.sidebar-item').forEach(el => {
     el.onclick = () => {
