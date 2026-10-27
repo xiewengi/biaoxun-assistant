@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 from .. import config, db
+from .. import crypto
 
 # 采集器固定把结果写到仓库 demo/data/announcements.json；测试可 monkeypatch 本常量。
 ANNOUNCEMENTS_JSON = config.REPO_DIR / "demo" / "data" / "announcements.json"
@@ -178,7 +179,13 @@ def _insert_announcements(items: List[Dict[str, Any]]) -> int:
     """增量入库，返回真实新增条数（已存在的 id 会被忽略）。
 
     字段映射与 app/seed.py 的 seed_announcements 保持一致；进度记录随新公告写入。
+    buyer_district 映射：INSERT 前如果 item.district 为空，按 buyer 的 SHA-256
+    查 buyer_district.buyer_hash 自动补 district（与 router 层 _auto_match_district 同逻辑）。
     """
+    # 一次性全量加载 buyer_district 映射（3342 条量级，内存友好）
+    bmap = {r["buyer_hash"]: r["district"] for r in db.query_all(
+        "SELECT buyer_hash, district FROM buyer_district"
+    )}
     inserted = 0
     seen_urls, seen_codes, seen_titles = set(), set(), set()
     with db.get_conn() as conn:
@@ -190,6 +197,16 @@ def _insert_announcements(items: List[Dict[str, Any]]) -> int:
                 continue
             if _is_duplicate(conn, item, seen_urls, seen_codes, seen_titles):
                 continue
+
+            # === buyer_district 自动匹配 ===
+            item_district = (item.get("district") or "").strip()
+            if not item_district:
+                buyer_name = (item.get("buyer") or "").strip()
+                if buyer_name:
+                    h = crypto.sha256_hex(buyer_name)
+                    hit = bmap.get(h)
+                    if hit:
+                        item["district"] = hit
             cur = conn.execute(
                 _INSERT_ANNOUNCEMENT_SQL,
                 (
