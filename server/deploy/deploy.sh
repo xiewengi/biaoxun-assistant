@@ -291,6 +291,25 @@ fi
 #          --delete 保证服务器代码与本地一致，但 data/、web/、.venv/ 被排除，
 #          不会被删除。
 # ---------------------------------------------------------------------------
+# 3.5 前端版本号 +0.1（每次 deploy 自动递增，体现迭代节奏）
+# ---------------------------------------------------------------------------
+info "3.5/6 自动递增前端版本号"
+APP_JS="${PROJECT_ROOT}/demo/js/app.js"
+if [[ -f "$APP_JS" ]]; then
+  # 匹配 ">v数字.数字<"，例如 >v1.0< → >v1.1<，>v1.9< → >v2.0<
+  OLD_VER=$(grep -oE '>v[0-9]+\.[0-9]+<' "$APP_JS" | head -1 | sed 's/^>//;s/<$//')
+  if [[ -n "$OLD_VER" ]]; then
+    NEW_VER=$(awk -v v="${OLD_VER#v}" 'BEGIN{n=split(v,a,"."); printf "v%d.%d", a[1], a[2]+1}')
+    sed -i '' "s/>${OLD_VER}</>${NEW_VER}</" "$APP_JS" 2>/dev/null \
+      || sed -i "s/>${OLD_VER}</>${NEW_VER}</" "$APP_JS"
+    echo "  ${OLD_VER} → ${NEW_VER}"
+  else
+    echo "  ⚠ 未找到页脚版本号（格式应为 >vN.N<），跳过"
+  fi
+else
+  echo "  ⚠ ${APP_JS} 不存在，跳过"
+fi
+
 info "4/6 同步代码到 ${TARGET}:${REMOTE_DIR}"
 
 if ! ssh "${SSH_OPTS[@]}" "$TARGET" "${SUDO_CMD}mkdir -p '${REMOTE_DIR}'"; then
