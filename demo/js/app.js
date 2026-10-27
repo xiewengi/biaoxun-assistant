@@ -803,13 +803,14 @@ function renderAnnouncementDetail() {
               </div>
             </div>
             <div class="flex gap-2">
+              ${state.currentUser && state.currentUser.group === '集团客户部'
+                ? `<button class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg text-sm hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50" data-edit-ann="${a.id}">✎ 编辑公告</button>`
+                : ''}
               ${isConfirmed
                 ? `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="商机已确认, 不可分配">任务分配</button>`
                 : (state.currentUser && state.currentUser.group === '集团客户部'
                   ? `<button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-assign="${a.id}">任务分配</button>`
                   : `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="仅集团客户部可分配">任务分配</button>`)}
-              <!-- 进度更新按钮暂时注释, 后续需要再启用 -->
-              <!-- <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm hover:bg-gray-50" data-progress="${a.id}">进度更新</button> -->
               ${a.progress === '已确认'
                 ? `<button class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm opacity-70 cursor-not-allowed" disabled>✓ 信息已确认</button>`
                 : `<button id="btn-confirm-opp" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">✅ 信息已确认</button>`}
@@ -2123,6 +2124,14 @@ function bindEvents() {
       if (ids.length === 0) { alert('请先勾选一条公告再修改'); return; }
       if (ids.length > 1) { alert('修改只能选择单条，不能多选'); return; }
       state.formAnnId = ids[0];
+      state.modal = 'ann-form';
+      render();
+    };
+  });
+  document.querySelectorAll('[data-edit-ann]').forEach(el => {
+    el.onclick = (e) => {
+      const id = e.currentTarget.dataset.editAnn;
+      state.formAnnId = id;
       state.modal = 'ann-form';
       render();
     };
