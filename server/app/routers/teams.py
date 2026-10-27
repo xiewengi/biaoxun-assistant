@@ -1,6 +1,7 @@
 """团队（小组）路由。契约见 docs/api-contract.md 第 4 节。
 
 写操作需要同步三张表：groups / group_members / users（管理员账号）。
+成员行可选 userId（新方案：关联 users 表）或 namePinyin（老方案兼容）。
 """
 from __future__ import annotations
 
@@ -23,6 +24,7 @@ class MemberBody(BaseModel):
     namePinyin: str = ""
     contact: str = ""
     position: str = "成员"
+    userId: Optional[int] = None   # 新方案：关联 users 表的 id
 
 
 class GroupBody(BaseModel):
@@ -80,25 +82,31 @@ def _ensure_unique(
 
 def _normalize_members(
     members: Optional[Sequence[MemberBody]],
-) -> List[Tuple[str, str, str, str]]:
-    """去空、去重，返回 (name, name_pinyin, contact, position)。"""
-    result: List[Tuple[str, str, str, str]] = []
-    seen = set()
+) -> List[Dict[str, Any]]:
+    """去空、去重，返回 [{name, name_pinyin, contact, position, user_id}]。"""
+    result: List[Dict[str, Any]] = []
+    seen_names = set()
+    seen_user_ids = set()
     for member in members or []:
         name = (member.name or "").strip()
-        if not name:
+        uid = member.userId
+        if not name and not uid:
             continue
-        if name in seen:
+        if uid is not None:
+            if uid in seen_user_ids:
+                raise HTTPException(status_code=400, detail="成员重复：userId={}".format(uid))
+            seen_user_ids.add(uid)
+        if name and name in seen_names:
             raise HTTPException(status_code=400, detail="成员姓名重复：{}".format(name))
-        seen.add(name)
-        result.append(
-            (
-                name,
-                (member.namePinyin or "").strip(),
-                (member.contact or "").strip(),
-                (member.position or "").strip() or "成员",
-            )
-        )
+        if name:
+            seen_names.add(name)
+        result.append({
+            "name": name,
+            "name_pinyin": (member.namePinyin or "").strip(),
+            "contact": (member.contact or "").strip(),
+            "position": (member.position or "").strip() or "成员",
+            "user_id": uid,
+        })
     return result
 
 
@@ -107,14 +115,59 @@ def _replace_members(
     group_id: int,
     members: Optional[Sequence[MemberBody]],
 ) -> None:
-    """成员数组整体替换。"""
+    """成员数组整体替换。
+
+    - 带 userId 的：先踢掉旧组 group_members 记录，再 upsert 到本 group，users.group_id 同步迁移。
+    - 不带 userId 的（老方案兼容）：直接写 group_members 旧字段。
+    """
+    normalized = _normalize_members(members)
+    new_user_ids = {m["user_id"] for m in normalized if m.get("user_id") is not None}
+
+    # 旧组成员里哪些 userId 不在新列表了 → 从 users.group_id 清理
+    old_users_in_group = conn.execute(
+        "SELECT user_id FROM group_members WHERE group_id = ? AND user_id IS NOT NULL",
+        (group_id,),
+    ).fetchall()
+    for row in old_users_in_group:
+        if row["user_id"] not in new_user_ids:
+            conn.execute(
+                "UPDATE users SET group_id = NULL WHERE id = ? AND group_id = ?",
+                (row["user_id"], group_id),
+            )
+
+    # 清空本 group 的 group_members（清空后按新列表重写）
     conn.execute("DELETE FROM group_members WHERE group_id = ?", (group_id,))
-    for name, name_pinyin, contact, position in _normalize_members(members):
-        conn.execute(
-            """INSERT INTO group_members (group_id, name, name_pinyin, contact, position)
-               VALUES (?, ?, ?, ?, ?)""",
-            (group_id, name, name_pinyin, contact, position),
-        )
+
+    for m in normalized:
+        uid = m.get("user_id")
+        if uid is not None:
+            # 先踢掉旧组
+            conn.execute(
+                "DELETE FROM group_members WHERE user_id = ? AND group_id != ?",
+                (uid, group_id),
+            )
+            # 从 users 表拉最新展示字段
+            u = conn.execute(
+                "SELECT name, phone FROM users WHERE id = ?", (uid,)
+            ).fetchone()
+            display_name = m["name"] or (u["name"] if u else "")
+            contact = m["contact"] or (u["phone"] if u else "")
+            conn.execute(
+                """INSERT INTO group_members
+                   (group_id, user_id, name, name_pinyin, contact, position)
+                   VALUES (?, ?, ?, ?, ?, ?)""",
+                (group_id, uid, display_name, "", contact, m["position"]),
+            )
+            conn.execute(
+                "UPDATE users SET group_id = ? WHERE id = ?", (group_id, uid)
+            )
+        else:
+            conn.execute(
+                """INSERT INTO group_members
+                   (group_id, name, name_pinyin, contact, position)
+                   VALUES (?, ?, ?, ?, ?)""",
+                (group_id, m["name"], m["name_pinyin"], m["contact"], m["position"]),
+            )
 
 
 @router.get("")

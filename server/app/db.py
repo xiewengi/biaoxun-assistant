@@ -59,6 +59,18 @@ def init_db() -> None:
                        "TEXT NOT NULL DEFAULT ''")
 
 
+        # 2026-10-26 新增：成员关联 user 表（独立用户页上线）
+        _ensure_column(conn, "group_members", "user_id",
+                        "INTEGER REFERENCES users(id) ON DELETE SET NULL")
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_group_members_user ON group_members(user_id)"
+        )
+        conn.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS uq_group_members_user "
+            "ON group_members(group_id, user_id) WHERE user_id IS NOT NULL"
+        )
+
+
 def rows_to_dicts(rows: Iterable[sqlite3.Row]) -> List[Dict[str, Any]]:
     return [dict(r) for r in rows]
 

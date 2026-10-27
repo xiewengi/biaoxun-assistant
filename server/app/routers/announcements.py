@@ -540,3 +540,5 @@ def batch_assign_announcements(
         for item in result["skipped"]
     ]
     items = [_detail(ann_id) for ann_id in result["ids"]]
+    security.audit(user, "批量分配", "", f"分配给{group_name}，成功{result['updated']}条")
+    return {"updated": result["updated"], "items": items, "skipped": skipped}

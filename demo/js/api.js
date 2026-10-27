@@ -209,6 +209,21 @@
     return request('/collect/runs', { params: { limit: limit === undefined ? 10 : limit } });
   }
 
+  // ---------- 用户管理 ----------
+  function listUsers() { return request('/users'); }
+  function createUser(body) { return request('/users', { method: 'POST', body: body || {} }); }
+  function updateUser(id, body) {
+    return request('/users/' + encodeURIComponent(id), { method: 'PUT', body: body || {} });
+  }
+  function deleteUser(id) {
+    return request('/users/' + encodeURIComponent(id), { method: 'DELETE' });
+  }
+  function resetUserPassword(id, password) {
+    return request('/users/' + encodeURIComponent(id) + '/reset-password', {
+      method: 'POST', body: { password: password || '' },
+    });
+  }
+
   // ---------- 定时任务 ----------
   function getSchedule() { return request('/schedule'); }
   function updateSchedule(body) { return request('/schedule', { method: 'PUT', body: body || {} }); }
@@ -245,6 +260,12 @@
     createGroup: createGroup,
     updateGroup: updateGroup,
     deleteGroup: deleteGroup,
+
+    listUsers: listUsers,
+    createUser: createUser,
+    updateUser: updateUser,
+    deleteUser: deleteUser,
+    resetUserPassword: resetUserPassword,
 
     listSources: listSources,
     createSource: createSource,

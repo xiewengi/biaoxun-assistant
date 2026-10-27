@@ -99,6 +99,19 @@ def announcement_to_api(
     return ann
 
 
+def user_to_api(row: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "id": row["id"],
+        "account": row.get("account", ""),
+        "name": row.get("name", ""),
+        "phone": row.get("phone", ""),
+        "role": row.get("role", "member"),
+        "groupId": row.get("group_id"),
+        "group": row.get("group_name") or "",
+        "createdAt": row.get("created_at", ""),
+    }
+
+
 def group_to_api(row: Dict[str, Any], members: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {
         "id": row["id"],
@@ -115,6 +128,7 @@ def group_to_api(row: Dict[str, Any], members: List[Dict[str, Any]]) -> Dict[str
         "memberDetails": [
             {
                 "id": m.get("id"),
+                "userId": m.get("user_id"),
                 "name": m.get("name", ""),
                 "namePinyin": m.get("name_pinyin", ""),
                 "contact": m.get("contact", ""),

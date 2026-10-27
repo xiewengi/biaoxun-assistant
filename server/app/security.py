@@ -104,7 +104,7 @@ def get_current_user(
 def require_jitubu(user: Dict[str, Any], action_label: str = "执行该操作") -> None:
     """集团客户部专属权限（分配 / 新增 / 修改 / 删除公告等）。"""
     if user.get("group") != "集团客户部":
-        raise HTTPException(status_code=403, detail=f"仅集团客户部可{action_label}")
+        raise HTTPException(status_code=403, detail=f"仅管理员可{action_label}")
 
 
 def require_group_admin(user: Dict[str, Any]) -> None:
