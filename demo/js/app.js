@@ -450,7 +450,7 @@ function renderSidebar() {
         <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">标</div>
         <div>
           <div class="font-semibold text-gray-900">标讯助手</div>
-          <div class="text-xs text-gray-400">Demo v1.0</div>
+          <div class="text-xs text-gray-400">v1.0</div>
         </div>
       </div>
       <nav class="flex-1 py-3 px-2 space-y-1">
