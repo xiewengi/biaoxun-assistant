@@ -803,7 +803,8 @@ function renderAnnouncementDetail() {
               </div>
             </div>
             <div class="flex gap-2">
-              ${state.currentUser && state.currentUser.group === '集团客户部'
+              <!-- 编辑公告暂时隐藏，后续开放 -->
+              ${false && state.currentUser && state.currentUser.group === '集团客户部'
                 ? `<button class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg text-sm hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50" data-edit-ann="${a.id}">✎ 编辑公告</button>`
                 : ''}
               ${isConfirmed
