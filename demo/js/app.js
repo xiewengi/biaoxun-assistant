@@ -877,7 +877,7 @@ function renderAnnouncementDetail() {
                 <input data-opp-field="opportunityCode" ${disabledAttr} value="${a.opportunityCode || ''}" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="由用户自由填写">
               </div>
               <div class="col-span-3 px-3">                <label class="text-gray-500 text-sm mb-2 block">商机了解情况</label>
-                <textarea data-opp-field="opportunityStatus" ${disabledAttr} rows="4" class="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none h-28" placeholder="由用户自由填写"></textarea>
+                <textarea data-opp-field="opportunityStatus" ${disabledAttr} rows="4" class="w-full px-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none h-28" placeholder="由用户自由填写">${a.opportunityStatus || ""}</textarea>
               </div>
               <div class="px-3">                <label class="text-gray-500 text-sm mb-2 block">是否应标</label>
                 <select data-opp-field="willBid" ${disabledAttr} class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white">
