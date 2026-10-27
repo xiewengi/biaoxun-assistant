@@ -32,7 +32,7 @@ CSP_POLICY = (
     "style-src 'self' 'unsafe-inline'; "
     "img-src 'self' data:; "
     "font-src 'self' data:; "
-    "connect-src 'self'; "
+    "connect-src 'self' http://127.0.0.1:8000 http://localhost:8000 http://127.0.0.1:8765 http://localhost:8765 http://127.0.0.1:5173 http://localhost:5173; "
     "object-src 'none'; "
     "base-uri 'self'; "
     "form-action 'self'; "

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="bx-api-base" content="http://127.0.0.1:8000/api">
   <title>标讯助手</title>
   <!-- 内联编译好的 Tailwind CSS -->
 <style>*, ::before, ::after {
@@ -2258,9 +2259,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft
 
 .sidebar-item:hover { background: #f3f4f6; }
 
-.sidebar-item.active { background: #eff6ff; color: #2563eb; }
+.sidebar-item.active { background: #eff6ff; color: #2563eb; border-left: 3px solid #2563eb; }
 
 .sidebar-item.active svg { stroke: #2563eb; }
+
+.sidebar-group-title { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 12px 6px; }
+
+.sidebar-divider { height: 1px; background: #e5e7eb; margin: 8px 12px; }
+
+.sidebar-badge { font-size: 11px; padding: 1px 6px; border-radius: 8px; font-weight: 500; }
 
 .ann-row:hover { background: #f9fafb; }
 

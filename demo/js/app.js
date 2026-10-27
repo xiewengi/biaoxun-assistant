@@ -440,50 +440,103 @@ async function doLogout() {
 
 function renderSidebar() {
   const isJitubu = state.currentUser && state.currentUser.group === '集团客户部';
-  const items = [
-    { key: 'announcements', label: '招标公告', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
-    { key: 'reminders', label: '任务提醒', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' },
-    { key: 'team', label: '团队管理', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
-    { key: 'users', label: '用户管理', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
-    { key: 'schedule', label: '定时任务', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { key: 'buyer-districts', label: '区县映射', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', requireJitubu: true },
-    { key: 'sources', label: '数据来源', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
+
+  // --- 状态数据 ---
+  const reminderCnt = getFilteredReminders().length;
+  const stats = getStats();
+  const unassignedCnt = stats.unassignedCount;
+  const totalSources = SOURCES_DATA.length;
+  const okSources = SOURCES_DATA.filter(s => s.enabled).length;
+
+  // --- 业务中心 ---
+  const bizItems = [
+    { key: 'announcements', label: '招标公告', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01', badge: null },
+    { key: 'reminders', label: '任务提醒', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9', badge: reminderCnt > 0 ? { text: reminderCnt, cls: 'bg-red-500 text-white animate-pulse' } : null },
+    { key: 'dashboard', label: '数据看板', icon: 'M3 3v18h18M7 14l4-4 4 4 5-5', badge: null, disabled: true },
+  ];
+
+  // --- 管理与配置 ---
+  const adminItems = [
+    { key: 'team', label: '团队管理', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', badge: null },
+    { key: 'users', label: '用户管理', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', badge: null },
+    { key: 'schedule', label: '定时任务', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', badge: null },
+    { key: 'buyer-districts', label: '区县映射', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', badge: null, requireJitubu: true },
+    { key: 'sources', label: '数据来源', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z', badge: { text: okSources + '/' + totalSources, cls: okSources === totalSources ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600' } },
   ].filter(i => !i.requireJitubu || isJitubu);
+
+  const iconBox = (icon) => `
+    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+      <path stroke-linecap="round" stroke-linejoin="round" d="${icon}"></path>
+    </svg>
+  `;
+
+  const menuItem = (item) => `
+    <div class="sidebar-item ${state.page === item.key ? 'active' : ''} ${item.disabled ? 'opacity-40 cursor-not-allowed' : ''} flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm text-gray-600" ${item.disabled ? '' : `data-page="${item.key}"`}>
+      ${iconBox(item.icon)}
+      <span class="flex-1">${item.label}</span>
+      ${item.badge ? `<span class="sidebar-badge ${item.badge.cls}">${item.badge.text}</span>` : ''}
+    </div>
+  `;
+
   return `
     <aside class="w-60 bg-white border-r border-gray-200 flex flex-col">
-      <div class="h-16 flex items-center gap-3 px-5 border-b border-gray-200">
-        <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">标</div>
-        <div>
-          <div class="font-semibold text-gray-900">标讯助手</div>
+      <!-- Logo -->
+      <div class="h-16 flex items-center gap-3 px-4 border-b border-gray-200">
+        <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0">标</div>
+        <div class="min-w-0">
+          <div class="font-semibold text-gray-900 truncate">标讯助手</div>
           <div class="text-xs text-gray-400">v1.2</div>
         </div>
       </div>
-      <nav class="flex-1 py-3 px-2 space-y-1">
-        ${items.map(i => `
-          <div class="sidebar-item ${state.page === i.key ? 'active' : ''} flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer text-sm text-gray-600" data-page="${i.key}">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="${i.icon}"></path>
-            </svg>
-            ${i.label}
-            ${i.key === 'reminders' ? (() => { const cnt = getFilteredReminders().length; return cnt > 0 ? `<span class="ml-auto bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full animate-pulse">${cnt}</span>` : ''; })() : ''}
+
+      <!-- 搜索 -->
+      <div class="px-3 pt-3 pb-2">
+        <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-50 text-gray-400 text-sm cursor-text hover:bg-gray-100 transition-colors" id="sidebar-search-trigger">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span class="flex-1">搜索公告/任务…</span>
+          <kbd class="text-[10px] px-1 py-0.5 bg-white border border-gray-200 rounded text-gray-400">⌘K</kbd>
+        </div>
+      </div>
+
+      <div class="flex-1 overflow-y-auto">
+        <!-- 业务中心 -->
+        <div class="sidebar-group-title">📁 业务中心</div>
+        <nav class="px-2 space-y-1">
+          ${bizItems.map(menuItem).join('')}
+        </nav>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- 管理与配置 -->
+        <div class="sidebar-group-title">⚙️ 管理与配置</div>
+        <nav class="px-2 space-y-1">
+          ${adminItems.map(menuItem).join('')}
+        </nav>
+      </div>
+
+      <!-- 用户区 -->
+      <div class="border-t border-gray-200 px-3 py-3">
+        <div class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-gray-50 cursor-pointer" id="sidebar-user-menu">
+          <div class="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+            ${state.currentUser ? state.currentUser.name.charAt(0) : '?'}
           </div>
-        `).join('')}
-      </nav>
-      <div class="px-4 py-3 border-t border-gray-200 text-xs text-gray-400">
-        <div>战略客户中心</div>
-        <div>行业：党政/医疗/工业…</div>
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-medium text-gray-800 truncate">${state.currentUser ? state.currentUser.name : '未登录'}</div>
+            <div class="text-xs text-gray-400 truncate">${state.currentUser ? state.currentUser.group : ''}</div>
+          </div>
+          <button id="btn-logout" class="text-xs text-gray-400 hover:text-red-500 px-2 py-1 rounded hover:bg-red-50 transition-colors" title="退出登录">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          </button>
+        </div>
       </div>
     </aside>
   `;
 }
 
 function renderHeader() {
-  const pageTitle = { announcements: '招标公告', sources: '数据来源', reminders: '任务提醒', team: '团队管理', users: '用户管理', schedule: '定时任务配置', 'buyer-districts': '区县映射' }[state.page];
+  const pageTitle = { announcements: '招标公告', sources: '数据来源', reminders: '任务提醒', team: '团队管理', users: '用户管理', schedule: '定时任务配置', 'buyer-districts': '区县映射', dashboard: '数据看板', help: '帮助反馈' }[state.page] || '标讯助手';
   const stats = getStats();
   const siteOk = state.siteResults.filter(r => r.ok).length;
-  const lastCrawl = state.siteResults.length > 0 
-    ? new Date(Math.max(...state.siteResults.map(r => 0))).toLocaleString('zh-CN') 
-    : '—';
   return `
     <header class="h-16 bg-white border-b border-gray-200 flex items-center px-6 gap-6">
       <div>
@@ -497,21 +550,8 @@ function renderHeader() {
             <span class="font-semibold text-orange-600">${stats.unassignedCount}</span> 待分配 · 
             <span class="font-semibold text-blue-600">${stats.inProgressCount}</span> 已分配
           </div>
-          <button class="text-xs text-gray-400 hover:text-blue-600 px-3 py-1.5 border border-gray-200 rounded-lg" id="btn-refresh">
-            🔄 刷新抓取
-          </button>
         </div>
-      ` : `<div class="ml-auto text-sm text-gray-500"></div>`}
-      <!-- 当前登录用户 -->
-      <div class="flex items-center gap-3 pl-3 ml-2 border-l border-gray-200">
-        <div class="text-right">
-          <div class="text-sm font-medium text-gray-800">${state.currentUser ? state.currentUser.name : ''}</div>
-          <div class="text-xs text-gray-400">${state.currentUser ? state.currentUser.group : ''}</div>
-        </div>
-        <button id="btn-logout" class="text-xs text-gray-500 hover:text-red-600 px-2.5 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50">
-          退出
-        </button>
-      </div>
+      ` : ''}
     </header>
   `;
 }
@@ -536,6 +576,8 @@ function renderPage() {
     case 'users': return renderUsers();
     case 'schedule': return renderSchedule();
     case 'buyer-districts': return renderBuyerDistricts();
+    case 'dashboard': return renderDashboard();
+    case 'help': return renderHelp();
   }
 }
 
@@ -1368,11 +1410,6 @@ function renderSources() {
         </table>
       </div>
 
-      <!-- 说明卡片 -->
-      <div class="bg-orange-50 border border-orange-100 rounded-xl p-4 text-xs text-orange-700 leading-relaxed">
-        <div class="font-semibold mb-1">💡 关于 generic 待适配源</div>
-        <div>列表中大部分网站标记为 generic，表示暂无专属采集适配器。定时任务执行时会自动跳过 generic 源（仅采集 czggzy / ccgp / gdgpo 已实现的三个）。后续新增一个网站若属于这三类，改 sourceCode 即可自动纳入；完全新类型的则在 SOURCE_DISPATCH 里注册实现函数。</div>
-      </div>
     </div>
   `;
 }
