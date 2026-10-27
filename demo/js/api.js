@@ -228,6 +228,35 @@
   function getSchedule() { return request('/schedule'); }
   function updateSchedule(body) { return request('/schedule', { method: 'PUT', body: body || {} }); }
 
+  // ---------- 采购人-区县基础资料 ----------
+  function listBuyerDistricts(params) { return request('/buyer-districts', { params: params || {} }); }
+  function createBuyerDistrict(body) { return request('/buyer-districts', { method: 'POST', body: body || {} }); }
+  function updateBuyerDistrict(id, body) { return request('/buyer-districts/' + encodeURIComponent(id), { method: 'PUT', body: body || {} }); }
+  function deleteBuyerDistrict(id) { return request('/buyer-districts/' + encodeURIComponent(id), { method: 'DELETE' }); }
+
+  // FormData 上传 Excel（不走通用 request 函数，单独处理 Content-Type）
+  async function importBuyerDistrictExcel(file, skipDuplicates) {
+    var fd = new FormData();
+    fd.append('file', file);
+    fd.append('skip_duplicates', skipDuplicates !== false ? 'true' : 'false');
+    var token = getToken();
+    var headers = {};
+    if (token) headers.Authorization = 'Bearer ' + token;
+    var res = await fetch(buildUrl('/buyer-districts/import-excel'), {
+      method: 'POST',
+      headers: headers,
+      body: fd,
+    });
+    var data = null;
+    try { data = await res.json(); } catch (e) { data = null; }
+    if (!res.ok) {
+      var detail = (data && data.detail) || ('请求失败（' + res.status + '）');
+      if (res.status === 401) notifyUnauthorized(detail);
+      throw new Error(detail);
+    }
+    return data;
+  }
+
   global.API = {
     TOKEN_KEY: TOKEN_KEY,
     getToken: getToken,
@@ -277,5 +306,11 @@
 
     getSchedule: getSchedule,
     updateSchedule: updateSchedule,
+
+    listBuyerDistricts: listBuyerDistricts,
+    createBuyerDistrict: createBuyerDistrict,
+    updateBuyerDistrict: updateBuyerDistrict,
+    deleteBuyerDistrict: deleteBuyerDistrict,
+    importBuyerDistrictExcel: importBuyerDistrictExcel,
   };
 })(window);

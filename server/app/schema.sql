@@ -166,6 +166,17 @@ CREATE TABLE IF NOT EXISTS crawl_runs (
     operator    TEXT NOT NULL DEFAULT ''
 );
 
+-- ---------- 采购人-区县 基础资料 ----------
+-- 加密列（buyer_hash 等）由 db.py 的 _migrate_buyer_encryption 增量迁移补充
+CREATE TABLE IF NOT EXISTS buyer_district (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    buyer       TEXT NOT NULL,
+    district    TEXT NOT NULL DEFAULT '',
+    remark      TEXT NOT NULL DEFAULT '',
+    created_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    updated_at  TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+
 -- ---------- 操作审计（轻量） ----------
 CREATE TABLE IF NOT EXISTS audit_log (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,

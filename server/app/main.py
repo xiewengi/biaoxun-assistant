@@ -71,6 +71,7 @@ from .routers import schedule as schedule_router  # noqa: E402
 from .routers import sources as sources_router  # noqa: E402
 from .routers import teams as teams_router  # noqa: E402
 from .routers import users as users_router  # noqa: E402
+from .routers import buyer_district as buyer_district_router  # noqa: E402
 
 app.include_router(auth_router.router)
 app.include_router(announcements_router.router)
@@ -79,6 +80,7 @@ app.include_router(teams_router.router)
 app.include_router(users_router.router)
 app.include_router(sources_router.router)
 app.include_router(schedule_router.router)
+app.include_router(buyer_district_router.router)
 
 
 @app.get("/api/health")

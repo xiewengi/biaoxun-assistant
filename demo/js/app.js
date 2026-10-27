@@ -25,6 +25,14 @@ let state = {
   pageSize: 10,           // 10 / 50 / 100 / 0(全部)
   currentPage: 1,
   reminderDistrictFilter: '',  // 任务提醒页专属区县筛选
+  // 采购人-区县基础资料
+  buyerDistrictList: [],
+  buyerDistrictTotal: 0,
+  buyerDistrictPage: 1,
+  buyerDistrictPageSize: 50,
+  buyerDistrictKeyword: '',
+  buyerDistrictEditId: null,   // 编辑时存 id
+  _bdEditing: null,             // { buyer, district, remark }
 };
 
 // ============ 初始化 / 登录态 ============
@@ -305,6 +313,8 @@ function render() {
     ${state.modal === 'progress' ? renderProgressModal() : ''}
     ${state.modal === 'edit-group' ? renderEditGroupModal() : ''}
     ${state.modal === 'ann-form' ? renderAnnFormModal() : ''}
+    ${state.modal === 'bd-form' ? renderBuyerDistrictFormModal() : ''}
+    ${state.modal === 'bd-import' ? renderBuyerDistrictImportModal() : ''}
   `;
   bindEvents();
 }
@@ -425,13 +435,15 @@ async function doLogout() {
 }
 
 function renderSidebar() {
+  const isJitubu = state.currentUser && state.currentUser.group === '集团客户部';
   const items = [
     { key: 'announcements', label: '招标公告', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01' },
     { key: 'reminders', label: '任务提醒', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' },
     { key: 'team', label: '团队管理', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z' },
     { key: 'schedule', label: '定时任务', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { key: 'buyer-districts', label: '区县映射', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', requireJitubu: true },
     { key: 'sources', label: '数据来源', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
-  ];
+  ].filter(i => !i.requireJitubu || isJitubu);
   return `
     <aside class="w-60 bg-white border-r border-gray-200 flex flex-col">
       <div class="h-16 flex items-center gap-3 px-5 border-b border-gray-200">
@@ -461,7 +473,7 @@ function renderSidebar() {
 }
 
 function renderHeader() {
-  const pageTitle = { announcements: '招标公告', sources: '数据来源', reminders: '任务提醒', team: '团队管理', schedule: '定时任务配置' }[state.page];
+  const pageTitle = { announcements: '招标公告', sources: '数据来源', reminders: '任务提醒', team: '团队管理', schedule: '定时任务配置', 'buyer-districts': '区县映射' }[state.page];
   const stats = getStats();
   const siteOk = state.siteResults.filter(r => r.ok).length;
   const lastCrawl = state.siteResults.length > 0 
@@ -517,6 +529,7 @@ function renderPage() {
     case 'reminders': return renderReminders();
     case 'team': return renderTeam();
     case 'schedule': return renderSchedule();
+    case 'buyer-districts': return renderBuyerDistricts();
   }
 }
 
@@ -1890,8 +1903,188 @@ function renderProgressModal() {
   `;
 }
 
-// ============ 事件绑定 ============
-// ============ 辅助：绑定成员行删除按钮 ============
+// ============ 基础资料 · 采购人-区县 ============
+async function loadBuyerDistricts() {
+  try {
+    const data = await API.listBuyerDistricts({
+      keyword: state.buyerDistrictKeyword,
+      page: state.buyerDistrictPage,
+      page_size: state.buyerDistrictPageSize,
+    });
+    state.buyerDistrictList = data.items || [];
+    state.buyerDistrictTotal = data.total || 0;
+  } catch (e) {
+    alert(e.message || '加载基础资料失败');
+  }
+}
+
+function renderBuyerDistricts() {
+  const totalPages = Math.max(1, Math.ceil(state.buyerDistrictTotal / state.buyerDistrictPageSize));
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) pages.push(i);
+
+  return `
+    <div class="space-y-4">
+      <!-- 工具条 -->
+      <div class="bg-white rounded-xl border border-gray-200 px-4 py-3 flex items-center gap-3">
+        <input id="bd-search" type="text" placeholder="搜索区县 / 备注...（采购人加密存储，暂不支持模糊搜索）"
+          value="${state.buyerDistrictKeyword}"
+          class="h-9 px-3 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400 min-w-[240px]" />
+        <span class="text-sm text-gray-400">共 ${state.buyerDistrictTotal} 条</span>
+        <div class="ml-auto flex items-center gap-2">
+          <button id="btn-bd-import" class="text-sm px-3 py-2 border border-green-500 text-green-600 rounded-lg hover:bg-green-50 flex items-center gap-1">
+            📥 批量导入 Excel
+          </button>
+          <button id="btn-bd-add" class="text-sm px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-1">
+            + 新增
+          </button>
+        </div>
+      </div>
+
+      <!-- 表格 -->
+      <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="px-4 py-3 text-left font-medium text-gray-600 w-16">#</th>
+              <th class="px-4 py-3 text-left font-medium text-gray-600">采购人</th>
+              <th class="px-4 py-3 text-left font-medium text-gray-600 w-24">区县</th>
+              <th class="px-4 py-3 text-left font-medium text-gray-600">备注</th>
+              <th class="px-4 py-3 text-left font-medium text-gray-600 w-36">更新时间</th>
+              <th class="px-4 py-3 text-right font-medium text-gray-600 w-32">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${state.buyerDistrictList.length === 0 ? `
+              <tr><td colspan="6" class="px-4 py-16 text-center text-gray-400">暂无数据，点右上角 <b class="text-green-600">批量导入 Excel</b> 或 <b class="text-blue-600">+ 新增</b> 开始</td></tr>
+            ` : state.buyerDistrictList.map((r, idx) => `
+              <tr class="border-b border-gray-100 hover:bg-gray-50">
+                <td class="px-4 py-3 text-gray-400">${(state.buyerDistrictPage - 1) * state.buyerDistrictPageSize + idx + 1}</td>
+                <td class="px-4 py-3 text-gray-800 font-medium">${r.buyer}</td>
+                <td class="px-4 py-3">${r.district ? `<span class="tag tag-blue">${r.district}</span>` : '<span class="text-gray-300">-</span>'}</td>
+                <td class="px-4 py-3 text-gray-500">${r.remark || ''}</td>
+                <td class="px-4 py-3 text-gray-400 text-xs">${r.updatedAt || r.createdAt || ''}</td>
+                <td class="px-4 py-3 text-right">
+                  <button class="bd-edit text-blue-600 hover:underline mr-3" data-id="${r.id}">编辑</button>
+                  <button class="bd-del text-red-500 hover:underline" data-id="${r.id}" data-name="${r.buyer}">删除</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 分页 -->
+      ${totalPages > 1 ? `
+        <div class="flex items-center justify-end gap-2 text-sm">
+          ${pages.map(p => `
+            <button class="bd-page-btn h-8 px-3 rounded border ${p === state.buyerDistrictPage ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-200 hover:bg-gray-50'}" data-page="${p}">${p}</button>
+          `).join('')}
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+// ---- 基础资料：新增/编辑 Modal ----
+function renderBuyerDistrictFormModal() {
+  const isEdit = !!state.buyerDistrictEditId;
+  const data = state._bdEditing || {};
+  return `
+    <div class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center" id="bd-form-modal">
+      <div class="bg-white rounded-xl shadow-2xl w-[480px] max-h-[90vh] overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-200 flex items-center">
+          <h3 class="font-semibold text-gray-800">${isEdit ? '编辑' : '新增'}采购人-区县</h3>
+          <button class="ml-auto text-gray-400 hover:text-gray-600" id="bd-form-close">✕</button>
+        </div>
+        <div class="p-5 space-y-4">
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">采购人 <span class="text-red-500">*</span></label>
+            <input id="bd-f-buyer" type="text" value="${data.buyer || ''}" placeholder="例如：XX市政府采购中心"
+              class="w-full h-9 px-3 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" />
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">区县</label>
+            <input id="bd-f-district" type="text" value="${data.district || ''}" placeholder="例如：朝阳区 / 海淀区"
+              class="w-full h-9 px-3 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" />
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">备注</label>
+            <input id="bd-f-remark" type="text" value="${data.remark || ''}" placeholder="选填"
+              class="w-full h-9 px-3 border border-gray-200 rounded text-sm focus:outline-none focus:border-blue-400" />
+          </div>
+        </div>
+        <div class="px-5 py-3 border-t border-gray-200 flex justify-end gap-2">
+          <button id="bd-form-cancel" class="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">取消</button>
+          <button id="bd-form-save" class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">保存</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- 基础资料：Excel 导入 Modal ----
+function renderBuyerDistrictImportModal() {
+  return `
+    <div class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center" id="bd-import-modal">
+      <div class="bg-white rounded-xl shadow-2xl w-[560px] max-h-[90vh] overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-200 flex items-center">
+          <h3 class="font-semibold text-gray-800">📥 批量导入 Excel</h3>
+          <button class="ml-auto text-gray-400 hover:text-gray-600" id="bd-import-close">✕</button>
+        </div>
+        <div class="p-5 space-y-4">
+          <!-- 模板说明 -->
+          <div class="bg-gray-50 rounded-lg p-4 text-sm">
+            <div class="font-medium text-gray-700 mb-2">Excel 模板要求</div>
+            <div class="text-gray-500 text-xs leading-relaxed">
+              - 第一行为表头，必须包含「<b class="text-gray-700">采购人</b>」列<br/>
+              - 可选列：「区县」「备注」<br/>
+              - 采购人作为唯一键，重复时按下方选项处理<br/>
+              - 支持 .xlsx / .xls 格式
+            </div>
+          </div>
+
+          <!-- 上传区 -->
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">选择文件</label>
+            <input id="bd-import-file" type="file" accept=".xlsx,.xls"
+              class="w-full text-sm text-gray-600 file:mr-3 file:px-3 file:py-1.5 file:text-sm file:border-0 file:bg-blue-50 file:text-blue-600 file:rounded hover:file:bg-blue-100" />
+          </div>
+
+          <!-- 覆盖策略 -->
+          <div class="flex items-center gap-2 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="bd-import-mode" value="skip" checked />
+              <span>跳过已存在的采购人（推荐，安全）</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="bd-import-mode" value="overwrite" />
+              <span>覆盖已存在的采购人（以 Excel 为准）</span>
+            </label>
+          </div>
+
+          <!-- 结果展示区 -->
+          <div id="bd-import-result" class="hidden bg-green-50 border border-green-100 rounded-lg p-4 text-sm text-green-700">
+            <div id="bd-import-result-text"></div>
+          </div>
+          <div id="bd-import-error" class="hidden bg-red-50 border border-red-100 rounded-lg p-4 text-sm text-red-700"></div>
+        </div>
+        <div class="px-5 py-3 border-t border-gray-200 flex justify-end gap-2">
+          <button id="bd-import-cancel" class="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">关闭</button>
+          <button id="bd-import-submit" class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">开始导入</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- 切换到基础资料页时自动加载 ----
+function onEnterBuyerDistrictsPage() {
+  state.buyerDistrictPage = 1;
+  loadBuyerDistricts().then(() => { render(); });
+}
+
+
 function bindMemberRow(row) {
   const del = row.querySelector('.remove-member');
   if (del) del.onclick = () => { row.remove(); };
@@ -1907,6 +2100,7 @@ function bindEvents() {
       state.detailId = null;
       state.modal = null;
       render();
+      if (state.page === 'buyer-districts') onEnterBuyerDistrictsPage();
     };
   });
 
@@ -2655,6 +2849,136 @@ function bindEvents() {
   patchReminderCheckboxIndeterminate();
   // 修改弹窗内：初始成员行绑定删除按钮
   document.querySelectorAll('#edit-members .member-row').forEach(row => bindMemberRow(row));
+
+  // ============ 基础资料 · 采购人-区县 事件 ============
+  // 搜索
+  const bdSearch = document.getElementById('bd-search');
+  if (bdSearch) bdSearch.onkeydown = (e) => {
+    if (e.key === 'Enter') {
+      state.buyerDistrictKeyword = bdSearch.value.trim();
+      state.buyerDistrictPage = 1;
+      loadBuyerDistricts().then(() => { render(); });
+    }
+  };
+  // 新增按钮
+  document.querySelectorAll('#btn-bd-add').forEach(el => {
+    el.onclick = () => {
+      state.buyerDistrictEditId = null;
+      state._bdEditing = { buyer: '', district: '', remark: '' };
+      state.modal = 'bd-form';
+      render();
+    };
+  });
+  // 批量导入按钮
+  document.querySelectorAll('#btn-bd-import').forEach(el => {
+    el.onclick = () => { state.modal = 'bd-import'; render(); };
+  });
+  // 表格行：编辑
+  document.querySelectorAll('.bd-edit').forEach(btn => {
+    btn.onclick = () => {
+      const id = parseInt(btn.dataset.id, 10);
+      const row = state.buyerDistrictList.find(r => r.id === id);
+      if (!row) return;
+      state.buyerDistrictEditId = id;
+      state._bdEditing = { buyer: row.buyer, district: row.district, remark: row.remark };
+      state.modal = 'bd-form';
+      render();
+    };
+  });
+  // 表格行：删除
+  document.querySelectorAll('.bd-del').forEach(btn => {
+    btn.onclick = async () => {
+      const id = parseInt(btn.dataset.id, 10);
+      const name = btn.dataset.name;
+      if (!confirm(`确认删除采购人「${name}」？`)) return;
+      try {
+        await API.deleteBuyerDistrict(id);
+        await loadBuyerDistricts();
+        render();
+      } catch (e) { alert(e.message || '删除失败'); }
+    };
+  });
+  // 分页
+  document.querySelectorAll('.bd-page-btn').forEach(btn => {
+    btn.onclick = () => {
+      state.buyerDistrictPage = parseInt(btn.dataset.page, 10);
+      loadBuyerDistricts().then(() => { render(); });
+    };
+  });
+
+  // ---- 表单弹窗事件 ----
+  if (document.getElementById('bd-form-modal')) {
+    const close = () => { state.modal = null; state._bdEditing = null; state.buyerDistrictEditId = null; render(); };
+    document.querySelectorAll('#bd-form-close, #bd-form-cancel').forEach(el => el.onclick = close);
+    document.getElementById('bd-form-save').onclick = async () => {
+      const buyer = document.getElementById('bd-f-buyer').value.trim();
+      const district = document.getElementById('bd-f-district').value.trim();
+      const remark = document.getElementById('bd-f-remark').value.trim();
+      if (!buyer) { alert('采购人不能为空'); return; }
+      try {
+        if (state.buyerDistrictEditId) {
+          await API.updateBuyerDistrict(state.buyerDistrictEditId, { buyer, district, remark });
+        } else {
+          await API.createBuyerDistrict({ buyer, district, remark });
+        }
+        state.modal = null;
+        state._bdEditing = null;
+        state.buyerDistrictEditId = null;
+        await loadBuyerDistricts();
+        render();
+      } catch (e) { alert(e.message || '保存失败'); }
+    };
+  }
+
+  // ---- 导入弹窗事件 ----
+  if (document.getElementById('bd-import-modal')) {
+    document.querySelectorAll('#bd-import-close, #bd-import-cancel').forEach(el => {
+      el.onclick = () => { state.modal = null; render(); };
+    });
+    document.getElementById('bd-import-submit').onclick = async () => {
+      const fileInput = document.getElementById('bd-import-file');
+      const modeRadio = document.querySelector('input[name="bd-import-mode"]:checked');
+      const skipDup = !modeRadio || modeRadio.value === 'skip';
+
+      const errBox = document.getElementById('bd-import-error');
+      const resBox = document.getElementById('bd-import-result');
+      errBox.classList.add('hidden');
+      resBox.classList.add('hidden');
+
+      if (!fileInput.files || !fileInput.files[0]) {
+        errBox.textContent = '请先选择 Excel 文件';
+        errBox.classList.remove('hidden');
+        return;
+      }
+      const file = fileInput.files[0];
+      if (!/\.(xlsx|xls)$/i.test(file.name)) {
+        errBox.textContent = '只支持 .xlsx / .xls 格式';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const submitBtn = document.getElementById('bd-import-submit');
+      submitBtn.disabled = true; submitBtn.textContent = '导入中...';
+      try {
+        const res = await API.importBuyerDistrictExcel(file, skipDup);
+        const errList = res.errors || [];
+        let text = `✅ 导入完成：新增 ${res.created} 条，更新 ${res.updated} 条，跳过 ${res.skipped} 条`;
+        if (errList.length > 0) {
+          text += `\n⚠️ 异常 ${errList.length} 行：\n` + errList.slice(0, 10).map(e => `  第 ${e.line} 行：${e.reason}`).join('\n');
+          if (errList.length > 10) text += `\n  ...还有 ${errList.length - 10} 行`;
+        }
+        document.getElementById('bd-import-result-text').textContent = text;
+        resBox.classList.remove('hidden');
+        await loadBuyerDistricts();
+        // 刷新当前页展示
+      } catch (e) {
+        errBox.textContent = '❌ 导入失败：' + (e.message || '未知错误');
+        errBox.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false; submitBtn.textContent = '开始导入';
+      }
+    };
+  }
 }
 
 

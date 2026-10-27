@@ -70,6 +70,46 @@ def init_db() -> None:
             "ON group_members(group_id, user_id) WHERE user_id IS NOT NULL"
         )
 
+        # 2026-10-27 新增：buyer_district 表 buyer 字段加密 + buyer_hash 辅助列
+        _migrate_buyer_encryption(conn)
+
+
+def _migrate_buyer_encryption(conn: sqlite3.Connection) -> None:
+    """迁移：buyer_district.buyer 从明文→密文，新增 buyer_hash 列。幂等。"""
+    cols = {row[1] for row in conn.execute("PRAGMA table_info(buyer_district)").fetchall()}
+    if "buyer_district" not in {row[0] for row in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table'").fetchall()}:
+        return  # 表不存在，schema.sql 会直接建带加密字段的版本
+
+    # 1) 确保 buyer_hash 列存在
+    if "buyer_hash" not in cols:
+        conn.execute("ALTER TABLE buyer_district ADD COLUMN buyer_hash TEXT NOT NULL DEFAULT ''")
+
+    # 2) 把现有明文 buyer 转成密文 + 填 hash（如果还没加密过）
+    # 判断密文特征：base64 且长度 > 32（IV12+tag16+至少1字节密文=29+base64开销≈40+）
+    from .crypto import encrypt as _enc, sha256_hex as _sha
+
+    rows = conn.execute("SELECT id, buyer, buyer_hash FROM buyer_district").fetchall()
+    for r in rows:
+        buyer = r["buyer"] or ""
+        if not buyer:
+            continue
+        # 如果 buyer_hash 已经有值，且 buyer 看起来是密文（包含 base64 特征且长度够），跳过
+        if r["buyer_hash"] and len(buyer) >= 44 and all(c in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=" for c in buyer):
+            continue
+        # 明文 → 密文 + 填 hash
+        encrypted = _enc(buyer)
+        h = _sha(buyer)
+        conn.execute(
+            "UPDATE buyer_district SET buyer = ?, buyer_hash = ? WHERE id = ?",
+            (encrypted, h, r["id"]),
+        )
+
+    # 3) 建唯一索引（幂等）
+    conn.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS uq_buyer_district_hash ON buyer_district(buyer_hash)"
+    )
+
 
 def rows_to_dicts(rows: Iterable[sqlite3.Row]) -> List[Dict[str, Any]]:
     return [dict(r) for r in rows]

@@ -239,7 +239,26 @@ def _body_to_db_fields(body: AnnouncementFullBody) -> Dict[str, Any]:
     fields["matched_keywords"] = db.dumps(kw) if isinstance(kw, list) else db.dumps([])
     fields["business_tags"] = db.dumps(tags) if isinstance(tags, list) else db.dumps([])
     fields["contacts_json"] = db.dumps(contacts) if isinstance(contacts, dict) else db.dumps({})
+    # 根据采购人自动匹配区县（仅当用户未显式填 district 时）
+    _auto_match_district(fields)
     return fields
+
+
+def _auto_match_district(fields: Dict[str, Any]) -> None:
+    """如果 district 为空，拿 buyer 查 buyer_district 表自动补（用 SHA-256 哈希匹配密文表）。"""
+    if fields.get("district"):  # 用户已填，尊重
+        return
+    buyer = (fields.get("buyer") or "").strip()
+    if not buyer:
+        return
+    from .. import crypto
+    h = crypto.sha256_hex(buyer)
+    row = db.query_one(
+        "SELECT district FROM buyer_district WHERE buyer_hash = ? LIMIT 1",
+        (h,),
+    )
+    if row and row.get("district"):
+        fields["district"] = row["district"]
 
 
 # ---------- 路由 ----------
