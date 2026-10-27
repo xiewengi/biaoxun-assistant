@@ -247,12 +247,12 @@ def guess_business_tags(text):
 
 def guess_district(text):
     hits = [d for d in ["湘桥", "潮安", "饶平", "枫溪"] if d in text]
-    if len(hits) >= 2:
-        return "市区"  # 多区县（如多电厂联合采购）统一归市区，避免随机落一个区
+    if len(hits) >= 2 or "湘桥" in hits:
+        return "市区"  # 湘桥归市区；多区县（如多电厂联合采购）统一归市区
     if hits:
         return hits[0]
     if "潮州市" in text or "潮州" in text:
-        return "市区"  # 市本级/未标区县的归市区（对齐昨天口径）
+        return "市区"  # 市本级/未标区县的归市区
     return ""
 
 
@@ -828,14 +828,14 @@ def _gd_ann_type(code, tmap):
 
 
 def _gd_district(code, name):
-    """区划码→demo 区县（对齐昨天口径：湘桥/潮安/饶平/枫溪/市区）。"""
-    m = {"445101": "市区", "445102": "湘桥", "445103": "潮安", "445122": "饶平"}
+    """区划码→区县。"""
+    m = {"445101": "市区", "445102": "市区", "445103": "潮安", "445122": "饶平"}
     if code in m:
         return m[code]
-    for d in ["湘桥", "潮安", "饶平", "枫溪"]:
+    for d in ["潮安", "饶平", "枫溪"]:
         if d in name:
             return d
-    if "市本级" in name:
+    if "湘桥" in name or "市本级" in name:
         return "市区"
     return ""
 

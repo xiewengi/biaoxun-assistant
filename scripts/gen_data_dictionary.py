@@ -131,7 +131,7 @@ TABLE_COLUMN_META: Dict[str, Dict[str, str]] = {
         "agency": "采购代理机构",
         "budget": "预算金额（保留原始字符串，含千分位/元）",
         "fund_source": "资金来源",
-        "district": "所属区县：潮安 / 市区 / 湘桥 / 饶平 等",
+        "district": "所属区县：潮安 / 市区 / 饶平 三选一",
         "ann_type": "公告类型，如 采购公告 / 采购意向公告 / 招标公告",
         "pub_date": "发布日期（YYYY-MM-DD）",
         "deadline": "报名截止日期",

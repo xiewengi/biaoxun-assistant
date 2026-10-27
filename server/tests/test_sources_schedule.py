@@ -315,7 +315,7 @@ def test_collect_success_inserts_incrementally(
         "agency": "测试代理",
         "budget": "100,000.00元",
         "fundSource": "财政",
-        "district": "湘桥",
+        "district": "市区",
         "annType": "招标公告",
         "pubDate": "2026-10-25",
         "deadline": "2026-11-01",

@@ -259,8 +259,8 @@ def test_list_groups_seeded_order(client, admin_headers):
 
 def test_create_group_default_password_login(client, admin_headers):
     body = {
-        "name": "湘桥",
-        "region": "湘桥",
+        "name": "测试组",
+        "region": "测试组",
         "admin": "张负责人",
         "adminContact": "13900001111",
         "adminAccount": "xiangqiao_admin",
@@ -279,8 +279,8 @@ def test_create_group_default_password_login(client, admin_headers):
     assert r.status_code == 200, r.text
     group = r.json()
     assert group["id"] == 6
-    assert group["name"] == "湘桥"
-    assert group["region"] == "湘桥"
+    assert group["name"] == "测试组"
+    assert group["region"] == "测试组"
     assert group["admin"] == "张负责人"
     assert group["adminAccount"] == "xiangqiao_admin"
     assert group["createdAt"] == date.today().isoformat()
@@ -293,14 +293,14 @@ def test_create_group_default_password_login(client, admin_headers):
     r = _login(client, "xiangqiao_admin")
     assert r.status_code == 200, r.text
     user = r.json()["user"]
-    assert user["group"] == "湘桥"
+    assert user["group"] == "测试组"
     assert user["groupId"] == 6
     assert user["name"] == "张负责人"
 
     # 列表按 id 升序，新小组排最后
     items = client.get("/api/groups", headers=admin_headers).json()["items"]
     assert [g["id"] for g in items] == [1, 2, 3, 4, 5, 6]
-    assert items[-1]["name"] == "湘桥"
+    assert items[-1]["name"] == "测试组"
 
 
 def test_create_group_conflicts(client, admin_headers):

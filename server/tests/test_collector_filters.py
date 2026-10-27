@@ -41,7 +41,7 @@ def test_chaozhou_notice_is_kept():
     )
     assert rec is not None
     assert rec["region"] == "潮州"
-    assert rec["district"] == "湘桥"
+    assert rec["district"] == "市区"
     assert rec["id"].startswith("ANN20261022")
 
 
