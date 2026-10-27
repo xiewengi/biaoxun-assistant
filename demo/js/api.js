@@ -257,6 +257,34 @@
     return data;
   }
 
+  // 公告批量导入：上传 Excel
+  async function importAnnouncementsExcel(file, skipDuplicates) {
+    var fd = new FormData();
+    fd.append('file', file);
+    fd.append('skip_duplicates', skipDuplicates !== false ? 'true' : 'false');
+    var token = getToken();
+    var headers = {};
+    if (token) headers.Authorization = 'Bearer ' + token;
+    var res = await fetch(buildUrl('/announcements/import-excel'), {
+      method: 'POST',
+      headers: headers,
+      body: fd,
+    });
+    var data = null;
+    try { data = await res.json(); } catch (e) { data = null; }
+    if (!res.ok) {
+      var detail = (data && data.detail) || ('请求失败（' + res.status + '）');
+      if (res.status === 401) notifyUnauthorized(detail);
+      throw new Error(detail);
+    }
+    return data;
+  }
+
+  // 下载公告导入模板（blob）
+  function getAnnouncementImportTemplateUrl() {
+    return buildUrl('/announcements/import-template.xlsx');
+  }
+
   global.API = {
     TOKEN_KEY: TOKEN_KEY,
     getToken: getToken,
@@ -312,5 +340,8 @@
     updateBuyerDistrict: updateBuyerDistrict,
     deleteBuyerDistrict: deleteBuyerDistrict,
     importBuyerDistrictExcel: importBuyerDistrictExcel,
+
+    importAnnouncementsExcel: importAnnouncementsExcel,
+    getAnnouncementImportTemplateUrl: getAnnouncementImportTemplateUrl,
   };
 })(window);

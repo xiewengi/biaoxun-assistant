@@ -15,7 +15,7 @@ let state = {
   selectedReminderIds: new Set(),
   filters: { keyword: '', region: '', district: '', progress: '', bidStatus: '', businessTag: '' },
   detailId: null,
-  modal: null, // 'assign' | 'batch-assign' | 'reminder-batch-assign' | 'progress' | 'add-group' | 'edit-group' | 'kw-delete' | 'ann-form' | null
+  modal: null, // 'assign' | 'batch-assign' | 'reminder-batch-assign' | 'progress' | 'add-group' | 'edit-group' | 'kw-delete' | 'ann-form' | 'ann-import' | null
   formAnnId: null,  // ann-form 模式下：null=新增，非 null=编辑
   assignAnnId: null,
   progressAnnId: null,
@@ -313,6 +313,7 @@ function render() {
     ${state.modal === 'progress' ? renderProgressModal() : ''}
     ${state.modal === 'edit-group' ? renderEditGroupModal() : ''}
     ${state.modal === 'ann-form' ? renderAnnFormModal() : ''}
+    ${state.modal === 'ann-import' ? renderAnnouncementImportModal() : ''}
     ${state.modal === 'bd-form' ? renderBuyerDistrictFormModal() : ''}
     ${state.modal === 'bd-import' ? renderBuyerDistrictImportModal() : ''}
   `;
@@ -450,7 +451,7 @@ function renderSidebar() {
         <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">标</div>
         <div>
           <div class="font-semibold text-gray-900">标讯助手</div>
-          <div class="text-xs text-gray-400">v1.0</div>
+          <div class="text-xs text-gray-400">v1.2</div>
         </div>
       </div>
       <nav class="flex-1 py-3 px-2 space-y-1">
@@ -595,9 +596,10 @@ function renderAnnouncementList() {
           <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-gray-50" id="batchClearBtn">清空选择</button>
         </div>
 
-        <!-- 集团客户部专属：新增/修改/删除（不跟选中态耦合，独立按钮） -->
+        <!-- 集团客户部专属：新增/修改/删除/导入（不跟选中态耦合，独立按钮） -->
         ${state.currentUser && state.currentUser.group === '集团客户部'
         ? `<div class="flex items-center gap-1.5 ml-auto" id="annCrudBar">
+             <button class="px-3 py-1 text-xs border border-green-500 text-green-600 rounded hover:bg-green-50" id="annImportBtn">📥 批量导入</button>
              <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="annAddBtn">+ 新增公告</button>
              <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-blue-50" id="annEditBtn">修改</button>
              <button class="px-3 py-1 text-xs border border-gray-200 text-red-500 rounded hover:bg-red-50 hover:border-red-200" id="annDeleteBtn">删除</button>
@@ -2080,7 +2082,74 @@ function renderBuyerDistrictImportModal() {
   `;
 }
 
-// ---- 切换到基础资料页时自动加载 ----
+// ---- 招标公告：Excel 批量导入 Modal ----
+function renderAnnouncementImportModal() {
+  const templateUrl = API.getAnnouncementImportTemplateUrl();
+  const token = API.getToken();
+  const fullUrl = token
+    ? templateUrl + (templateUrl.indexOf('?') >= 0 ? '&' : '?') + 'token=' + encodeURIComponent(token)
+    : templateUrl;
+  return `
+    <div class="fixed inset-0 z-50 bg-black/40 flex items-center justify-center" id="ann-import-modal">
+      <div class="bg-white rounded-xl shadow-2xl w-[600px] max-h-[90vh] overflow-hidden">
+        <div class="px-5 py-4 border-b border-gray-200 flex items-center">
+          <h3 class="font-semibold text-gray-800">📥 批量导入招标公告</h3>
+          <button class="ml-auto text-gray-400 hover:text-gray-600" id="ann-import-close">✕</button>
+        </div>
+        <div class="p-5 space-y-4">
+          <!-- 模板下载 + 说明 -->
+          <div class="bg-gray-50 rounded-lg p-4 text-sm">
+            <div class="flex items-center justify-between mb-2">
+              <div class="font-medium text-gray-700">第一步：下载官方导入模板</div>
+              <a href="${fullUrl}"
+                 class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 inline-flex items-center gap-1"
+                 title="下载公告导入模板">
+                ⬇ 下载模板
+              </a>
+            </div>
+            <div class="text-gray-500 text-xs leading-relaxed space-y-1">
+              <div>• <b class="text-red-500">请勿自行编造表头</b>，必须使用上面下载的模板，否则系统会拒绝导入</div>
+              <div>• 必填列：<b>项目名称</b>、<b>公告标题</b>（两列可互代，但不能同时为空）</div>
+              <div>• 日期列统一写成 YYYY-MM-DD（如 2026-10-27）；Excel date 格式也会被自动识别</div>
+              <div>• 二值字段（是否有效商机 / 是否运营商参与 / 是否应标）：填 是 / 否</div>
+              <div>• 查重键：项目编号 + 公告链接，或 公告标题 + 采购人 + 发布日期</div>
+              <div>• 支持 .xlsx / .xls，单次建议 500 行以内（浏览器稳定性）</div>
+            </div>
+          </div>
+
+          <!-- 上传区 -->
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">第二步：填好数据后选择文件上传</label>
+            <input id="ann-import-file" type="file" accept=".xlsx,.xls"
+              class="w-full text-sm text-gray-600 file:mr-3 file:px-3 file:py-1.5 file:text-sm file:border-0 file:bg-green-50 file:text-green-600 file:rounded hover:file:bg-green-100" />
+          </div>
+
+          <!-- 覆盖策略 -->
+          <div class="flex items-center gap-2 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="ann-import-mode" value="skip" checked />
+              <span>跳过已存在的公告（推荐，安全）</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="ann-import-mode" value="overwrite" />
+              <span>覆盖已存在的公告（以 Excel 为准）</span>
+            </label>
+          </div>
+
+          <!-- 结果展示区 -->
+          <div id="ann-import-result" class="hidden bg-green-50 border border-green-100 rounded-lg p-4 text-sm text-green-700">
+            <div id="ann-import-result-text"></div>
+          </div>
+          <div id="ann-import-error" class="hidden bg-red-50 border border-red-100 rounded-lg p-4 text-sm text-red-700"></div>
+        </div>
+        <div class="px-5 py-3 border-t border-gray-200 flex justify-end gap-2">
+          <button id="ann-import-cancel" class="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50">关闭</button>
+          <button id="ann-import-submit" class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700">开始导入</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
 function onEnterBuyerDistrictsPage() {
   state.buyerDistrictPage = 1;
   loadBuyerDistricts().then(() => { render(); });
@@ -2109,6 +2178,11 @@ function bindEvents() {
   // 返回列表
   document.querySelectorAll('[data-back]').forEach(el => {
     el.onclick = () => { state.detailId = null; render(); };
+  });
+
+  // ---- 集团客户部 · 批量导入 ----
+  document.querySelectorAll('#annImportBtn').forEach(el => {
+    el.onclick = () => { state.modal = 'ann-import'; render(); };
   });
 
   // ---- 集团客户部 · 新增 / 修改 / 删除 ----
@@ -2981,6 +3055,58 @@ function bindEvents() {
         resBox.classList.remove('hidden');
         await loadBuyerDistricts();
         // 刷新当前页展示
+      } catch (e) {
+        errBox.textContent = '❌ 导入失败：' + (e.message || '未知错误');
+        errBox.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false; submitBtn.textContent = '开始导入';
+      }
+    };
+  }
+
+  // ---- 招标公告导入弹窗事件 ----
+  if (document.getElementById('ann-import-modal')) {
+    document.querySelectorAll('#ann-import-close, #ann-import-cancel').forEach(el => {
+      el.onclick = () => { state.modal = null; render(); };
+    });
+    document.getElementById('ann-import-submit').onclick = async () => {
+      const fileInput = document.getElementById('ann-import-file');
+      const modeRadio = document.querySelector('input[name="ann-import-mode"]:checked');
+      const skipDup = !modeRadio || modeRadio.value === 'skip';
+
+      const errBox = document.getElementById('ann-import-error');
+      const resBox = document.getElementById('ann-import-result');
+      errBox.classList.add('hidden');
+      resBox.classList.add('hidden');
+
+      if (!fileInput.files || !fileInput.files[0]) {
+        errBox.textContent = '请先选择 Excel 文件';
+        errBox.classList.remove('hidden');
+        return;
+      }
+      const file = fileInput.files[0];
+      if (!/\.(xlsx|xls)$/i.test(file.name)) {
+        errBox.textContent = '只支持 .xlsx / .xls 格式';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const submitBtn = document.getElementById('ann-import-submit');
+      submitBtn.disabled = true; submitBtn.textContent = '导入中...';
+      try {
+        const res = await API.importAnnouncementsExcel(file, skipDup);
+        const errList = res.errors || [];
+        let text = `✅ 导入完成：新增 ${res.created} 条，更新 ${res.updated} 条，跳过 ${res.skipped} 条`;
+        if (errList.length > 0) {
+          text += `\n⚠️ 异常 ${errList.length} 行：\n` + errList.slice(0, 10).map(e => `  第 ${e.line} 行：${e.reason}`).join('\n');
+          if ((res.total_errors || errList.length) > 10) text += `\n  ...还有 ${(res.total_errors || errList.length) - 10} 行`;
+        }
+        document.getElementById('ann-import-result-text').textContent = text;
+        resBox.classList.remove('hidden');
+        // 刷新公告列表 state（复用现成的刷新函数，保留当前筛选/页码）
+        // 不主动 render()，否则 Modal 里的结果框会被清掉；
+        // 关闭 Modal 时会触发 render()，列表自然刷新
+        await refreshAfterMutation();
       } catch (e) {
         errBox.textContent = '❌ 导入失败：' + (e.message || '未知错误');
         errBox.classList.remove('hidden');

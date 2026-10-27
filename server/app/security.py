@@ -7,7 +7,7 @@ import secrets
 from datetime import datetime, timedelta
 from typing import Any, Dict, Optional
 
-from fastapi import Depends, Header, HTTPException, status
+from fastapi import Depends, Header, HTTPException, Query, status
 
 from . import config, db
 
@@ -74,8 +74,10 @@ def user_payload(row: Dict[str, Any]) -> Dict[str, Any]:
 
 def get_current_user(
     authorization: Optional[str] = Header(default=None),
+    token_param: Optional[str] = Query(default=None, alias="token"),
 ) -> Dict[str, Any]:
-    token = _parse_bearer(authorization)
+    # 优先从 Header Bearer 取，没有就 fallback 到 query param token（浏览器直接下载文件时用）
+    token = _parse_bearer(authorization) or (token_param.strip() if token_param else "")
     if not token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
