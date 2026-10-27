@@ -517,7 +517,7 @@ function getStats() {
   return {
     todayCount: state.announcements.filter(a => a.pubDate === today).length,
     unassignedCount: state.announcements.filter(a => a.progress === '待分配' || !a.currentHandler).length,
-    inProgressCount: state.announcements.filter(a => a.progress === '已分配').length,
+    inProgressCount: state.announcements.filter(a => a.progress === '已分配' || a.progress === '已确认').length,
   };
 }
 
