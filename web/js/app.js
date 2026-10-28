@@ -507,7 +507,7 @@ function renderSidebar() {
         <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0">标</div>
         <div class="min-w-0">
           <div class="font-semibold text-gray-900 truncate">标讯助手</div>
-          <div class="text-xs text-gray-400">v1.3</div>
+          <div class="text-xs text-gray-400">v1.4</div>
         </div>
       </div>
 
