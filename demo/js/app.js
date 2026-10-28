@@ -2352,12 +2352,19 @@ function renderUsers() {
   const jitubu = hasPerm('users:update');
   return `
     <div class="space-y-4">
-      <div class="grid grid-cols-5 gap-4">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">总账号数</div><div class="text-2xl font-bold text-gray-900">${stats.total}</div></div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">集团管理员</div><div class="text-2xl font-bold text-purple-600">${stats.jitubu_admin}</div></div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">小组管理员</div><div class="text-2xl font-bold text-blue-600">${stats.group_admin}</div></div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">业务员</div><div class="text-2xl font-bold text-green-600">${stats.member}</div></div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">未分组</div><div class="text-2xl font-bold text-orange-500">${stats.nogroup}</div></div>
+      <div class="flex gap-3">
+        ${[
+          ['总账号', stats.total, 'text-gray-900'],
+          ['集团管理员', stats.jitubu_admin, 'text-purple-600'],
+          ['小组管理员', stats.group_admin, 'text-blue-600'],
+          ['业务员', stats.member, 'text-green-600'],
+          ['未分组', stats.nogroup, 'text-orange-500'],
+        ].map(([label, val, color]) => `
+          <div class="flex-1 bg-white rounded-lg border border-gray-100 px-4 py-2.5 flex items-center justify-between">
+            <span class="text-xs text-gray-500">${label}</span>
+            <span class="text-lg font-bold ${color}">${val}</span>
+          </div>
+        `).join('')}
       </div>
       <div class="flex items-center justify-between">
         <div class="text-xs text-gray-400">统一由集团客户部维护账号；负责人在团队管理里可自由加减成员（从用户表选）</div>
