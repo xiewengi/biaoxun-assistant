@@ -38,6 +38,14 @@ let state = {
   _bdEditing: null,             // { buyer, district, remark }
 };
 
+// ============ RBAC 权限检查 ============
+function hasPerm(code) {
+  const u = state.currentUser;
+  if (!u) return false;
+  if (u.role === 'super_admin') return true;
+  return (u.permissions || []).includes(code);
+}
+
 // ============ 初始化 / 登录态 ============
 // 商机字段：本地即时更新 + 防抖 PATCH 持久化
 const oppPatchTimers = new Map();
@@ -443,8 +451,6 @@ async function doLogout() {
 }
 
 function renderSidebar() {
-  const isJitubu = state.currentUser && state.currentUser.group === '集团客户部';
-
   // --- 状态数据 ---
   const reminderCnt = getFilteredReminders().length;
   const stats = getStats();
@@ -461,12 +467,12 @@ function renderSidebar() {
 
   // --- 管理与配置 ---
   const adminItems = [
-    { key: 'team', label: '团队管理', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', badge: null },
-    { key: 'users', label: '用户管理', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', badge: null },
-    { key: 'schedule', label: '定时任务', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', badge: null },
-    { key: 'buyer-districts', label: '区县映射', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', badge: null, requireJitubu: true },
-    { key: 'sources', label: '数据来源', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z', badge: { text: okSources + '/' + totalSources, cls: okSources === totalSources ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600' } },
-  ].filter(i => !i.requireJitubu || isJitubu);
+    { key: 'team', label: '团队管理', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z', badge: null, requirePerm: 'groups:read' },
+    { key: 'users', label: '用户管理', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z', badge: null, requirePerm: 'users:read' },
+    { key: 'schedule', label: '定时任务', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', badge: null, requirePerm: 'schedule:read' },
+    { key: 'buyer-districts', label: '区县映射', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', badge: null, requirePerm: 'buyer-districts:read' },
+    { key: 'sources', label: '数据来源', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z', badge: { text: okSources + '/' + totalSources, cls: okSources === totalSources ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600' }, requirePerm: 'sources:read' },
+  ].filter(i => !i.requirePerm || hasPerm(i.requirePerm));
 
   const iconBox = (icon) => `
     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
@@ -641,19 +647,18 @@ function renderAnnouncementList() {
         <!-- 批量操作：默认隐藏，选中时 inline 出现在最右侧 -->
         <div id="batchBar" style="display:none" class="flex items-center gap-1.5 ml-auto">
           <span id="batchCount" class="text-xs text-blue-600 font-medium whitespace-nowrap">已选 0 条</span>
-          ${state.currentUser && state.currentUser.group === '集团客户部'
+          ${hasPerm('announcements:assign')
           ? `<button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="batchAssignBtn">批量分配</button>`
-          : `<button class="px-3 py-1 text-xs bg-gray-300 text-white rounded cursor-not-allowed" id="batchAssignBtn" disabled title="仅集团客户部可批量分配">批量分配</button>`}
+          : `<button class="px-3 py-1 text-xs bg-gray-300 text-white rounded cursor-not-allowed" id="batchAssignBtn" disabled title="无分配权限">批量分配</button>`}
           <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-gray-50" id="batchClearBtn">清空选择</button>
         </div>
 
-        <!-- 集团客户部专属：新增/修改/删除/导入（不跟选中态耦合，独立按钮） -->
-        ${state.currentUser && state.currentUser.group === '集团客户部'
+        ${hasPerm('announcements:import') || hasPerm('announcements:create') || hasPerm('announcements:update') || hasPerm('announcements:delete')
         ? `<div class="flex items-center gap-1.5 ml-auto" id="annCrudBar">
-             <button class="px-3 py-1 text-xs border border-green-500 text-green-600 rounded hover:bg-green-50" id="annImportBtn">📥 批量导入</button>
-             <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="annAddBtn">+ 新增公告</button>
-             <button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-blue-50" id="annEditBtn">修改</button>
-             <button class="px-3 py-1 text-xs border border-gray-200 text-red-500 rounded hover:bg-red-50 hover:border-red-200" id="annDeleteBtn">删除</button>
+             ${hasPerm('announcements:import') ? `<button class="px-3 py-1 text-xs border border-green-500 text-green-600 rounded hover:bg-green-50" id="annImportBtn">📥 批量导入</button>` : ''}
+             ${hasPerm('announcements:create') ? `<button class="px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700" id="annAddBtn">+ 新增公告</button>` : ''}
+             ${hasPerm('announcements:update') ? `<button class="px-3 py-1 text-xs border border-gray-200 text-gray-600 rounded hover:bg-blue-50" id="annEditBtn">修改</button>` : ''}
+             ${hasPerm('announcements:delete') ? `<button class="px-3 py-1 text-xs border border-gray-200 text-red-500 rounded hover:bg-red-50 hover:border-red-200" id="annDeleteBtn">删除</button>` : ''}
            </div>`
         : ''}
       </div>
@@ -714,9 +719,9 @@ function renderAnnouncementList() {
                   <td class="px-3 py-3 whitespace-nowrap" style="width:80px">${renderBidStatusTag(a)}</td>
                   <td class="px-4 py-3 text-center whitespace-nowrap sticky right-0 ann-row-last" style="background:#fff;width:120px">
                     ${a.progress === '待分配' || !a.currentHandler ? 
-                      (state.currentUser && state.currentUser.group === '集团客户部'
+                      (hasPerm('announcements:assign')
                         ? `<button class="text-blue-600 hover:underline text-xs mr-2" data-assign="${a.id}">分配</button>`
-                        : `<button class="text-gray-300 text-xs cursor-not-allowed mr-2" disabled title="仅集团客户部可分配">分配</button>`)
+                        : `<button class="text-gray-300 text-xs cursor-not-allowed mr-2" disabled title="无分配权限">分配</button>`)
                       : ''}
                     <button class="text-blue-600 hover:underline text-xs" data-detail="${a.id}">详情</button>
                   </td>
@@ -857,14 +862,14 @@ function renderAnnouncementDetail() {
             </div>
             <div class="flex gap-2">
               <!-- 编辑公告暂时隐藏，后续开放 -->
-              ${false && state.currentUser && state.currentUser.group === '集团客户部'
+              ${false && hasPerm('announcements:update')
                 ? `<button class="px-4 py-2 border border-gray-200 text-gray-700 rounded-lg text-sm hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50" data-edit-ann="${a.id}">✎ 编辑公告</button>`
                 : ''}
               ${isConfirmed
                 ? `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="商机已确认, 不可分配">任务分配</button>`
-                : (state.currentUser && state.currentUser.group === '集团客户部'
+                : (hasPerm('announcements:assign')
                   ? `<button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-assign="${a.id}">任务分配</button>`
-                  : `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="仅集团客户部可分配">任务分配</button>`)}
+                  : `<button class="px-4 py-2 bg-gray-300 text-white rounded-lg text-sm cursor-not-allowed" disabled title="无分配权限">任务分配</button>`)}
               ${a.progress === '已确认'
                 ? `<button class="px-4 py-2 bg-green-500 text-white rounded-lg text-sm opacity-70 cursor-not-allowed" disabled>✓ 信息已确认</button>`
                 : `<button id="btn-confirm-opp" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">✅ 信息已确认</button>`}
@@ -1065,13 +1070,13 @@ function renderReminders() {
               ${selectedCount === 0 ? 'disabled' : ''}>
         清除选择
       </button>
-      ${state.currentUser && state.currentUser.group === '集团客户部'
+      ${hasPerm('reminders:assign')
               ? `<button id="reminder-batch-assign"
                   class="px-4 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
                   ${selectedCount === 0 ? 'disabled' : ''}>
                   📋 批量分配（${selectedCount}）
                 </button>`
-              : `<button id="reminder-batch-assign" disabled title="仅集团客户部可批量分配"
+              : `<button id="reminder-batch-assign" disabled title="无分配权限"
                   class="px-4 py-1.5 text-xs bg-gray-300 text-white rounded-lg cursor-not-allowed">
                   📋 批量分配（${selectedCount}）
                 </button>`}
@@ -1128,9 +1133,9 @@ function renderReminders() {
                   <td class="px-4 py-3 text-center whitespace-nowrap sticky right-0 ann-row-last" style="background:#fff;width:150px">
                     <button class="text-blue-600 hover:underline text-xs mr-2" data-detail="${r.targetId}">查看公告</button>
                     ${r.type === 'admin-assign' || r.annProgress === '待分配' ?
-                      (state.currentUser && state.currentUser.group === '集团客户部'
+                      (hasPerm('reminders:assign')
                         ? `<button class="text-blue-600 hover:underline text-xs" data-assign="${r.targetId}">分配</button>`
-                        : `<button class="text-gray-300 text-xs cursor-not-allowed" disabled title="仅集团客户部可分配">分配</button>`)
+                        : `<button class="text-gray-300 text-xs cursor-not-allowed" disabled title="无分配权限">分配</button>`)
                       : ''}
                   </td>
                 </tr>
@@ -2331,7 +2336,7 @@ function renderUsers() {
     member: state.users.filter(u => u.role === 'member').length,
     nogroup: state.users.filter(u => !u.groupId).length,
   };
-  const jitubu = state.currentUser && state.currentUser.group === '集团客户部';
+  const jitubu = hasPerm('users:update');
   return `
     <div class="space-y-4">
       <div class="grid grid-cols-4 gap-4">

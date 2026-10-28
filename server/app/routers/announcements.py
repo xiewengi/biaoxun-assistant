@@ -331,7 +331,7 @@ def create_announcement(
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
     """新增公告（集团客户部）。"""
-    security.require_jitubu(user, "新增公告")
+    security.require_permission(user, "announcements:create", "新增公告")
     _validate_form_body(body)
     fields = _body_to_db_fields(body)
     fields["id"] = _gen_ann_id()
@@ -353,7 +353,7 @@ def assign_announcement(
     body: AssignBody,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_group_admin(user)
+    security.require_any_permission(user, "announcements:assign", "announcements:update")
     group_name = (body.group or "").strip()
 
     with db.get_conn() as conn:
@@ -374,7 +374,7 @@ def batch_assign_announcements(
     body: BatchAssignBody,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_group_admin(user)
+    security.require_any_permission(user, "announcements:assign", "announcements:update")
     group_name = (body.group or "").strip()
 
     with db.get_conn() as conn:
@@ -680,7 +680,7 @@ def download_import_template(
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> StreamingResponse:
     """下载招标公告批量导入模板（.xlsx，含表头+示例行）。浏览器通过 query param token 也能鉴权。"""
-    security.require_jitubu(user, "下载公告导入模板")
+    security.require_permission(user, "announcements:import", "下载导入模板")
     content = _build_template_bytes()
     filename = f"announcement_import_template_{date.today().isoformat()}.xlsx"
     return StreamingResponse(
@@ -707,7 +707,7 @@ async def import_announcements_excel(
     - 必填：项目名称、公告标题；progress 非法值会被静默降级为「待分配」
     - 采购人-区县能自动匹配（复用 buyer_district）
     """
-    security.require_jitubu(user, "批量导入招标公告")
+    security.require_permission(user, "announcements:import", "批量导入")
 
     filename = (file.filename or "").lower()
     if not filename.endswith((".xlsx", ".xls")):
@@ -850,7 +850,7 @@ def update_announcement_full(
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
     """全字段修改（集团客户部），覆盖商机管理的 PATCH 之外的场景。"""
-    security.require_jitubu(user, "修改公告")
+    security.require_permission(user, "announcements:update", "修改公告")
     _get_ann_row(ann_id)  # 存在性检查
     _validate_form_body(body)
     fields = _body_to_db_fields(body)
@@ -881,7 +881,7 @@ def delete_announcement(
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
     """逻辑删除（集团客户部）。已确认的公告允许删除（业务上确实需要"无法恢复"，但数据保留）。"""
-    security.require_jitubu(user, "删除公告")
+    security.require_permission(user, "announcements:delete", "删除公告")
     row = db.query_one("SELECT is_deleted, project_name, title FROM announcements WHERE id = ?", (ann_id,))
     if not row:
         raise HTTPException(status_code=404, detail="公告不存在")

@@ -30,7 +30,8 @@ def login(body: LoginBody) -> Dict[str, Any]:
         raise HTTPException(status_code=401, detail="账号或密码错误")
     token = security.create_session(row["id"])
     security.audit(row, "登录", row["account"])
-    return {"token": token, "user": security.user_payload(row)}
+    user_out = security.enrich_user_with_permissions(security.user_payload(row))
+    return {"token": token, "user": user_out}
 
 
 @router.post("/logout")

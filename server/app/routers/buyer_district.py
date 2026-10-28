@@ -63,7 +63,7 @@ def list_buyer_districts(
     page_size: int = 50,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "访问区县映射")
+    security.require_permission(user, "buyers:read", "访问区县映射")
     conditions: List[str] = ["1=1"]
     params: List[Any] = []
     if keyword:
@@ -107,7 +107,7 @@ def create_buyer_district(
     body: BuyerDistrictBody,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "访问区县映射")
+    security.require_permission(user, "buyers:manage", "管理区县映射")
     buyer = (body.buyer or "").strip()
     if not buyer:
         raise HTTPException(status_code=400, detail="采购人不能为空")
@@ -132,7 +132,7 @@ def update_buyer_district(
     body: BuyerDistrictUpdate,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "访问区县映射")
+    security.require_permission(user, "buyers:manage", "管理区县映射")
     row = db.query_one("SELECT * FROM buyer_district WHERE id = ?", (item_id,))
     if not row:
         raise HTTPException(status_code=404, detail="记录不存在")
@@ -176,7 +176,7 @@ def delete_buyer_district(
     item_id: int,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "访问区县映射")
+    security.require_permission(user, "buyers:manage", "管理区县映射")
     row = db.query_one("SELECT buyer FROM buyer_district WHERE id = ?", (item_id,))
     if not row:
         raise HTTPException(status_code=404, detail="记录不存在")
@@ -199,7 +199,7 @@ async def import_excel(
     - skip_duplicates=true（默认）：已存在的采购人跳过
     - skip_duplicates=false：已存在的采购人覆盖更新（以 Excel 为准）
     """
-    security.require_jitubu(user, "导入采购人基础资料")
+    security.require_permission(user, "buyers:manage", "导入采购人基础资料")
 
     filename = (file.filename or "").lower()
     if not filename.endswith((".xlsx", ".xls")):
@@ -309,7 +309,7 @@ def match_by_buyer(
     buyer: str,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "访问区县映射")
+    security.require_permission(user, "buyers:read", "访问区县映射")
     """工具接口：给一个明文采购人，返回匹配到的区县（供公告自动补全用）。"""
     row = _lookup_buyer((buyer or "").strip())
     if not row:

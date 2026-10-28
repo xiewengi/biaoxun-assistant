@@ -193,6 +193,7 @@ def create_group(
     body: GroupBody,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
+    security.require_permission(user, "groups:create", "新建小组")
     name = (body.name or "").strip()
     region = (body.region or "").strip()
     admin = (body.admin or "").strip()
@@ -245,6 +246,7 @@ def update_group(
     body: GroupBody,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
+    security.require_any_permission(user, "groups:update", "groups:create")
     row = db.query_one("SELECT * FROM groups WHERE id = ?", (group_id,))
     if not row:
         raise HTTPException(status_code=404, detail="小组不存在")
@@ -331,6 +333,7 @@ def delete_group(
     group_id: int,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
+    security.require_permission(user, "groups:delete", "删除小组")
     row = db.query_one("SELECT * FROM groups WHERE id = ?", (group_id,))
     if not row:
         raise HTTPException(status_code=404, detail="小组不存在")

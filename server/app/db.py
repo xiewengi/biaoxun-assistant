@@ -49,15 +49,24 @@ def _ensure_column(conn: sqlite3.Connection, table: str, column: str, ddl: str) 
 
 
 def init_db() -> None:
-    """建表（幂等）+ 增量列迁移（软删除等后加字段）。"""
+    """建表（幂等）+ 增量列迁移（软删除等后加字段）+ RBAC seed。"""
     with get_conn() as conn:
         conn.executescript(SCHEMA_PATH.read_text(encoding="utf-8"))
+
+        # --- RBAC 初始化（幂等） ---
+        _seed_rbac(conn)
+
+        # 旧 role 值迁移：'admin'/'member' → 新 code
+        _migrate_users_role(conn)
+
+        # 强制 account='admin' 为 super_admin
+        _ensure_super_admin(conn)
+
         # 2026-10-26 新增：公告软删除
         _ensure_column(conn, "announcements", "is_deleted",
                        "INTEGER NOT NULL DEFAULT 0")
         _ensure_column(conn, "announcements", "deleted_at",
                        "TEXT NOT NULL DEFAULT ''")
-
 
         # 2026-10-26 新增：成员关联 user 表（独立用户页上线）
         _ensure_column(conn, "group_members", "user_id",
@@ -72,6 +81,134 @@ def init_db() -> None:
 
         # 2026-10-27 新增：buyer_district 表 buyer 字段加密 + buyer_hash 辅助列
         _migrate_buyer_encryption(conn)
+
+
+def _seed_rbac(conn: sqlite3.Connection) -> None:
+    """写入预置 roles / permissions / role_permissions（INSERT OR IGNORE 幂等）。"""
+    # --- 2a. 4 个角色 ---
+    roles = [
+        ("super_admin",    "超级管理员", "全系统权限"),
+        ("jitubu_admin",   "集团管理员", "原集团客户部，跨小组管理"),
+        ("group_admin",    "小组管理员", "管辖本小组用户与公告"),
+        ("member",         "业务员",     "仅查看/处理分配给自己的公告"),
+    ]
+    conn.executemany(
+        "INSERT OR IGNORE INTO roles (code, name, description) VALUES (?, ?, ?)",
+        roles,
+    )
+
+    # --- 2b. 权限点（code, module, description） ---
+    perms = [
+        # 用户
+        ("users:read",            "用户", "查看用户列表与详情"),
+        ("users:create",          "用户", "新增用户"),
+        ("users:update",          "用户", "修改用户"),
+        ("users:delete",          "用户", "删除用户"),
+        ("users:reset_password",  "用户", "重置用户密码"),
+        # 团队
+        ("groups:read",           "团队", "查看团队列表与详情"),
+        ("groups:create",         "团队", "新增团队"),
+        ("groups:update",         "团队", "修改团队"),
+        ("groups:delete",         "团队", "删除团队"),
+        # 公告
+        ("announcements:read",    "公告", "查看公告"),
+        ("announcements:create",  "公告", "新增公告"),
+        ("announcements:update",  "公告", "修改公告"),
+        ("announcements:delete",  "公告", "删除公告"),
+        ("announcements:import",  "公告", "批量导入公告"),
+        ("announcements:assign",  "公告", "分配公告给业务员"),
+        # 采购人
+        ("buyers:read",           "采购人", "查看采购人资料"),
+        ("buyers:manage",         "采购人", "管理采购人资料"),
+        # 数据源
+        ("sources:manage",        "数据源", "管理数据源配置"),
+        # 定时任务
+        ("schedule:manage",      "定时任务", "管理定时任务"),
+        # 自身
+        ("self:read_profile",     "自身", "读取个人资料"),
+    ]
+    conn.executemany(
+        "INSERT OR IGNORE INTO permissions (code, module, description) VALUES (?, ?, ?)",
+        perms,
+    )
+
+    # --- 2c. 角色-权限关联矩阵 ---
+    # 先查出 role id 与 permission id（避免 code 被改导致关联错）
+    role_ids = {r["code"]: r["id"] for r in conn.execute("SELECT id, code FROM roles").fetchall()}
+    perm_ids = {p["code"]: p["id"] for p in conn.execute("SELECT id, code FROM permissions").fetchall()}
+
+    # 权限矩阵：role_code -> list[perm_code]
+    matrix = {
+        "super_admin": list(perm_ids.keys()),   # 全量
+        "jitubu_admin": list(perm_ids.keys()),  # 全量（与 super 同）
+        "group_admin": [
+            "groups:read",
+            "groups:update",
+            "announcements:read",
+            "announcements:assign",
+            "self:read_profile",
+        ],
+        "member": [
+            "groups:read",
+            "announcements:read",
+            "self:read_profile",
+        ],
+    }
+
+    rows_to_insert = []
+    for role_code, perm_codes in matrix.items():
+        rid = role_ids.get(role_code)
+        if rid is None:
+            continue
+        for pc in perm_codes:
+            pid = perm_ids.get(pc)
+            if pid is None:
+                continue
+            rows_to_insert.append((rid, pid))
+
+    conn.executemany(
+        "INSERT OR IGNORE INTO role_permissions (role_id, permission_id) VALUES (?, ?)",
+        rows_to_insert,
+    )
+
+
+def _migrate_users_role(conn: sqlite3.Connection) -> None:
+    """老 role='admin'/'member' → 新 role code。幂等（已在 roles表里的不动）。"""
+    # 先确保 users.role 列存在（历史表肯定有）
+    # 方案：用 groups.name 判断原来的 group 是不是 '集团客户部'
+    # 老 role='admin' 且 group='集团客户部' → jitubu_admin
+    # 老 role='admin' 且 group≠'集团客户部' → group_admin
+    # 老 role='member' → member
+    conn.execute(
+        """
+        UPDATE users SET role = CASE
+            WHEN users.role = 'member' THEN 'member'
+            WHEN users.role = 'admin' AND groups.name = '集团客户部' THEN 'jitubu_admin'
+            WHEN users.role = 'admin' AND groups.name != '集团客户部' THEN 'group_admin'
+        END
+        FROM groups
+        WHERE users.group_id = groups.id
+          AND users.role IN ('admin', 'member')
+          AND users.role NOT IN (SELECT code FROM roles)
+        """
+    )
+    # group_id 为空的 admin → jitubu_admin（兜底）
+    conn.execute(
+        """
+        UPDATE users SET role = CASE WHEN role = 'admin' THEN 'jitubu_admin'
+                                    WHEN role = 'member' THEN 'member' END
+        WHERE role IN ('admin', 'member')
+          AND role NOT IN (SELECT code FROM roles)
+          AND group_id IS NULL
+        """
+    )
+
+
+def _ensure_super_admin(conn: sqlite3.Connection) -> None:
+    """强制 account='admin' 的用户 role='super_admin'（如果存在）。"""
+    conn.execute(
+        "UPDATE users SET role = 'super_admin' WHERE account = 'admin'"
+    )
 
 
 def _migrate_buyer_encryption(conn: sqlite3.Connection) -> None:

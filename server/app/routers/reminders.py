@@ -105,7 +105,7 @@ def list_reminders(
     if scope not in ("me", "all"):
         raise HTTPException(status_code=400, detail="scope 参数无效，只能是 me 或 all")
     if scope == "all":
-        security.require_group_admin(user)
+        security.require_permission(user, "announcements:assign", "查看所有提醒")
 
     district = (district or "").strip()
     sql = "SELECT * FROM announcements WHERE progress != '已确认'"
@@ -162,7 +162,7 @@ def batch_assign(
     body: BatchAssignBody,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_group_admin(user)
+    security.require_permission(user, "announcements:assign", "批量分配任务提醒")
     group_name = (body.group or "").strip()
     group = db.query_one("SELECT * FROM groups WHERE name = ?", (group_name,))
     if not group:

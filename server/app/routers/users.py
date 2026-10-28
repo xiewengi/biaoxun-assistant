@@ -129,7 +129,7 @@ def _transfer_member(conn, user_id: int, new_group_id: Optional[int]) -> None:
 def list_users(
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "查看用户列表")
+    security.require_permission(user, "users:read", "查看用户列表")
     rows = db.query_all(
         """
         SELECT u.id, u.account, u.name, u.phone, u.role, u.group_id, u.created_at,
@@ -146,7 +146,7 @@ def create_user(
     body: UserBody,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "创建账号")
+    security.require_permission(user, "users:create", "创建账号")
 
     account = (body.account or "").strip()
     name = (body.name or "").strip()
@@ -200,7 +200,7 @@ def update_user(
     body: UserBody,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "修改账号")
+    security.require_permission(user, "users:update", "修改账号")
 
     with db.get_conn() as conn:
         cur_row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
@@ -261,7 +261,7 @@ def delete_user(
     user_id: int,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "删除账号")
+    security.require_permission(user, "users:delete", "删除账号")
 
     with db.get_conn() as conn:
         row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
@@ -285,7 +285,7 @@ def reset_password(
     body: Optional[Dict[str, str]] = None,
     user: Dict[str, Any] = Depends(security.get_current_user),
 ) -> Dict[str, Any]:
-    security.require_jitubu(user, "重置密码")
+    security.require_permission(user, "users:reset_password", "重置密码")
     new_pw = (body or {}).get("password") or config.DEFAULT_PASSWORD
     new_pw = new_pw.strip()
     if not new_pw:
