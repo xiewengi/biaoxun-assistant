@@ -845,7 +845,7 @@ function renderAnnouncementDetail() {
               <h2 class="text-xl font-semibold text-gray-900 leading-snug mb-2">${a.projectName || a.title}</h2>
               <div class="flex flex-wrap gap-1.5">
                 ${a.matchedKeywords.map(k => `<span class="tag tag-purple">🔑 ${k}</span>`).join('')}
-                <span class="tag tag-green">业务标签：${(a.businessTags || []).map(t => `<span class="tag tag-green mr-1">${t}</span>`).join('') || '<span class="text-gray-400">—</span>'}</span>
+                ${(a.businessTags || []).map(t => `<span class="tag tag-green">${t}</span>`).join('')}
                 <span class="tag tag-blue">${a.district}</span>
                 ${renderProgressTag(a.progress)}
                 ${renderBidStatusTag(a)}
@@ -886,7 +886,7 @@ function renderAnnouncementDetail() {
             <div><span class="text-gray-400">创建时间：</span><span class="text-gray-700">${a.createdAt}</span></div>
             <div><span class="text-gray-400">当前处理人：</span><span class="text-gray-700">${a.currentHandler || '未分配'}</span></div>
             <div class="col-span-2"><span class="text-gray-400">命中关键词：</span><span class="text-gray-700">${a.matchedKeywords.map(k => `<span class="tag tag-purple mr-1">${k}</span>`).join('')}</span></div>
-            <div class="col-span-2"><span class="text-gray-400">业务标签：</span><span class="text-gray-700">业务标签：${(a.businessTags || []).map(t => `<span class="tag tag-green mr-1">${t}</span>`).join('') || '<span class="text-gray-400">—</span>'}</span></div>
+            <div class="col-span-2"><span class="text-gray-400">业务标签：</span><span class="text-gray-700">${(a.businessTags || []).map(t => `<span class="tag tag-green mr-1">${t}</span>`).join('') || '<span class="text-gray-400">—</span>'}</span></div>
           </div>
 
           <div class="mt-6 pt-4 border-t border-gray-100">
