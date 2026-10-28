@@ -349,6 +349,14 @@ RSYNC_EXCLUDES=(
   --exclude '/package.json'
   --exclude '/package-lock.json'
   --exclude '/.gitignore'
+  # 安全项：绝不能把私钥/授权文件同步到公网服务器
+  --exclude '/腾讯云/'
+  --exclude '*.pem'
+  --exclude '*.key'
+  # 本地开发元数据（.agents/ 里的 worktree 副本含硬编码地址与旧代码）
+  --exclude '/.agents/'
+  --exclude '*.bak*'
+  --exclude '*.bak-*[0-9]*'
 )
 
 RSYNC_SSH="ssh -p ${PORT} -o ConnectTimeout=10 -o ControlMaster=auto -o ControlPath=${CTRL_SOCK} -o ControlPersist=600${IDENTITY:+ -i ${IDENTITY}}"
