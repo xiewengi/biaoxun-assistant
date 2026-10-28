@@ -168,9 +168,14 @@ def test_reminders_district_filter_and_me_scope(client, admin_headers, member_he
 
 
 def test_reminders_scope_all_forbidden_for_member(client, member_headers):
+    """业务员不能查看全部提醒 → 403。
+
+    RBAC 改造后错误文案由「仅集团客户部可…」改为「无权限：查看所有提醒」，
+    这里断言 RBAC 化的提示语。
+    """
     r = client.get("/api/reminders?scope=all", headers=member_headers)
     assert r.status_code == 403
-    assert "集团客户部" in r.json()["detail"]
+    assert "无权限" in r.json()["detail"]
 
 
 def test_reminders_batch_assign_success(client, admin_headers):
@@ -222,7 +227,7 @@ def test_reminders_batch_assign_permissions(client, admin_headers, member_header
         headers=member_headers,
     )
     assert r.status_code == 403
-    assert "集团客户部" in r.json()["detail"]
+    assert "无权限" in r.json()["detail"]
 
     r = client.post(
         "/api/reminders/batch-assign",

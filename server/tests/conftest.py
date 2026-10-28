@@ -38,9 +38,32 @@ def admin_headers(client):
 
 
 @pytest.fixture()
-def member_headers(client):
+def member_headers(client, admin_headers):
+    """业务员（role=member）的登录凭证。
+
+    业务员账号在真实业务里是由集团管理员在「用户管理」页面新增的，
+    所以这里走同一条路径：用管理员的 token 调 POST /api/users 建一个
+    role='member' 的账号，再用它登录。
+
+    注意：不能直接用种子里的 linxiaoyu2 —— RBAC 改造后它是小组管理员
+    (group_admin)，权限矩阵里明确带有 announcements:assign，
+    拿它测「业务员不能分配」会得到错误的 200。
+    """
     r = client.post(
-        "/api/auth/login", json={"account": "linxiaoyu2", "password": "123456"}
+        "/api/users",
+        json={
+            "account": "test_yewuyuan",
+            "name": "测试业务员",
+            "phone": "13900000001",
+            "groupId": 4,          # 潮安
+            "role": "member",
+            "password": "123456",
+        },
+        headers=admin_headers,
+    )
+    assert r.status_code == 200, r.text
+    r = client.post(
+        "/api/auth/login", json={"account": "test_yewuyuan", "password": "123456"}
     )
     assert r.status_code == 200, r.text
     return {"Authorization": "Bearer " + r.json()["token"]}

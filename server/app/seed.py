@@ -62,10 +62,18 @@ def seed_groups(conn: sqlite3.Connection) -> None:
              g["adminAccount"], g["position"], g["createdAt"]),
         )
         pw = security.hash_password(config.DEFAULT_PASSWORD)
+        # 直接写入 RBAC 角色码。不能用老值 'admin'：
+        #   db.init_db() 的 _migrate_users_role() 在 seed_groups() 之前执行，
+        #   那时 users 表还是空的，迁移追不上这次写入 → 用户会永远停留在
+        #   'admin'（roles 表里没有这个 code）→ 命中 0 项权限 → 所有写接口 403。
+        #   映射规则与 _migrate_users_role() 保持一致：
+        #   集团客户部 → jitubu_admin，其余小组 → group_admin。
+        role = "jitubu_admin" if g["name"] == "集团客户部" else "group_admin"
         conn.execute(
             """INSERT INTO users (account, name, phone, password_hash, salt, group_id, role)
-               VALUES (?, ?, ?, ?, ?, ?, 'admin')""",
-            (g["adminAccount"], g["admin"], g["adminContact"], pw["hash"], pw["salt"], g["id"]),
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (g["adminAccount"], g["admin"], g["adminContact"], pw["hash"], pw["salt"],
+             g["id"], role),
         )
 
 
@@ -176,6 +184,11 @@ def run_seed() -> Dict[str, int]:
         seed_schedule(conn)
         after = conn.execute("SELECT COUNT(*) c FROM users").fetchone()["c"]
         stats["users"] = after - before
+    # 兜底：seed 之后补跑一次 role 迁移。
+    # db.init_db()（第 176 行）里的 _migrate_users_role() 跑在 seed_groups() 之前，
+    # 彼时 users 表为空，迁移空转；若将来有其他路径写入老值 'admin'，
+    # 这里能把它映射成正确角色码，避免用户命中 0 项权限导致写接口全部 403。
+    db.init_db()
     return stats
 
 
