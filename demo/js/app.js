@@ -21,6 +21,7 @@ let state = {
   progressAnnId: null,
   editGroupId: null,
   users: [],
+  usersForSelect: [],  // 轻量用户列表，供团队成员选择用
   editingUser: null,
   selectedAnnIds: new Set(),
   // 翻页
@@ -115,18 +116,20 @@ async function refreshAfterMutation() {
 
 // 首屏数据：公告 / 提醒 / 小组 / 数据源 / 定时配置 并发加载
 async function loadInitialData() {
-  const [anns, reminders, runs] = await Promise.all([
+  const [anns, reminders, runs, usersForSelect] = await Promise.all([
     loadAnnouncements(),
     API.listReminders({ scope: 'me' }),
     API.collectRuns(1).catch(e => { alert(e.message || '采集记录加载失败'); return null; }),
     loadGroups(),
     loadSources(),
     loadSchedule(),
+    API.listUsersForSelect().catch(() => ({ items: [] })),
   ]);
   state.announcements = anns;
   state.reminders = (reminders && reminders.items) || [];
   state.siteResults = SOURCES_DATA.map(mapSourceToSiteResult);
   state.latestRun = (runs && runs.items && runs.items[0]) || null;
+  state.usersForSelect = (usersForSelect && usersForSelect.items) || [];
 }
 
 function handleUnauthorized() {
@@ -313,6 +316,7 @@ function render() {
     </div>
     ${state.modal === 'assign' ? renderAssignModal() : state.modal === 'batch-assign' ? renderBatchAssignModal() : state.modal === 'reminder-batch-assign' ? renderReminderBatchAssignModal() : state.modal === 'kw-delete' ? renderKwDeleteModal() : ''}
     ${state.modal === 'progress' ? renderProgressModal() : ''}
+    ${state.modal === 'add-group' ? renderAddGroupModal() : ''}
     ${state.modal === 'edit-group' ? renderEditGroupModal() : ''}
     ${state.modal === 'ann-form' ? renderAnnFormModal() : ''}
     ${state.modal === 'user-form' ? renderUserFormModal(state.editingUser) : ''}
@@ -1195,7 +1199,7 @@ function renderTeam() {
             </div>
             <div class="flex items-center gap-2">
               <button class="text-xs text-blue-600 hover:text-blue-800 px-2 py-1 border border-blue-200 rounded hover:bg-blue-50" data-edit-group="${g.id}">✎ 修改</button>
-              <span class="tag tag-blue">${g.admin} +${g.members.length}人</span>
+              <span class="tag tag-blue">${g.admin} +${(g.memberDetails || g.members || []).length}人</span>
             </div>
           </div>
           
@@ -1212,17 +1216,18 @@ function renderTeam() {
               <span class="tag tag-yellow">负责人</span>
             </div>
             
-            ${g.members.length > 0 ? g.members.map((m, i) => `
+            ${g.memberDetails && g.memberDetails.length > 0 ? g.memberDetails.map(m => `
               <div class="flex items-center gap-3 p-3 hover:bg-gray-50 rounded-lg">
-                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">${m[0]}</div>
+                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">${(m.name || '?')[0]}</div>
                 <div class="flex-1">
-                  <div class="text-sm font-medium text-gray-800">${m}</div>
+                  <div class="text-sm font-medium text-gray-800">${m.name}</div>
               <div class="text-xs text-gray-500">
-                <span>📞 ${g.memberContacts[i] || '—'}</span>
+                <span>📞 ${m.contact || '—'}</span>
                 <span class="mx-2">·</span>
-                <span>👤 ${g.memberPinyin[i] || '—'}</span>
+                <span>👤 ${m.namePinyin || '—'}</span>
               </div>
                 </div>
+                <span class="tag tag-blue">${m.position || '成员'}</span>
               </div>
             `).join('') : `<div class="text-xs text-gray-400 text-center py-2">暂无团队成员，点击修改添加</div>`}
           </div>
@@ -1232,6 +1237,95 @@ function renderTeam() {
   `;
 }
 
+// ---- 新增小组弹窗 ----
+function renderAddGroupModal() {
+  const allUsers = state.usersForSelect || [];
+  return `
+    <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
+      <div class="bg-white rounded-xl w-[560px] max-h-[80vh] p-6 shadow-xl flex flex-col" data-stop>
+        <h3 class="font-semibold text-gray-900 text-lg mb-4">新增小组</h3>
+        
+        <div class="flex-1 overflow-auto space-y-4 scrollbar-thin pr-1">
+          <!-- 基本信息 -->
+          <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+            <div class="text-xs text-gray-500 font-medium uppercase tracking-wide">基本信息</div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">小组名称 *</label>
+                <input id="add-name" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="例：潮安">
+              </div>
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">所属区域 *</label>
+                <input id="add-region" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="例：潮安">
+              </div>
+            </div>
+          </div>
+          
+          <!-- 负责人：从用户列表选 -->
+          <div class="bg-orange-50 rounded-lg p-4 space-y-3">
+            <div class="text-xs text-orange-700 font-medium uppercase tracking-wide">负责人</div>
+            <div>
+              <label class="text-xs text-gray-500 mb-1 block">选择负责人（从用户列表选）</label>
+              <select id="add-admin-user" class="w-full h-10 px-3 border border-orange-200 rounded-lg text-sm focus:outline-none focus:border-orange-400 bg-white">
+                ${renderUserSelectOptions(null, new Set(), '— 选择负责人 —')}
+              </select>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">姓名</label>
+                <input id="add-admin" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50" readonly placeholder="选人后自动填充">
+              </div>
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">联系方式</label>
+                <input id="add-admin-contact" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50" readonly placeholder="选人后自动填充">
+              </div>
+              <div>
+                <label class="text-xs text-gray-500 mb-1 block">账号</label>
+                <input id="add-admin-account" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50" readonly placeholder="选人后自动填充">
+              </div>
+            </div>
+            <div>
+              <label class="text-xs text-gray-500 mb-1 block">初始密码（留空使用系统默认密码 123456）</label>
+              <input id="add-password" type="text" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="留空 = 默认密码 123456">
+            </div>
+          </div>
+          
+          <!-- 团队成员：从用户列表选 -->
+          <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-500 font-medium uppercase tracking-wide">团队成员（业务员）</div>
+              <button class="text-xs text-blue-600 hover:text-blue-800" data-add-member-line>＋ 添加成员</button>
+            </div>
+            <div id="edit-members" class="space-y-2">
+              <div class="text-xs text-gray-400 text-center py-3 border border-dashed border-gray-200 rounded-lg">暂无成员，点击上方「＋ 添加成员」</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-100">
+          <button class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50" data-close-modal>取消</button>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700" data-save-new-group>创建小组</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- 生成用户下拉选项（供团队成员选择） ----
+function renderUserSelectOptions(selectedUserId, excludeUserIds, placeholder) {
+  // selectedUserId: 当前已选的用户 id（用于回显）
+  // excludeUserIds: 需要排除的用户 id 集合（已选的其他成员 + 负责人）
+  const allUsers = state.usersForSelect || [];
+  const available = allUsers.filter(u => !excludeUserIds.has(u.id) || u.id === selectedUserId);
+  let html = `<option value="">${placeholder || '— 选择用户 —'}</option>`;
+  for (const u of available) {
+    const groupLabel = u.group ? `（${u.group}）` : '（未分组）';
+    const sel = u.id === selectedUserId ? ' selected' : '';
+    html += `<option value="${u.id}"${sel}>${u.name} / ${u.account}${groupLabel}</option>`;
+  }
+  return html;
+}
+
 // ---- 修改小组弹窗 ----
 function renderEditGroupModal() {
   const g = TEAM_GROUPS.find(x => x.id === state.editGroupId);
@@ -1239,11 +1333,20 @@ function renderEditGroupModal() {
   const memberDetails = (Array.isArray(g.memberDetails) && g.memberDetails.length > 0)
     ? g.memberDetails
     : (g.members || []).map((name, i) => ({
+        userId: null,
         name: name,
         contact: (g.memberContacts || [])[i] || '',
         namePinyin: (g.memberPinyin || [])[i] || '',
         position: '成员',
       }));
+
+  // 负责人信息：从 users 表找到对应的 user
+  const adminUser = (state.usersForSelect || []).find(u => u.account === g.adminAccount);
+  const adminUserId = adminUser ? adminUser.id : '';
+
+  // 计算已选成员的 userId 集合（用于下拉排除）
+  const memberUserIds = new Set(memberDetails.filter(m => m.userId).map(m => m.userId));
+
   return `
     <div class="fixed inset-0 z-50 flex items-center justify-center modal-bg fade-in" data-close-modal>
       <div class="bg-white rounded-xl w-[560px] max-h-[80vh] p-6 shadow-xl flex flex-col" data-stop>
@@ -1265,42 +1368,54 @@ function renderEditGroupModal() {
             </div>
           </div>
           
-          <!-- 负责人信息 -->
+          <!-- 负责人：从用户列表选择 -->
           <div class="bg-orange-50 rounded-lg p-4 space-y-3">
             <div class="text-xs text-orange-700 font-medium uppercase tracking-wide">负责人</div>
+            <div>
+              <label class="text-xs text-gray-500 mb-1 block">选择负责人（从用户列表选）</label>
+              <select id="edit-admin-user" class="w-full h-10 px-3 border border-orange-200 rounded-lg text-sm focus:outline-none focus:border-orange-400 bg-white">
+                ${renderUserSelectOptions(adminUserId, memberUserIds, '— 选择负责人 —')}
+              </select>
+            </div>
             <div class="grid grid-cols-3 gap-3">
               <div>
                 <label class="text-xs text-gray-500 mb-1 block">姓名</label>
-                <input id="edit-admin" value="${g.admin}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+                <input id="edit-admin" value="${g.admin}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50" readonly>
               </div>
               <div>
                 <label class="text-xs text-gray-500 mb-1 block">联系方式</label>
-                <input id="edit-admin-contact" value="${g.adminContact}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+                <input id="edit-admin-contact" value="${g.adminContact}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50" readonly>
               </div>
               <div>
                 <label class="text-xs text-gray-500 mb-1 block">账号</label>
-                <input id="edit-admin-account" value="${g.adminAccount}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
+                <input id="edit-admin-account" value="${g.adminAccount}" class="w-full h-9 px-3 border border-gray-200 rounded-lg text-sm bg-gray-50" readonly>
               </div>
             </div>
           </div>
           
-          <!-- 团队成员 -->
+          <!-- 团队成员：从用户列表选择 -->
           <div class="bg-gray-50 rounded-lg p-4 space-y-3">
             <div class="flex items-center justify-between">
               <div class="text-xs text-gray-500 font-medium uppercase tracking-wide">团队成员（业务员）</div>
-              <button class="text-xs text-blue-600 hover:text-blue-800" data-add-member-line>＋ 加一行</button>
+              <button class="text-xs text-blue-600 hover:text-blue-800" data-add-member-line>＋ 添加成员</button>
             </div>
             <div id="edit-members" class="space-y-2">
-              ${memberDetails.length > 0 ? memberDetails.map((m, i) => `
+              ${memberDetails.length > 0 ? memberDetails.map((m, i) => {
+                // 计算本行的排除集合：其他成员的 userId + 负责人
+                const excludeIds = new Set(memberUserIds);
+                if (adminUserId) excludeIds.add(adminUserId);
+                return `
                 <div class="flex items-center gap-2 member-row" data-idx="${i}" data-position="${m.position || '成员'}">
                   <div class="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">${(m.name || '?')[0]}</div>
-                  <input value="${m.name || ''}" class="member-name flex-1 min-w-0 h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="姓名">
-                  <input value="${m.contact || ''}" class="member-contact w-[140px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="联系方式">
-                  <input value="${m.namePinyin || ''}" class="member-pinyin w-[130px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="账号">
+                  <select class="member-user-select flex-1 min-w-0 h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white" data-user-id="${m.userId || ''}">
+                    ${renderUserSelectOptions(m.userId || null, excludeIds, '— 选择用户 —')}
+                  </select>
+                  <span class="member-name-hidden hidden">${m.name || ''}</span>
+                  <span class="member-contact-hidden hidden">${m.contact || ''}</span>
                   <button class="text-red-500 hover:text-red-700 text-sm px-2 remove-member flex-shrink-0" title="删除">✕</button>
                 </div>
-              `).join('') : `
-                <div class="text-xs text-gray-400 text-center py-3 border border-dashed border-gray-200 rounded-lg">暂无成员，点击上方「＋ 加一行」添加</div>
+              `}).join('') : `
+                <div class="text-xs text-gray-400 text-center py-3 border border-dashed border-gray-200 rounded-lg">暂无成员，点击上方「＋ 添加成员」</div>
               `}
             </div>
           </div>
@@ -2344,7 +2459,12 @@ function bindUsersEvents() {
       const id = parseInt(btn.dataset.id);
       const u = state.users.find(x => x.id === id);
       if (!confirm('确定删除账号 ' + u.account + '（' + u.name + '）？该账号会立即无法登录。')) return;
-      try { await API.deleteUser(id); state.users = state.users.filter(x => x.id !== id); render(); }
+      try {
+        await API.deleteUser(id);
+        state.users = state.users.filter(x => x.id !== id);
+        state.usersForSelect = state.usersForSelect.filter(x => x.id !== id);
+        render();
+      }
       catch (e) { alert(e.message || '删除失败'); }
     };
   });
@@ -2365,7 +2485,10 @@ function bindUsersEvents() {
       if (state.editingUser) await API.updateUser(state.editingUser.id, body);
       else await API.createUser(body);
       state.modal = null; state.editingUser = null;
-      const data = await API.listUsers(); state.users = data.items || []; render();
+      const data = await API.listUsers(); state.users = data.items || [];
+      // 同步刷新用户选择列表
+      try { const sd = await API.listUsersForSelect(); state.usersForSelect = (sd && sd.items) || []; } catch(e) {}
+      render();
     } catch (e) { alert(e.message || '保存失败'); }
   };
 }
@@ -2563,9 +2686,12 @@ function bindEvents() {
   if (bGroup && bReceiver) {
     bGroup.onchange = () => {
       const g = TEAM_GROUPS.find(x => x.name === bGroup.value);
-      bReceiver.innerHTML = g ? 
-        `<option value="${g.admin}">${g.admin}（管理员）</option>` + 
-        g.members.map(m => `<option value="${m}">${m}</option>`).join('') :
+      const memberNames = (g && g.memberDetails && g.memberDetails.length > 0)
+        ? g.memberDetails.map(m => m.name)
+        : (g ? (g.members || []) : []);
+      bReceiver.innerHTML = g ?
+        `<option value="${g.admin}">${g.admin}（管理员）</option>` +
+        memberNames.map(m => `<option value="${m}">${m}</option>`).join('') :
         '<option value="">请选择接收人</option>';
     };
   }
@@ -2857,32 +2983,111 @@ function bindEvents() {
     };
   });
 
-  // 新增小组
+  // 新增小组（弹窗方式，负责人从用户列表选）
   document.querySelectorAll('[data-add-group]').forEach(el => {
     el.onclick = async () => {
-      const name = prompt('小组名称');
-      if (!name || !name.trim()) return;
-      const region = prompt('所属区域', name.trim()) || name.trim();
-      const admin = prompt('负责人姓名');
-      if (!admin || !admin.trim()) return;
-      const adminContact = prompt('负责人联系方式') || '';
-      const adminAccount = prompt('负责人登录账号');
-      if (!adminAccount || !adminAccount.trim()) return;
-      const password = prompt('初始密码（留空使用系统默认密码）') || '';
+      // 每次打开弹窗都刷新用户选择列表
+      try { const data = await API.listUsersForSelect(); state.usersForSelect = (data && data.items) || []; }
+      catch (e) { /* 静默 */ }
+      state.modal = 'add-group';
+      render();
+    };
+  });
 
+  // 打开修改小组弹窗
+  document.querySelectorAll('[data-edit-group]').forEach(el => {
+    el.onclick = async () => {
+      // 每次打开弹窗都刷新用户选择列表
+      try { const data = await API.listUsersForSelect(); state.usersForSelect = (data && data.items) || []; }
+      catch (e) { /* 静默 */ }
+      state.editGroupId = parseInt(el.dataset.editGroup);
+      state.modal = 'edit-group';
+      render();
+    };
+  });
+
+  // 负责人下拉联动：选人后自动填充姓名/联系方式/账号（编辑弹窗）
+  const adminUserSel = document.getElementById('edit-admin-user');
+  if (adminUserSel) {
+    adminUserSel.onchange = () => {
+      const uid = parseInt(adminUserSel.value);
+      const u = (state.usersForSelect || []).find(x => x.id === uid);
+      const nameEl = document.getElementById('edit-admin');
+      const contactEl = document.getElementById('edit-admin-contact');
+      const accountEl = document.getElementById('edit-admin-account');
+      if (u) {
+        if (nameEl) nameEl.value = u.name;
+        if (contactEl) contactEl.value = u.phone || '';
+        if (accountEl) accountEl.value = u.account;
+      } else {
+        if (nameEl) nameEl.value = '';
+        if (contactEl) contactEl.value = '';
+        if (accountEl) accountEl.value = '';
+      }
+    };
+  }
+
+  // 负责人下拉联动：新增弹窗
+  const addAdminUserSel = document.getElementById('add-admin-user');
+  if (addAdminUserSel) {
+    addAdminUserSel.onchange = () => {
+      const uid = parseInt(addAdminUserSel.value);
+      const u = (state.usersForSelect || []).find(x => x.id === uid);
+      const nameEl = document.getElementById('add-admin');
+      const contactEl = document.getElementById('add-admin-contact');
+      const accountEl = document.getElementById('add-admin-account');
+      if (u) {
+        if (nameEl) nameEl.value = u.name;
+        if (contactEl) contactEl.value = u.phone || '';
+        if (accountEl) accountEl.value = u.account;
+      } else {
+        if (nameEl) nameEl.value = '';
+        if (contactEl) contactEl.value = '';
+        if (accountEl) accountEl.value = '';
+      }
+    };
+  }
+
+  // 创建小组按钮
+  document.querySelectorAll('[data-save-new-group]').forEach(el => {
+    el.onclick = async () => {
+      const name = document.getElementById('add-name').value.trim();
+      const region = document.getElementById('add-region').value.trim();
+      if (!name) { alert('请填写小组名称'); return; }
+      if (!region) { alert('请填写所属区域'); return; }
+      const adminVal = document.getElementById('add-admin').value.trim();
+      const adminAccountVal = document.getElementById('add-admin-account').value.trim();
+      if (!adminVal || !adminAccountVal) { alert('请选择负责人'); return; }
       const body = {
-        name: name.trim(),
-        region: region.trim(),
-        admin: admin.trim(),
-        adminContact: adminContact.trim(),
-        adminAccount: adminAccount.trim(),
+        name: name,
+        region: region,
+        admin: adminVal,
+        adminContact: document.getElementById('add-admin-contact').value.trim(),
+        adminAccount: adminAccountVal,
         position: '负责人',
         members: [],
       };
-      if (password.trim()) body.password = password.trim();
+      const pw = document.getElementById('add-password');
+      if (pw && pw.value.trim()) body.password = pw.value.trim();
+      // 收集成员
+      document.querySelectorAll('#edit-members .member-row').forEach(row => {
+        const sel = row.querySelector('.member-user-select');
+        const userId = sel ? (parseInt(sel.value) || null) : null;
+        const u = userId ? (state.usersForSelect || []).find(x => x.id === userId) : null;
+        if (userId && u) {
+          body.members.push({
+            userId: userId,
+            name: u.name,
+            namePinyin: u.account,
+            contact: u.phone || '',
+            position: row.dataset.position || '成员',
+          });
+        }
+      });
       try {
         await API.createGroup(body);
         await loadGroups();
+        state.modal = null;
         render();
       } catch (e) {
         alert(e.message || '新增小组失败');
@@ -2890,32 +3095,55 @@ function bindEvents() {
     };
   });
 
-  // 打开修改小组弹窗
-  document.querySelectorAll('[data-edit-group]').forEach(el => {
-    el.onclick = () => {
-      state.editGroupId = parseInt(el.dataset.editGroup);
-      state.modal = 'edit-group';
-      render();
+  // 成员下拉联动：选人后更新头像
+  document.querySelectorAll('.member-user-select').forEach(sel => {
+    sel.onchange = () => {
+      const uid = parseInt(sel.value);
+      const u = (state.usersForSelect || []).find(x => x.id === uid);
+      const row = sel.closest('.member-row');
+      if (row) {
+        const avatar = row.querySelector('.w-7');
+        if (avatar) avatar.textContent = u ? u.name[0] : '?';
+      }
     };
   });
 
-  // 修改弹窗内：加一行成员
+  // 修改弹窗内：加一行成员（用户下拉选）
   const addMemberBtn = document.querySelector('[data-add-member-line]');
   if (addMemberBtn) {
     addMemberBtn.onclick = () => {
       const box = document.getElementById('edit-members');
       if (!box) return;
+      // 计算已有成员的 userId 用于排除
+      const existingIds = new Set();
+      document.querySelectorAll('#edit-members .member-user-select').forEach(s => {
+        if (s.value) existingIds.add(parseInt(s.value));
+      });
+      const adminSel = document.getElementById('edit-admin-user');
+      if (adminSel && adminSel.value) existingIds.add(parseInt(adminSel.value));
+
       const div = document.createElement('div');
       div.className = 'flex items-center gap-2 member-row';
+      div.dataset.position = '成员';
       div.innerHTML = `
         <div class="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">?</div>
-        <input class="member-name flex-1 min-w-0 h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="姓名">
-        <input class="member-contact w-[140px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="联系方式">
-        <input class="member-pinyin w-[130px] h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="账号">
+        <select class="member-user-select flex-1 min-w-0 h-9 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400 bg-white" data-user-id="">
+          ${renderUserSelectOptions(null, existingIds, '— 选择用户 —')}
+        </select>
         <button class="text-red-500 hover:text-red-700 text-sm px-2 remove-member" title="删除">✕</button>
       `;
       box.appendChild(div);
       bindMemberRow(div);
+      // 绑定下拉联动
+      const newSel = div.querySelector('.member-user-select');
+      if (newSel) {
+        newSel.onchange = () => {
+          const uid = parseInt(newSel.value);
+          const u = (state.usersForSelect || []).find(x => x.id === uid);
+          const avatar = div.querySelector('.w-7');
+          if (avatar) avatar.textContent = u ? u.name[0] : '?';
+        };
+      }
     };
   }
 
@@ -2924,6 +3152,8 @@ function bindEvents() {
     el.onclick = async () => {
       const g = TEAM_GROUPS.find(x => x.id === state.editGroupId);
       if (!g) return;
+      const adminUserSel2 = document.getElementById('edit-admin-user');
+      const adminUserIdVal = adminUserSel2 ? parseInt(adminUserSel2.value) || null : null;
       const body = {
         name: document.getElementById('edit-name').value.trim() || g.name,
         region: document.getElementById('edit-region').value.trim() || g.region,
@@ -2934,18 +3164,23 @@ function bindEvents() {
         members: [],
       };
       document.querySelectorAll('#edit-members .member-row').forEach(row => {
-        const name = row.querySelector('.member-name').value.trim();
-        const contact = row.querySelector('.member-contact').value.trim();
-        const namePinyin = row.querySelector('.member-pinyin').value.trim();
-        if (name) {
+        const sel = row.querySelector('.member-user-select');
+        const userId = sel ? (parseInt(sel.value) || null) : null;
+        const u = userId ? (state.usersForSelect || []).find(x => x.id === userId) : null;
+        if (userId && u) {
           body.members.push({
-            name: name,
-            namePinyin: namePinyin,
-            contact: contact,
+            userId: userId,
+            name: u.name,
+            namePinyin: u.account,
+            contact: u.phone || '',
             position: row.dataset.position || '成员',
           });
         }
       });
+      if (!body.admin || !body.adminAccount) {
+        alert('请选择负责人');
+        return;
+      }
       try {
         await API.updateGroup(g.id, body);
         await loadGroups();
@@ -2986,15 +3221,20 @@ function bindEvents() {
   });
 
   // 分配时自动填充接收人列表
+  function buildReceiverOptions(g) {
+    if (!g) return '<option value="">请选择接收人</option>';
+    const memberNames = (g.memberDetails && g.memberDetails.length > 0)
+      ? g.memberDetails.map(m => m.name)
+      : (g.members || []);
+    return `<option value="${g.admin}">${g.admin}（管理员）</option>` +
+      memberNames.map(m => `<option value="${m}">${m}</option>`).join('');
+  }
   const groupSel = document.getElementById('assign-group');
   const recvSel = document.getElementById('assign-receiver');
   if (groupSel && recvSel) {
     groupSel.onchange = () => {
       const g = TEAM_GROUPS.find(x => x.name === groupSel.value);
-      recvSel.innerHTML = g ? 
-        `<option value="${g.admin}">${g.admin}（管理员）</option>` + 
-        g.members.map(m => `<option value="${m}">${m}</option>`).join('') :
-        '<option value="">请选择接收人</option>';
+      recvSel.innerHTML = buildReceiverOptions(g);
     };
   }
 
@@ -3099,9 +3339,12 @@ function bindEvents() {
   if (reminderBatchGroupSel && reminderBatchRecvSel) {
     reminderBatchGroupSel.onchange = () => {
       const g = TEAM_GROUPS.find(x => x.name === reminderBatchGroupSel.value);
+      const memberNames = (g && g.memberDetails && g.memberDetails.length > 0)
+        ? g.memberDetails.map(m => m.name)
+        : (g ? (g.members || []) : []);
       reminderBatchRecvSel.innerHTML = g ?
         `<option value="${g.admin}">${g.admin}（管理员）</option>` +
-        g.members.map(m => `<option value="${m}">${m}</option>`).join('') :
+        memberNames.map(m => `<option value="${m}">${m}</option>`).join('') :
         '<option value="">请选择接收人</option>';
     };
   }

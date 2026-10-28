@@ -300,3 +300,22 @@ def reset_password(
     )
     security.audit(user, "重置密码", row["account"])
     return {"ok": True, "account": row["account"]}
+
+
+@router.get("/for-select")
+def list_users_for_select(
+    user: Dict[str, Any] = Depends(security.get_current_user),
+) -> Dict[str, Any]:
+    """轻量用户列表，供团队成员选择下拉框使用。
+    任何已登录用户可调用（团队管理员选人加成员）。
+    返回 id / account / name / phone / groupId / group / role。
+    """
+    rows = db.query_all(
+        """
+        SELECT u.id, u.account, u.name, u.phone, u.role, u.group_id,
+               g.name AS group_name
+        FROM users u LEFT JOIN groups g ON g.id = u.group_id
+        ORDER BY u.name ASC
+        """
+    )
+    return {"items": [serializers.user_to_api(r) for r in rows]}

@@ -211,6 +211,7 @@
 
   // ---------- 用户管理 ----------
   function listUsers() { return request('/users'); }
+  function listUsersForSelect() { return request('/users/for-select'); }
   function createUser(body) { return request('/users', { method: 'POST', body: body || {} }); }
   function updateUser(id, body) {
     return request('/users/' + encodeURIComponent(id), { method: 'PUT', body: body || {} });
@@ -319,6 +320,7 @@
     deleteGroup: deleteGroup,
 
     listUsers: listUsers,
+    listUsersForSelect: listUsersForSelect,
     createUser: createUser,
     updateUser: updateUser,
     deleteUser: deleteUser,
