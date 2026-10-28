@@ -198,15 +198,15 @@ def _insert_announcements(items: List[Dict[str, Any]]) -> int:
             if _is_duplicate(conn, item, seen_urls, seen_codes, seen_titles):
                 continue
 
-            # === buyer_district 自动匹配 ===
-            item_district = (item.get("district") or "").strip()
-            if not item_district:
-                buyer_name = (item.get("buyer") or "").strip()
-                if buyer_name:
-                    h = crypto.sha256_hex(buyer_name)
-                    hit = bmap.get(h)
-                    if hit:
-                        item["district"] = hit
+            # === buyer_district 自动匹配（优先级高于 collector 的 guess_district） ===
+            # buyer_district 里的是业务上精确映射（如"潮州潮安"），collector 的 guess_district
+            # 只是关键词粗匹配（如"潮安"）。只要 buyer_district 命中就覆盖。
+            buyer_name = (item.get("buyer") or "").strip()
+            if buyer_name:
+                h = crypto.sha256_hex(buyer_name)
+                hit = bmap.get(h)
+                if hit:
+                    item["district"] = hit
             cur = conn.execute(
                 _INSERT_ANNOUNCEMENT_SQL,
                 (
