@@ -42,7 +42,8 @@ let state = {
 function hasPerm(code) {
   const u = state.currentUser;
   if (!u) return false;
-  if (u.role === 'super_admin') return true;
+  // super_admin + jitubu_admin 全量放行
+  if (u.role === 'super_admin' || u.role === 'jitubu_admin') return true;
   return (u.permissions || []).includes(code);
 }
 
@@ -1082,7 +1083,7 @@ function renderReminders() {
               ${selectedCount === 0 ? 'disabled' : ''}>
         清除选择
       </button>
-      ${hasPerm('reminders:assign')
+      ${hasPerm('announcements:assign')
               ? `<button id="reminder-batch-assign"
                   class="px-4 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed"
                   ${selectedCount === 0 ? 'disabled' : ''}>
@@ -1145,7 +1146,7 @@ function renderReminders() {
                   <td class="px-4 py-3 text-center whitespace-nowrap sticky right-0 ann-row-last" style="background:#fff;width:150px">
                     <button class="text-blue-600 hover:underline text-xs mr-2" data-detail="${r.targetId}">查看公告</button>
                     ${r.type === 'admin-assign' || r.annProgress === '待分配' ?
-                      (hasPerm('reminders:assign')
+                      (hasPerm('announcements:assign')
                         ? `<button class="text-blue-600 hover:underline text-xs" data-assign="${r.targetId}">分配</button>`
                         : `<button class="text-gray-300 text-xs cursor-not-allowed" disabled title="无分配权限">分配</button>`)
                       : ''}
