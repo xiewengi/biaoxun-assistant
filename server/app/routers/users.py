@@ -72,6 +72,41 @@ def _ensure_not_admin_of_other_group(conn, user_id: int, new_group_id: Optional[
             )
 
 
+# RBAC 允许的 role code（迁移后 4 个；兼容老 admin/member 自动升级）
+_VALID_ROLES = ("super_admin", "jitubu_admin", "group_admin", "member")
+
+
+def _validate_new_role(caller: Dict[str, Any], new_role: str, old_role: Optional[str] = None) -> None:
+    """校验目标 role 是否合法，以及调用者有没有权限改到这个 role。
+    
+    权限规则：
+    - super_admin → 可以设任何人任何 role
+    - jitubu_admin → 可以设 group_admin / member；不能设 super_admin / jitubu_admin
+    - group_admin / member（虽然不太可能走到 users:create/update）→ 只能设 member
+    """
+    if new_role not in _VALID_ROLES:
+        # 兼容老值 admin → 自动映射
+        if new_role == "admin":
+            new_role = "group_admin"  # 兜底：让老前端还能工作
+        else:
+            raise HTTPException(400, f"无效角色：{new_role}")
+
+    caller_role = caller.get("role") or "member"
+
+    if caller_role == "super_admin":
+        return  # 全放行
+
+    if new_role in ("super_admin", "jitubu_admin"):
+        raise HTTPException(403, f"只有超级管理员能设 {new_role}")
+
+    if caller_role == "jitubu_admin":
+        return  # 除 super_admin/jitubu_admin 外都能设
+
+    # group_admin / member → 只能设 member
+    if new_role != "member":
+        raise HTTPException(403, f"无权限设角色 {new_role}")
+
+
 def _transfer_member(conn, user_id: int, new_group_id: Optional[int]) -> None:
     """换组逻辑：
     - 如果新组已有这个 user_id（unique index 冲突），先从旧组 group_members 删掉
@@ -158,8 +193,7 @@ def create_user(
         raise HTTPException(status_code=400, detail="账号不能为空")
     if not name:
         raise HTTPException(status_code=400, detail="姓名不能为空")
-    if role not in ("admin", "member"):
-        raise HTTPException(status_code=400, detail="角色必须是 admin 或 member")
+    _validate_new_role(user, role)
 
     with db.get_conn() as conn:
         _ensure_unique(conn, account)
@@ -181,7 +215,7 @@ def create_user(
             conn.execute(
                 """INSERT INTO group_members (group_id, user_id, name, contact, position)
                    VALUES (?, ?, ?, ?, ?)""",
-                (group_id, new_id, name, phone, "负责人" if role == "admin" else "成员"),
+                (group_id, new_id, name, phone, "负责人" if role in ("group_admin", "jitubu_admin", "admin") else "成员"),
             )
             # 如果设为 admin，同步更新 groups.admin_account
             if role == "admin":
@@ -215,8 +249,7 @@ def update_user(
 
         if not new_account:
             raise HTTPException(status_code=400, detail="账号不能为空")
-        if new_role not in ("admin", "member"):
-            raise HTTPException(status_code=400, detail="角色必须是 admin 或 member")
+        _validate_new_role(user, new_role, old_role=cur_row["role"])
 
         _ensure_unique(conn, new_account, exclude_id=user_id)
 

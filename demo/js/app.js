@@ -46,6 +46,18 @@ function hasPerm(code) {
   return (u.permissions || []).includes(code);
 }
 
+function _roleTag(role) {
+  const map = {
+    super_admin: ['bg-red-50 text-red-700', '超级管理员'],
+    jitubu_admin: ['bg-purple-50 text-purple-700', '集团管理员'],
+    group_admin: ['bg-blue-50 text-blue-700', '小组管理员'],
+    member: ['bg-green-50 text-green-700', '业务员'],
+    admin: ['bg-blue-50 text-blue-700', '负责人'],  // 兼容老值
+  };
+  const [cls, label] = map[role] || ['bg-gray-50 text-gray-600', role || '未知'];
+  return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded ${cls} text-xs">${label}</span>`;
+}
+
 // ============ 初始化 / 登录态 ============
 // 商机字段：本地即时更新 + 防抖 PATCH 持久化
 const oppPatchTimers = new Map();
@@ -2332,17 +2344,19 @@ function renderUsers() {
   }
   const stats = {
     total: state.users.length,
-    admin: state.users.filter(u => u.role === 'admin').length,
+    jitubu_admin: state.users.filter(u => u.role === 'jitubu_admin').length,
+    group_admin: state.users.filter(u => u.role === 'group_admin').length,
     member: state.users.filter(u => u.role === 'member').length,
     nogroup: state.users.filter(u => !u.groupId).length,
   };
   const jitubu = hasPerm('users:update');
   return `
     <div class="space-y-4">
-      <div class="grid grid-cols-4 gap-4">
+      <div class="grid grid-cols-5 gap-4">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">总账号数</div><div class="text-2xl font-bold text-gray-900">${stats.total}</div></div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">负责人（admin）</div><div class="text-2xl font-bold text-blue-600">${stats.admin}</div></div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">业务员（member）</div><div class="text-2xl font-bold text-green-600">${stats.member}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">集团管理员</div><div class="text-2xl font-bold text-purple-600">${stats.jitubu_admin}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">小组管理员</div><div class="text-2xl font-bold text-blue-600">${stats.group_admin}</div></div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">业务员</div><div class="text-2xl font-bold text-green-600">${stats.member}</div></div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"><div class="text-xs text-gray-400 mb-1">未分组</div><div class="text-2xl font-bold text-orange-500">${stats.nogroup}</div></div>
       </div>
       <div class="flex items-center justify-between">
@@ -2372,7 +2386,7 @@ function renderUsers() {
                 <td class="px-4 py-3 font-medium text-gray-800">${u.name}</td>
                 <td class="px-4 py-3 text-gray-500">${u.phone || '-'}</td>
                 <td class="px-4 py-3">${u.group ? `<span class="tag tag-blue">${u.group}</span>` : `<span class="tag tag-gray">未分组</span>`}</td>
-                <td class="px-4 py-3 text-center">${u.role === 'admin' ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-xs">负责人</span>` : `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-green-50 text-green-700 text-xs">业务员</span>`}</td>
+                <td class="px-4 py-3 text-center">${_roleTag(u.role)}</td>
                 <td class="px-4 py-3 text-gray-400 text-xs">${u.createdAt || '-'}</td>
                 <td class="px-4 py-3 text-center">${jitubu ? `
                   <button class="text-xs text-blue-600 hover:text-blue-800 mr-2 user-edit" data-id="${u.id}">编辑</button>
@@ -2410,8 +2424,12 @@ function renderUserFormModal(user) {
               <input id="u-phone" value="${user ? (user.phone || '') : ''}" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="手机号"></div>
             <div><label class="text-xs text-gray-500 mb-1 block">角色</label>
               <select id="u-role" class="w-full h-10 px-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-blue-400">
-                <option value="member" ${!user || user.role === 'member' ? 'selected' : ''}>业务员（member）</option>
-                <option value="admin" ${user && user.role === 'admin' ? 'selected' : ''}>负责人（admin）</option>
+                <option value="member"         ${(!user || user.role === 'member')         ? 'selected' : ''}>业务员（member）— 看公告/改自己任务</option>
+                <option value="group_admin"    ${user && user.role === 'group_admin'      ? 'selected' : ''}>小组管理员（group_admin）— 管自己组</option>
+                <option value="jitubu_admin"   ${user && user.role === 'jitubu_admin'     ? 'selected' : ''}>集团管理员（jitubu_admin）— 全局管理</option>
+                ${hasPerm('users:update') && state.currentUser.role === 'super_admin'
+                  ? `<option value="super_admin" ${user && user.role === 'super_admin' ? 'selected' : ''}>超级管理员（super_admin）— 全部权限 + 跳过数据过滤</option>`
+                  : ''}
               </select></div>
           </div>
           <div><label class="text-xs text-gray-500 mb-1 block">归属小组</label>
