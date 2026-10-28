@@ -79,7 +79,7 @@ run_as() {
 }
 
 [[ -d "$SOURCE_DIR/server/app" ]] || die "发布包不完整：缺少 server/app"
-[[ -d "$SOURCE_DIR/demo" ]] || die "发布包不完整：缺少 demo/"
+[[ -d "$SOURCE_DIR/web" ]] || die "发布包不完整：缺少 web/"
 [[ -f "$SOURCE_DIR/server/requirements.txt" ]] || die "发布包不完整：缺少 requirements.txt"
 
 log "1/7 检查系统与 Python"
@@ -132,19 +132,18 @@ fi
 
 log "4/7 安装代码到 $APP_DIR"
 mkdir -p "$APP_DIR" "$APP_DIR/data"
-# 代码覆盖更新；data / web / backup 不在复制源里，天然保留
+# 代码覆盖更新；data / backup 不在复制源里，天然保留
 rsync -a --delete --exclude '.venv/' --exclude '__pycache__/' --exclude 'data/' \
   "$SOURCE_DIR/server/" "$APP_DIR/server/"
-if [[ -d "$SOURCE_DIR/demo" ]]; then
-  rsync -a --delete --exclude '.DS_Store' "$SOURCE_DIR/demo/" "$APP_DIR/demo/"
+if [[ -d "$SOURCE_DIR/web" ]]; then
+  rsync -a --delete --exclude '.DS_Store' "$SOURCE_DIR/web/" "$APP_DIR/web/"
 fi
 if [[ -d "$SOURCE_DIR/collector" ]]; then
   rsync -a --delete --exclude '__pycache__/' --exclude 'logs/' --exclude '_ocr/' \
     "$SOURCE_DIR/collector/" "$APP_DIR/collector/"
 fi
-rsync -a --delete --exclude '.DS_Store' "$APP_DIR/demo/" "$APP_DIR/web/"
-[[ -f "$APP_DIR/web/index.html" ]] || die "前端发布失败：缺少 $APP_DIR/web/index.html"
-ok "代码与前端已就位（web/ 由 demo/ 发布）"
+[[ -f "$APP_DIR/web/index.html" ]] || die "前端安装失败：缺少 $APP_DIR/web/index.html"
+ok "代码与前端已就位（web/ 为前端唯一目录）"
 
 log "5/7 创建/复用 venv 并安装 Python 依赖"
 VENV="$APP_DIR/server/.venv"
@@ -184,7 +183,7 @@ else
 fi
 
 if [[ "$DO_USER" == "1" ]]; then
-  chown -R "$APP_USER:$APP_USER" "$APP_DIR/server" "$APP_DIR/demo" "$APP_DIR/web" "$APP_DIR/collector" 2>/dev/null || true
+  chown -R "$APP_USER:$APP_USER" "$APP_DIR/server" "$APP_DIR/web" "$APP_DIR/collector" 2>/dev/null || true
   chown -R "$APP_USER:$APP_USER" "$APP_DIR/data"
 fi
 

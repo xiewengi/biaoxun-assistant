@@ -8,7 +8,7 @@ from .db import loads_maybe
 
 
 def compute_bid_status(ann: Dict[str, Any]) -> str:
-    """与 demo/js/app.js computeBidStatus 完全一致。"""
+    """与 web/js/app.js computeBidStatus 完全一致。"""
     ann_type = ann.get("annType") or ""
     if "意向" in ann_type:
         return "意向"

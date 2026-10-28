@@ -25,7 +25,7 @@ router = APIRouter(prefix="/api/announcements", tags=["announcements"])
 
 PROGRESS_VALUES = ("待分配", "已分配", "已确认")
 
-# 商机管理必填字段（与 demo/js/app.js REQUIRED_OPP_FIELDS 一致）
+# 商机管理必填字段（与 web/js/app.js REQUIRED_OPP_FIELDS 一致）
 REQUIRED_OPP_FIELDS = (
     ("is_valid_opportunity", "是否有效商机"),
     ("has_operator_involvement", "是否有运营商参与"),

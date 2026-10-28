@@ -12,8 +12,8 @@ REPO_DIR = BASE_DIR.parent
 DATA_DIR = Path(os.getenv("BX_DATA_DIR", BASE_DIR / "data")).resolve()
 DB_PATH = Path(os.getenv("BX_DB_PATH", DATA_DIR / "biaoxun.db")).resolve()
 
-# 前端静态目录：默认仓库 demo/；部署后一般指向 /opt/biaoxun/web
-STATIC_DIR = Path(os.getenv("BX_STATIC_DIR", REPO_DIR / "demo")).resolve()
+# 前端静态目录：默认仓库 web/；部署时同样是 /opt/biaoxun/web
+STATIC_DIR = Path(os.getenv("BX_STATIC_DIR", REPO_DIR / "web")).resolve()
 
 # 采集脚本（存在才允许触发真实采集）
 COLLECTOR_SCRIPT = Path(
@@ -26,7 +26,7 @@ SESSION_DAYS = int(os.getenv("BX_SESSION_DAYS", "7"))
 # 默认新用户 / 种子用户密码
 DEFAULT_PASSWORD = os.getenv("BX_DEFAULT_PASSWORD", "123456")
 
-# 允许跨域来源（本地 demo 8765 联调用；部署同源可收紧）
+# 允许跨域来源（本地静态服务器 8765 联调用；部署同源可收紧）
 CORS_ORIGINS = [
     o.strip()
     for o in os.getenv(

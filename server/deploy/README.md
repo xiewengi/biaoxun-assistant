@@ -1,6 +1,6 @@
 # 标讯助手 · 服务器部署手册
 
-> 适用：FastAPI + SQLite + 静态前端（`demo/`），目标腾讯云 Linux（Ubuntu 22.04 / Debian / CentOS Stream / Rocky / Alma）。
+> 适用：FastAPI + SQLite + 静态前端（`web/`），目标腾讯云 Linux（Ubuntu 22.04 / Debian / CentOS Stream / Rocky / Alma）。
 > 默认安装目录：`/opt/biaoxun`；数据库：`/opt/biaoxun/data/biaoxun.db`；服务名：`biaoxun`。
 > 一键脚本：[`deploy.sh`](./deploy.sh)；服务单元：[`biaoxun.service`](./biaoxun.service)；Nginx 站点：[`nginx-biaoxun.conf`](./nginx-biaoxun.conf)；通用启动：[`../run.sh`](../run.sh)。
 
@@ -29,11 +29,10 @@
 ```
 本地仓库
 ├── server/                 FastAPI 代码、requirements.txt、deploy/
-├── demo/                   静态前端（同时是首次启动的种子数据源）
+├── web/                    前端静态文件（同时是首次启动的种子数据源）
 └── deploy.sh ──rsync──▶ 服务器 /opt/biaoxun/
                           ├── server/            代码 + .venv（虚拟环境）
-                          ├── demo/              种子数据源（announcements/site_results）
-                          ├── web/               对外静态站点（由 demo/ 发布而来）
+                          ├── web/               前端静态站点 + 种子数据（announcements/site_results）
                           ├── data/biaoxun.db    SQLite（WAL）
                           └── backup/            可选：数据库备份（脚本不会删除）
 
@@ -49,9 +48,11 @@ nginx: 0.0.0.0:80 / :443
 关键点：
 
 - **应用只监听 `127.0.0.1`**，公网流量必须经 Nginx 或 SSH 隧道进入，避免 8000 端口裸奔。
-- `demo/` 必须保留在服务器上：`app/seed.py` 首次启动会读 `demo/data/announcements.json` 和 `demo/data/site_results.json` 灌种子数据；对外页面则从 `web/` 读取。
-- `data/`、`web/`、`.venv/`、`backup/` 被部署脚本排除，更新时不会覆盖或删除。
+- `web/` 是前端**唯一目录**（源码与部署产物同名）：`app/seed.py` 首次启动会读 `web/data/announcements.json` 和 `web/data/site_results.json` 灌种子数据；对外页面也从 `web/` 读取。
+  > 历史上曾是 `demo/`（源码）→ `web/`（发布副本）双目录，2026-10-28 已统一为单目录 `web/`。
+- `data/`、`.venv/`、`backup/` 被部署脚本排除，更新时不会覆盖或删除。
 - `deploy.sh` 的 rsync 带 `--delete`：`/opt/biaoxun` 下**本地不存在、也不在排除列表**的文件会被删除。不要把手工脚本/临时文件直接放在该目录，放 `data/` 或 `backup/`，或修改 `deploy.sh` 的 `RSYNC_EXCLUDES`。
+- **安全**：`RSYNC_EXCLUDES` 已排除 `/腾讯云/`、`*.pem`、`*.key`、`/.agents/`、`*.bak*`，私钥与本地开发元数据不会被同步到公网服务器。
 
 ---
 
@@ -353,10 +354,10 @@ chmod +x server/deploy/deploy.sh server/run.sh
 
 1. 本地检查文件与 `ssh`/`rsync`，建立 SSH 连接。
 2. 远程预检并安装 `rsync`（缺才装）。
-3. 本地用 rsync 增量同步，排除 `.venv`、`__pycache__`、`data`、`.git`、`node_modules`、`.pw-browsers`、`*.db`、`web/`、`backup/`。
+3. 本地用 rsync 增量同步，排除 `.venv`、`__pycache__`、`data`、`.git`、`node_modules`、`.pw-browsers`、`*.db`、`backup/`，以及私钥类文件（`*.pem`、`*.key`、`/腾讯云/`）与本地开发元数据（`/.agents/`、`*.bak*`）。
 4. 检测 `apt-get` / `dnf` / `yum`；安装 `python3-venv`、`python3-pip`（已有跳过）；校验 Python ≥ 3.9。
 5. 创建 `biaoxun` 系统用户（存在跳过）、`/opt/biaoxun/data`，创建/复用 `.venv` 并安装 `requirements.txt`。
-6. 发布 `demo/` → `/opt/biaoxun/web/`。
+6. 校验前端目录 `/opt/biaoxun/web/`（rsync 已直接同步到位），并清理历史遗留的 `demo/` 目录。
 7. 安装 `/etc/systemd/system/biaoxun.service`，`daemon-reload`、`enable`、`restart`。
 8. 已装 Nginx 则安装 `/etc/nginx/conf.d/biaoxun.conf`、禁用发行版默认站点、`nginx -t`、reload；未装则只打印安装命令。
 9. 检测 SELinux 并放行 Nginx 反代；提示 firewalld。
@@ -445,7 +446,7 @@ sudo chown -R biaoxun:biaoxun /opt/biaoxun/server
 sudo -u biaoxun python3 -m venv /opt/biaoxun/server/.venv
 sudo -u biaoxun /opt/biaoxun/server/.venv/bin/pip install -r /opt/biaoxun/server/requirements.txt
 sudo install -d -m 755 /opt/biaoxun/web
-sudo rsync -a --delete /opt/biaoxun/demo/ /opt/biaoxun/web/
+# 前端源码由 deploy.sh 的 rsync 直接同步到 /opt/biaoxun/web/，无需额外复制
 sudo chown -R biaoxun:biaoxun /opt/biaoxun/web
 # 预初始化数据库，避免 2 个 worker 首启竞争
 sudo -u biaoxun env BX_DATA_DIR=/opt/biaoxun/data BX_STATIC_DIR=/opt/biaoxun/web \
@@ -528,8 +529,7 @@ git pull
 | 内容 | 行为 |
 | --- | --- |
 | `server/` 代码 | rsync 覆盖为本地版本 |
-| `demo/` | 覆盖（种子数据源） |
-| `web/` | 由 `demo/` 重新发布 |
+| `web/` | rsync 覆盖为本地版本（前端 + 种子数据同一目录） |
 | `server/.venv` | 保留；`pip install -r` 增量更新依赖 |
 | `data/biaoxun.db` | **保留，不覆盖**（rsync 排除） |
 | `backup/` | **保留，不删除** |
@@ -697,7 +697,7 @@ sudo systemctl start biaoxun
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
 | `BX_DATA_DIR` | `server/data` | 数据目录；unit 中为 `/opt/biaoxun/data` |
-| `BX_STATIC_DIR` | 仓库 `demo/` | 前端目录；unit 中为 `/opt/biaoxun/web` |
+| `BX_STATIC_DIR` | 仓库 `web/` | 前端目录；unit 中为 `/opt/biaoxun/web` |
 | `BX_DB_PATH` | `$BX_DATA_DIR/biaoxun.db` | 可单独指定数据库文件 |
 | `BX_DEFAULT_PASSWORD` | `123456` | 首次种子用户密码；**上线前必须改** |
 | `BX_SESSION_DAYS` | `7` | 登录会话有效期（天） |
@@ -767,7 +767,7 @@ journalctl -u biaoxun -n 200 --no-pager
   ```bash
   sudo -u biaoxun /opt/biaoxun/server/.venv/bin/pip install -r /opt/biaoxun/server/requirements.txt
   ```
-- 缺少 `demo/data/announcements.json`：种子文件没同步，检查 `/opt/biaoxun/demo/data/`。
+- 缺少 `web/data/announcements.json`：种子文件没同步，检查 `/opt/biaoxun/web/data/`。
 - SQLite `database is locked`：长事务/多进程写冲突，见 10.10。
 
 ### 10.3 静态页面 404 / 打开是 Nginx 欢迎页

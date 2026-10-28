@@ -11,7 +11,7 @@ server/
 │   ├── schema.sql         # 建表 DDL（幂等）
 │   ├── security.py        # PBKDF2 口令 + Bearer 会话 + 权限
 │   ├── serializers.py     # DB 行 → 前端 camelCase
-│   ├── seed.py            # 首次启动灌 demo 数据
+│   ├── seed.py            # 首次启动灌种子数据（读 web/data/*.json）
 │   ├── routers/           # auth / announcements / reminders / teams / sources / schedule
 │   └── services/          # assignments（分配）/ crawler（采集）
 ├── tests/                 # pytest（每个用例独立临时库）
@@ -40,7 +40,7 @@ python3 -m venv .venv
 |---|---|---|
 | `BX_DATA_DIR` | `server/data` | 数据目录 |
 | `BX_DB_PATH` | `<DATA_DIR>/biaoxun.db` | SQLite 文件 |
-| `BX_STATIC_DIR` | 仓库 `demo/` | 前端静态目录 |
+| `BX_STATIC_DIR` | 仓库 `web/` | 前端静态目录 |
 | `BX_COLLECTOR` | 仓库 `collector/collect.py` | 采集脚本；不存在时 `/api/collect` 返回 501 |
 | `BX_SESSION_DAYS` | `7` | 登录有效期 |
 | `BX_DEFAULT_PASSWORD` | `123456` | 新建小组管理员默认密码 |

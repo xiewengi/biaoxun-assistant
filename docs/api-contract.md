@@ -8,7 +8,7 @@
 ## 0. 通用约定
 
 - 时间字符串：日期 `YYYY-MM-DD`，时间 `YYYY-MM-DD HH:MM:SS`。
-- 公告对象（Ann）字段全部驼峰，与 `demo/js/data.js` 的公告结构一一对应：
+- 公告对象（Ann）字段全部驼峰，与 `web/js/data.js` 的公告结构一一对应：
   `id,title,projectName,projectCode,buyer,agency,budget,fundSource,district,annType,pubDate,deadline,bidOpenDate,summary,contact,contacts,sourceUrl,region,purchaseMethod,matchedKeywords,businessTags,isValidOpportunity,hasOperatorInvolvement,opportunityCode,opportunityStatus,willBid,treePlacement,currentHandler,handlerGroup,progress,createdAt,nextFollowUp,bidStatus`
   详情额外含 `progressRecords[]`、`assignmentRecords[]`、`confirmedAt`。
 - 进度枚举：`待分配` / `已分配` / `已确认`（`app/serializers.py` 与前端 PROGRESS_OPTIONS 一致）。
@@ -136,4 +136,4 @@ body：`{keywordList?:[], keywordText?:"a、b、c", crawlInterval?, reminderInte
 ## 7. 其他
 
 - `GET /api/health` → `{ok:true,...}`（已实现）
-- 前端静态文件由 `main.py` 挂在 `/`（`BX_STATIC_DIR`，默认仓库 `demo/`）。
+- 前端静态文件由 `main.py` 挂在 `/`（`BX_STATIC_DIR`，默认仓库 `web/`）。

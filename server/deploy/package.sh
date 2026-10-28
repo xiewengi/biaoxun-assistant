@@ -3,7 +3,7 @@
 # 标讯助手 · 打离线发布包（本地执行）
 #
 # 产物：dist/biaoxun-release-<日期-时间>.tar.gz 与同名 .sha256
-# 包内：server/ demo/ collector/ install.sh VERSION
+# 包内：server/ web/ collector/ install.sh VERSION
 #
 # 用法：
 #   ./server/deploy/package.sh
@@ -43,8 +43,8 @@ rsync -a \
   --exclude '.pytest_cache/' --exclude '*.pyc' \
   "$REPO_DIR/server/" "$STAGE/server/"
 
-# demo（种子数据 + 前端源码）
-rsync -a --exclude '.DS_Store' "$REPO_DIR/demo/" "$STAGE/demo/"
+# web（前端源码 + 种子数据）
+rsync -a --exclude '.DS_Store' "$REPO_DIR/web/" "$STAGE/web/"
 
 # collector（采集脚本与数据源注册表）
 rsync -a --exclude '__pycache__/' --exclude 'logs/' --exclude '_ocr/' \

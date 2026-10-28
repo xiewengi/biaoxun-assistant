@@ -3,7 +3,7 @@
 职责：
 - 检查采集脚本是否可用（不存在时由路由层返回 501）；
 - 在后台 daemon 线程里跑 ``collector/collect.py``；
-- 采集结束后读取 ``demo/data/announcements.json``，按 seed.py 的字段映射
+- 采集结束后读取 ``web/data/announcements.json``，按 seed.py 的字段映射
   增量 ``INSERT OR IGNORE`` 进 announcements（同时补 progress_records）；
 - 回写 ``crawl_runs`` 的运行状态。
 """
@@ -20,8 +20,8 @@ from typing import Any, Dict, List, Tuple
 from .. import config, db
 from .. import crypto
 
-# 采集器固定把结果写到仓库 demo/data/announcements.json；测试可 monkeypatch 本常量。
-ANNOUNCEMENTS_JSON = config.REPO_DIR / "demo" / "data" / "announcements.json"
+# 采集器固定把结果写到仓库 web/data/announcements.json；测试可 monkeypatch 本常量。
+ANNOUNCEMENTS_JSON = config.REPO_DIR / "web" / "data" / "announcements.json"
 
 # 单次采集最长耗时（秒）。采集器慢，但不能无限挂住后台线程。
 COLLECT_TIMEOUT_SECONDS = 3600
@@ -128,7 +128,7 @@ def _run_collector(run_id: int, days: int) -> None:
 
 
 def _read_output() -> List[Dict[str, Any]]:
-    """读取采集器输出 JSON（demo/data/announcements.json）。"""
+    """读取采集器输出 JSON（web/data/announcements.json）。"""
     path = Path(ANNOUNCEMENTS_JSON)
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, list):

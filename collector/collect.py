@@ -12,7 +12,7 @@
   A. 潮州市公共资源交易中心 https://www.czggzy.com:8088 （列表→详情→公告PDF正文）
   B. 中国政府采购网 search.ccgp.gov.cn （有 IP 频控，慢速重试）
 
-输出：announcements.json（demo 字段结构，见 OUT 目标）
+输出：announcements.json（公告字段结构，见 OUT 目标）
 用法：python3 collector/collect.py [--days 30] [--source czggzy|ccgp|all] [--no-pdf]
 """
 import argparse
@@ -840,7 +840,7 @@ def _gd_district(code, name):
     return ""
 
 
-# ---------- 组装 demo 数据结构 ----------
+# ---------- 组装公告数据结构 ----------
 
 ANN_SUFFIX_RE = re.compile(
     r'\s*(公开招标公告|招标公告|竞争性磋商公告|竞争性谈判公告|询价公告|'
@@ -867,7 +867,7 @@ def build_record(title, summary, source_url, pub_date, deadline="", bid_open="",
                  contacts=None,
                  ann_type="招标公告", fund_source="", extra_text="",
                  purchase_method="", source_name=""):
-    """组装 demo 公告记录（字段见 PRD 招标公告展示）。返回 None 表示未通过过滤。
+    """组装公告记录（字段见 PRD 招标公告展示）。返回 None 表示未通过过滤。
 
     contacts: 结构化联系方式对象 {purchaser:{name,address,person,phone},
                agency:{...}, project:{...}}，前端详情页分三方展示。
@@ -1156,25 +1156,8 @@ def run_ccgp(days):
 
 
 def inject_single_file(recs):
-    """把数据注入单文件版 demo 的 INLINE_ANN（今日已清空为 []）。"""
-    path = os.path.join(BASE, "标讯助手demo.html")
-    if not os.path.exists(path):
-        return
-    with open(path, encoding="utf-8") as f:
-        html = f.read()
-    payload = json.dumps(recs, ensure_ascii=False, indent=1)
-    # 注意：re.sub 的替换串里 \n 等转义会被二次解释，必须用函数替换
-    new_html, n = re.subn(
-        r"const INLINE_ANN = \[[\s\S]*?\];",
-        lambda m: "const INLINE_ANN = " + payload + ";",
-        html, count=1,
-    )
-    if n:
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(new_html)
-        log(f"写入 {path}（INLINE_ANN {len(recs)} 条）")
-    else:
-        log(f"!! 未找到 INLINE_ANN 边界，跳过 {path}")
+    """已废弃：单文件离线版已删除，此处保留为空实现以兼容旧调用。"""
+    return
 
 
 SOURCES_JSON = os.path.join(BASE, "collector", "sources.json")
@@ -1526,11 +1509,10 @@ def main():
 
     payload = json.dumps(uniq, ensure_ascii=False, indent=2)
     for p in [os.path.join(BASE, "announcements.json"),
-              os.path.join(BASE, "demo", "data", "announcements.json")]:
+              os.path.join(BASE, "web", "data", "announcements.json")]:
         with open(p, "w", encoding="utf-8") as f:
             f.write(payload)
         log(f"写入 {p}")
-    inject_single_file(uniq)
 
 
 if __name__ == "__main__":

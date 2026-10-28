@@ -12,16 +12,27 @@
 | 系统 | Ubuntu 24.04（OpenSSH_9.6p1 Ubuntu-3ubuntu13.18，Python 3.12） |
 | Web 服务器 | **Caddy** 占用 80/443，现有站点「A股每日涨幅榜」 |
 | 证书 | Caddy 自签（Local Authority，探测时已过期，浏览器会提示不安全） |
-| SSH | **仅公钥认证**；部署私钥在本机 `~/.ssh/biaoxun_deploy` |
-| 域名 / 备案 | 无域名、无备案 → 用 `https://101.42.0.66/biaoxun/` 访问 |
+| SSH | **仅公钥认证**；部署私钥在本机 `~/Desktop/学习文档/标讯助手/腾讯云/biaoxun2.pem`（用户 `ubuntu`） |
+| sudo | 免密，口令为 `biaoxun`：`echo biaoxun \| sudo -S <命令>` |
+| 域名 / 备案 | 无域名、无备案 → 2026-10-25 起改为 `http://101.42.0.66/` 根路径访问（纯 HTTP，无证书警告） |
+
+> ⚠️ **私钥路径变更（2026-10-28 实测）**：本手册早期写的 `~/.ssh/biaoxun_deploy` 与 `~/Downloads/biaoxun2.pem`
+> **均已失效**（Permission denied / 文件不存在）。当前唯一可用私钥是
+> `~/Desktop/学习文档/标讯助手/腾讯云/biaoxun2.pem`。
+>
+> ⚠️ **GitHub 访问需强制 HTTP/1.1**（2026-10-28 实测）：本机 `github.com` 走默认 HTTP/2 会握手失败，
+> 报 `Failed to connect to github.com port 443` 或代理 `CONNECT tunnel failed, 502`。
+> 解决：`git -c http.version=HTTP/1.1 <fetch|push>`，并清空代理变量：
+> `http_proxy= https_proxy= all_proxy= HTTP_PROXY= HTTPS_PROXY= ALL_PROXY= git -c http.version=HTTP/1.1 push origin develop`
+> （WorkBuddy 沙箱内还需加 `dangerouslyDisableSandbox`）。
 
 **原则：不动「A股」站点，只往 Caddyfile 加一段 `/biaoxun` 路由；不需要改安全组。**
 
 ## 2. 部署前检查（SSH 可用后执行）
 
 ```bash
-KEY=~/.ssh/biaoxun_deploy
-SSH="ssh -i $KEY -o ConnectTimeout=10 root@101.42.0.66"
+KEY=~/Desktop/学习文档/标讯助手/腾讯云/biaoxun2.pem
+SSH="ssh -i $KEY -o ConnectTimeout=10 ubuntu@101.42.0.66"
 
 # 只读体检
 $SSH 'bash -s' < server/deploy/preflight.sh
@@ -43,11 +54,11 @@ cd "/Users/yyym/Desktop/学习文档/标讯助手"
 PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple \
   ./server/deploy/deploy.sh \
     --host 101.42.0.66 \
-    --user root \
-    --identity ~/.ssh/biaoxun_deploy
+    --user ubuntu \
+    --identity ~/Desktop/学习文档/标讯助手/腾讯云/biaoxun2.pem
 ```
 
-脚本会：rsync 代码 → 建 `biaoxun` 用户 → venv + 依赖（含采集器可选依赖）→ 发布前端到
+脚本会：rsync 代码 → 建 `biaoxun` 用户 → venv + 依赖（含采集器可选依赖）→ 前端同步到
 `/opt/biaoxun/web` → 预初始化 SQLite 种子 → 安装并启动 `biaoxun.service`（127.0.0.1:8000）
 → 检测到 Caddy 后**跳过 nginx**并打印子路径提示 → 本机健康检查。
 
@@ -59,7 +70,7 @@ PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple \
 $SSH 'cat /etc/caddy/Caddyfile'          # 先确认现有站点块结构
 
 # 把脚本传上去
-scp -i ~/.ssh/biaoxun_deploy server/deploy/apply-caddy-subpath.py root@101.42.0.66:/tmp/
+scp -i ~/Desktop/学习文档/标讯助手/腾讯云/biaoxun2.pem server/deploy/apply-caddy-subpath.py ubuntu@101.42.0.66:/tmp/
 
 # dry-run 看插入位置（不写文件）
 $SSH 'python3 /tmp/apply-caddy-subpath.py --caddyfile /etc/caddy/Caddyfile --dry-run'
@@ -144,9 +155,9 @@ cd /root/biaoxun-release && sudo bash install.sh \
 
 | 项 | 结果 |
 |---|---|
-| SSH | `ubuntu@101.42.0.66`，私钥 `~/Downloads/biaoxun2.pem`（与公钥 `skey-oftylro3` 配对），免密 sudo |
+| SSH | `ubuntu@101.42.0.66`，私钥 `~/Desktop/学习文档/标讯助手/腾讯云/biaoxun2.pem`（与公钥 `skey-oftylro3` 配对），免密 sudo（口令 `biaoxun`） |
 | 部署方式 | `deploy.sh --user ubuntu --identity ...` + 清华 pip 镜像 |
-| 安装目录 | `/opt/biaoxun`（server/demo/web/collector/data/backup），systemd `biaoxun` 监听 `127.0.0.1:8000`（2 workers） |
+| 安装目录 | `/opt/biaoxun`（server/web/collector/data/backup），systemd `biaoxun` 监听 `127.0.0.1:8000`（2 workers） |
 | 采集器依赖 | 首次因 collector 目录权限失败，`chown biaoxun` 后补装成功（trafilatura 2.3.1 等） |
 | Caddy | 已切换为根路径纯 HTTP：`:80` → `127.0.0.1:8000`（HTTPS 已关闭，备份仍保留） |
 | 旧站 | 「A股每日涨幅榜」已停止并删除（`stockrank.service`、`/opt/stockrank`）；备份 `/opt/backup/ashare-20261025-122819.tar.gz`；旧 Caddyfile 备份 `/etc/caddy/Caddyfile.bak.20261025-123049` |
@@ -180,7 +191,7 @@ cd /root/biaoxun-release && sudo bash install.sh \
 
 ### 9.3 种子重复回填修复（2026-10-26）
 
-问题：`seed.run_seed()` 每次进程启动都会对 `demo/data/announcements.json` 做 `INSERT OR IGNORE`，
+问题：`seed.run_seed()` 每次进程启动都会对 `web/data/announcements.json` 做 `INSERT OR IGNORE`，
 导致用户删除的种子公告在服务重启（含部署）后被重新插回。本次删除测试公告后就复现了一次。
 
 修复：`seed_announcements()` 只在 `announcements` 表为空时灌种子；新增回归测试
@@ -195,3 +206,56 @@ cd /root/biaoxun-release && sudo bash install.sh \
 
 期间混入一条手工接口测试数据（`ANN261026816595` / production-deploy-v1，audit_log 显示 10:22:54
 由 sheshujuan 登录后「新增公告」写入，非采集产生），已删除；库中无 example.com 残留。
+
+## 10. 三方一致性核对 + 结构重构（2026-10-28）
+
+### 10.1 核对结论
+
+| 核对项 | 结论 |
+|---|---|
+| 本地 ↔ GitHub | ✅ 完全一致（`develop` = `60e5036`） |
+| 本地 ↔ 服务器 | ✅ 代码一致（64 个共有文件中 61 个 SHA256 相同；3 处差异为运行数据与旧副本） |
+
+差异说明：`announcements.json` 是运行数据（服务器 22 条 md5 ID / 本地 16 条种子数据，DB 实际 26 条）；
+服务器 `/opt/biaoxun/demo/` 是旧副本，**线上实际服务目录是 `web/`**（systemd `BX_STATIC_DIR=/opt/biaoxun/web`）。
+
+### 10.2 安全加固
+
+- **清除服务器私钥副本**：`/opt/biaoxun/腾讯云/biaoxun2.pem`（rsync 把本地 `腾讯云/` 目录带上去的）已删除，
+  同源垃圾 `.agents/`、`标讯助手demo.html.bak*` 一并清理。
+- **修根因**：`deploy.sh` 的 `RSYNC_EXCLUDES` 补上 `/腾讯云/`、`*.pem`、`*.key`、`/.agents/`、`*.bak*`，
+  避免下次 deploy 再次把私钥同步到公网机器。`package.sh` 是白名单打包，天然无此问题。
+- 服务健康未受影响：清理后 `biaoxun.service` active、`/api/health` 正常、DB 26 条不变。
+
+### 10.3 前端目录重构：demo/ → web/
+
+**背景**：原设计是 `demo/`（源码）+ `web/`（发布副本）双目录，服务器上两份都存在，
+导致「本地看着不一致」的困扰，且每次 deploy 要多一次 rsync 复制。
+
+**改动**：源码目录 `demo/` 重命名为 `web/`，**取消双目录**。
+
+| 项 | 改前 | 改后 |
+|---|---|---|
+| 仓库前端目录 | `demo/` | `web/` |
+| 服务器前端目录 | `demo/`（源码）+ `web/`（副本） | `web/`（唯一，rsync 直接同步） |
+| systemd `BX_STATIC_DIR` | `/opt/biaoxun/web` | `/opt/biaoxun/web`（不变） |
+| seed 种子路径 | `demo/data/*.json` | `web/data/*.json` |
+| deploy.sh 6.7 步 | `rsync demo/ → web/` | 仅校验 + 清理历史 `demo/` |
+
+**同步改动**：`config.py`、`seed.py`（常量改名 `DEMO_*` → `SEED_*`）、`services/crawler.py`、
+`serializers.py`、`routers/announcements.py`、`tests/conftest.py`、`deploy.sh`、`install.sh`、
+`package.sh`、`caddy-biaoxun.conf`、全部相关文档。
+
+**同时删除**：根目录单文件离线版 `标讯助手demo.html`（标题「标讯助手 - Demo（离线版）」）
+及其在 `collector/collect.py` 中的写回逻辑 `inject_single_file()`。
+> 该文件是**独立单文件版**，与 `web/` 目录的正式前端无关；服务器从未部署过它。
+
+**验证**：`bash -n` + `py_compile` 全通过；pytest **58 passed / 16 failed**，
+其中 16 项失败经 `git stash` 基线对比确认为**改动前既有失败**（RBAC 改造引入），与本次重构无关；
+端到端启动 uvicorn：健康检查 OK、静态资源 200、登录成功、seed 从 `web/data` 读入 15 条公告。
+
+### 10.4 未处理事项
+
+- 默认密码仍是 `123456`（公网可访问），按老大要求本次不改，建议后续处理。
+- 旧 A股 的 `OPENROUTER_API_KEY` 建议到 OpenRouter 后台轮换。
+- pytest 里 16 项 RBAC 相关失败建议单独排期修复。

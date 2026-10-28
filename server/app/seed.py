@@ -12,11 +12,11 @@ from typing import Any, Dict, List
 
 from . import config, db, security
 
-DEMO_ANNOUNCEMENTS = config.REPO_DIR / "demo" / "data" / "announcements.json"
-DEMO_SITE_RESULTS = config.REPO_DIR / "demo" / "data" / "site_results.json"
+SEED_ANNOUNCEMENTS = config.REPO_DIR / "web" / "data" / "announcements.json"
+SEED_SITE_RESULTS = config.REPO_DIR / "web" / "data" / "site_results.json"
 SOURCES_JSON = config.REPO_DIR / "collector" / "sources.json"
 
-# 与 demo/js/data.js 的 TEAM_GROUPS 保持一致（顺序即展示优先级）
+# 与 web/js/data.js 的 TEAM_GROUPS 保持一致（顺序即展示优先级）
 SEED_GROUPS: List[Dict[str, Any]] = [
     {"id": 1, "name": "集团客户部", "region": "集团客户部", "admin": "佘淑娟",
      "adminContact": "13600121222", "adminAccount": "sheshujuan",
@@ -73,7 +73,7 @@ def seed_announcements(conn: sqlite3.Connection) -> int:
     # 只在公告表为空时灌种子；否则用户删除的公告会在每次服务重启时被重新插回
     if conn.execute("SELECT COUNT(*) c FROM announcements").fetchone()["c"]:
         return 0
-    items = _read_json(DEMO_ANNOUNCEMENTS, [])
+    items = _read_json(SEED_ANNOUNCEMENTS, [])
     if not isinstance(items, list):
         return 0
     inserted = 0
@@ -123,7 +123,7 @@ def seed_sources(conn: sqlite3.Connection) -> int:
     registry = _read_json(SOURCES_JSON, [])
     if not isinstance(registry, list):
         registry = []
-    site_results = _read_json(DEMO_SITE_RESULTS, [])
+    site_results = _read_json(SEED_SITE_RESULTS, [])
     status_by_domain = {}
     if isinstance(site_results, list):
         for r in site_results:

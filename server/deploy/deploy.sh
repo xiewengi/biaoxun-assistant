@@ -44,7 +44,7 @@ umask 022
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 SERVER_DIR="${PROJECT_ROOT}/server"
-DEMO_DIR="${PROJECT_ROOT}/demo"
+WEB_DIR="${PROJECT_ROOT}/web"
 
 HOST=""
 SSH_USER="root"
@@ -185,7 +185,7 @@ command -v ssh   >/dev/null 2>&1 || die "本地缺少 ssh 命令"
 command -v rsync >/dev/null 2>&1 || die "本地缺少 rsync 命令（macOS 自带）"
 [[ -f "${SERVER_DIR}/app/main.py" ]]      || die "未找到 ${SERVER_DIR}/app/main.py，请在项目根目录内运行"
 [[ -f "${SERVER_DIR}/requirements.txt" ]] || die "未找到 ${SERVER_DIR}/requirements.txt"
-[[ -f "${DEMO_DIR}/index.html" ]]         || die "未找到 ${DEMO_DIR}/index.html"
+[[ -f "${WEB_DIR}/index.html" ]]         || die "未找到 ${WEB_DIR}/index.html"
 [[ -f "${SERVER_DIR}/deploy/biaoxun.service" ]]   || die "未找到 server/deploy/biaoxun.service"
 [[ -f "${SERVER_DIR}/deploy/nginx-biaoxun.conf" ]] || die "未找到 server/deploy/nginx-biaoxun.conf"
 ok "本地文件齐全，项目根目录：${PROJECT_ROOT}"
@@ -294,7 +294,7 @@ fi
 # 3.5 前端版本号 +0.1（每次 deploy 自动递增，体现迭代节奏）
 # ---------------------------------------------------------------------------
 info "3.5/6 自动递增前端版本号"
-APP_JS="${PROJECT_ROOT}/demo/js/app.js"
+APP_JS="${PROJECT_ROOT}/web/js/app.js"
 if [[ -f "$APP_JS" ]]; then
   # 匹配 ">v数字.数字<"，例如 >v1.0< → >v1.1<，>v1.9< → >v2.0<
   OLD_VER=$(grep -oE '>v[0-9]+\.[0-9]+<' "$APP_JS" | head -1 | sed 's/^>//;s/<$//')
@@ -331,7 +331,6 @@ RSYNC_EXCLUDES=(
   --exclude 'pylibs/'
   --exclude '/server/data/'
   --exclude '/data/'
-  --exclude '/web/'
   --exclude '/backup/'
   --exclude '/backup.sh'
   --exclude '*.db'
@@ -344,7 +343,6 @@ RSYNC_EXCLUDES=(
   --exclude '/screenshots/'
   --exclude '/dist/'
   --exclude '/相关文档/'
-  --exclude '/标讯助手demo.html'
   --exclude '/announcements.json'
   --exclude '/package.json'
   --exclude '/package-lock.json'
@@ -534,7 +532,7 @@ log "准备目录与权限"
 install -d -m 755 "$REMOTE_DIR"
 install -d -m 750 -o "$APP_USER" -g "$APP_USER" "$REMOTE_DIR/data"
 chown -R "$APP_USER:$APP_USER" "$REMOTE_DIR/server"
-[[ -d "$REMOTE_DIR/demo" ]] && chown -R "$APP_USER:$APP_USER" "$REMOTE_DIR/demo"
+[[ -d "$REMOTE_DIR/web" ]] && chown -R "$APP_USER:$APP_USER" "$REMOTE_DIR/web"
 # rsync 会保留本地 uid，collector 也必须归 biaoxun，否则采集器依赖安装/运行失败
 [[ -d "$REMOTE_DIR/collector" ]] && chown -R "$APP_USER:$APP_USER" "$REMOTE_DIR/collector"
 ok "目录就绪：$REMOTE_DIR / data / server"
@@ -578,20 +576,24 @@ if [[ -f "$REMOTE_DIR/collector/requirements.txt" ]]; then
 fi
 
 # ---------------------------------------------------------------------------
-# 6.7 发布前端：demo/ -> web/
+# 6.7 校验前端目录
+#    说明：web/ 是前端唯一目录（源码与部署产物同名），rsync 已直接同步到位。
+#          历史上曾有 demo/ → web/ 双目录复制，已废弃，这里只做一致性校验。
 # ---------------------------------------------------------------------------
-log "发布前端：$REMOTE_DIR/demo/ -> $REMOTE_DIR/web/"
-[[ -d "$REMOTE_DIR/demo" ]] || die "未找到 $REMOTE_DIR/demo，无法发布前端"
-install -d -m 755 "$REMOTE_DIR/web"
-rsync -a --delete --exclude '.DS_Store' "$REMOTE_DIR/demo/" "$REMOTE_DIR/web/" \
-  || die "复制前端失败（demo -> web）"
-[[ -f "$REMOTE_DIR/web/index.html" ]] || die "发布后未找到 $REMOTE_DIR/web/index.html"
+log "校验前端：$REMOTE_DIR/web/"
+[[ -d "$REMOTE_DIR/web" ]] || die "未找到 $REMOTE_DIR/web，无法提供前端"
+[[ -f "$REMOTE_DIR/web/index.html" ]] || die "前端缺失 $REMOTE_DIR/web/index.html"
 chown -R "$APP_USER:$APP_USER" "$REMOTE_DIR/web"
-ok "前端已发布到 $REMOTE_DIR/web"
+# 清理历史遗留的 demo/ 双目录（2026-10-28 起前端统一为 web/）
+if [[ -d "$REMOTE_DIR/demo" ]]; then
+  rm -rf "$REMOTE_DIR/demo"
+  log "已清理历史遗留目录 $REMOTE_DIR/demo"
+fi
+ok "前端就绪：$REMOTE_DIR/web"
 
-# seed 需要 demo/data 与 collector/sources.json，缺失时只提示，不阻断
-if [[ ! -f "$REMOTE_DIR/demo/data/announcements.json" ]]; then
-  warn "缺少 demo/data/announcements.json，首次启动将没有种子公告"
+# seed 需要 web/data 与 collector/sources.json，缺失时只提示，不阻断
+if [[ ! -f "$REMOTE_DIR/web/data/announcements.json" ]]; then
+  warn "缺少 web/data/announcements.json，首次启动将没有种子公告"
 fi
 if [[ ! -f "$REMOTE_DIR/collector/sources.json" ]]; then
   warn "缺少 collector/sources.json，首次启动将没有种子数据源"
@@ -615,7 +617,7 @@ if [[ ! -s "$REMOTE_DIR/data/biaoxun.db" ]]; then
     as_app env HOME="$REMOTE_DIR/data" BX_DATA_DIR="$REMOTE_DIR/data" BX_STATIC_DIR="$REMOTE_DIR/web" \
       "$VENV/bin/python" -c 'from app import seed; print("种子数据：", seed.run_seed())'
   ); then
-    die "数据库初始化失败：请检查 $REMOTE_DIR/data 权限和 demo/collector 种子文件"
+    die "数据库初始化失败：请检查 $REMOTE_DIR/data 权限和 web/collector 种子文件"
   fi
   chown -R "$APP_USER:$APP_USER" "$REMOTE_DIR/data"
 fi

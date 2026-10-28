@@ -9,15 +9,14 @@
 ```
 /tmp/bx-stage/
 ├── server/          # 代码 + 全新 .venv（未复用仓库里的 venv）
-├── demo/            # 种子数据源
+├── web/             # 前端静态文件 + 种子数据源（BX_STATIC_DIR 指向这里）
 ├── collector/       # 采集器 + sources.json
-├── web/             # demo 发布副本（BX_STATIC_DIR 指向这里）
 ├── data/            # SQLite（biaoxun.db）
 └── backup/          # backup.sh 产物
 ```
 
 步骤严格按 `deploy/deploy.sh`：rsync 过滤同步 → 建 venv → 装 requirements →
-demo 发布到 web → 预初始化种子 → 以 systemd 同款环境变量启动。
+预初始化种子 → 以 systemd 同款环境变量启动。
 
 ## 2. 验证结果
 
@@ -57,11 +56,10 @@ demo 发布到 web → 预初始化种子 → 以 systemd 同款环境变量启�
 # 仓库根目录
 rm -rf /tmp/bx-stage && mkdir -p /tmp/bx-stage/data
 rsync -a --exclude '.venv/' --exclude '__pycache__/' --exclude 'data/' server/ /tmp/bx-stage/server/
-rsync -a --exclude '.DS_Store' demo/ /tmp/bx-stage/demo/
+rsync -a --exclude '.DS_Store' web/ /tmp/bx-stage/web/
 rsync -a --exclude '__pycache__/' --exclude '_ocr/' --exclude 'logs/' collector/ /tmp/bx-stage/collector/
 cd /tmp/bx-stage/server
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-rsync -a --delete demo/ web/            # 从 /tmp/bx-stage 下执行
 BX_DATA_DIR=/tmp/bx-stage/data BX_STATIC_DIR=/tmp/bx-stage/web \
   .venv/bin/python -c 'from app import seed; print(seed.run_seed())'
 BX_DATA_DIR=/tmp/bx-stage/data BX_STATIC_DIR=/tmp/bx-stage/web \

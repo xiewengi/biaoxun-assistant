@@ -12,7 +12,7 @@ sys.path.insert(0, str(ROOT))
 _BOOT_TMP = tempfile.mkdtemp(prefix="bx-boot-")
 os.environ.setdefault("BX_DATA_DIR", _BOOT_TMP)
 os.environ.setdefault("BX_DB_PATH", os.path.join(_BOOT_TMP, "boot.db"))
-os.environ.setdefault("BX_STATIC_DIR", str(ROOT.parent / "demo"))
+os.environ.setdefault("BX_STATIC_DIR", str(ROOT.parent / "web"))
 
 import pytest  # noqa: E402
 from fastapi.testclient import TestClient  # noqa: E402
