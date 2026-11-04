@@ -56,9 +56,28 @@ OPENER = urllib.request.build_opener(
 # ---------- 过滤配置 ----------
 
 # 城市 = 潮州：必须命中其一
-CITY_WORDS = ["潮州", "湘桥", "潮安", "饶平", "枫溪"]
+# 2026-11-04：补「潮汕」——暨南大学附属第一医院潮汕医院位于饶平县，
+# 标题/采购人只写「潮汕医院」没有「潮州」二字，会被误挡。
+CITY_WORDS = ["潮州", "湘桥", "潮安", "饶平", "枫溪", "潮汕"]
 # 汕头辖区（一字之差，必须排除）：命中且不命中潮州词 → 剔除
 CITY_BLOCK = ["潮阳", "潮南", "汕头", "澄海", "南澳"]
+# 2026-11-04：潮州本地机构但名称里不含区县词的特例（用于强证据判定）。
+# 暨南大学附属第一医院潮汕医院位于饶平县，标题/采购人只有「潮汕医院」，
+# 没有「潮州/湘桥/潮安/饶平/枫溪」，不放行会误杀这条本地商机。
+CHAOZHOU_LOCAL_INSTITUTIONS = ["潮汕医院"]
+# 2026-11-04：潮州下辖镇名（部分公告标题只写镇名，如「意溪镇…维修养护项目」，
+# 且采购人解析为空，此时标题里没有区县词，需靠镇名判定归属）。
+CHAOZHOU_TOWNS = [
+    # 湘桥区
+    "意溪镇", "磷溪镇", "铁铺镇", "官塘镇",
+    # 潮安区
+    "庵埠镇", "浮洋镇", "凤凰镇", "文祠镇", "赤凤镇", "龙湖镇",
+    "金石镇", "沙溪镇", "江东镇", "彩塘镇", "凤塘镇", "东凤镇",
+    "登塘镇", "归湖镇",
+    # 饶平县
+    "新丰镇", "新圩镇", "钱东镇", "汫洲镇", "海山镇", "六甲镇",
+    "上饶镇", "东山镇", "黄冈镇",
+]
 
 # 定时任务1 关键词表（PRD）
 KEYWORDS = [
@@ -188,7 +207,11 @@ def html_to_clean_text(html):
 # ---------- 过滤器 ----------
 
 def city_filter(*texts):
-    """城市=潮州：任一文本命中潮州词，且不落在汕头黑名单。"""
+    """城市=潮州：任一文本命中潮州词，且不落在汕头黑名单。
+
+    2026-11-04：潮州词表补「潮汕」——暨南大学附属第一医院潮汕医院位于饶平县，
+    标题/采购人只写「潮汕医院」没有「潮州」二字，原词表会误挡这条本地商机。
+    """
     blob = " ".join(t for t in texts if t)
     has_block = any(w in blob for w in CITY_BLOCK)
     has_city = any(w in blob for w in CITY_WORDS)
@@ -201,29 +224,71 @@ def city_filter(*texts):
     return False
 
 
+def strong_city_evidence(title, project_name, buyer):
+    """强证据判定：标题 / 项目名 / 采购人 里出现潮州词。
+
+    2026-11-04 新增。背景：全国性平台的公告正文常在「包件清单」里顺带提到
+    潮州区县（例如深圳能源的吨袋采购覆盖「潮安厂、湘桥厂」，主体采购人是
+    深圳能源环保股份有限公司）。这种公告不属于潮州本地商机，
+    仅靠正文出现潮州词会误收，故要求标题/项目名/采购人命中。
+    """
+    blob = " ".join(t for t in (title, project_name, buyer) if t)
+    if any(w in blob for w in CITY_WORDS):
+        return True
+    # 2026-11-04：潮州本地机构但名称里不含区县词的特例。
+    # 暨南大学附属第一医院潮汕医院（位于饶平县）标题/采购人只有「潮汕医院」，
+    # 没有「潮州/湘桥/潮安/饶平/枫溪」，若不放行会误杀这条本地商机。
+    if any(k in blob for k in CHAOZHOU_LOCAL_INSTITUTIONS):
+        return True
+    # 2026-11-04：标题只写镇名的情况（如「意溪镇农村小型集中式供水工程维修养护项目」，
+    # 且采购人解析为空），靠潮州下辖镇名判定归属。
+    if any(town in blob for town in CHAOZHOU_TOWNS):
+        return True
+    return False
+
+
 GENERIC_TITLES = {
     "招标公告", "采购公告", "采购意向公告", "竞争性磋商公告",
     "结果公告", "中标公告", "竞争性谈判公告",
 }
 
+# 2026-11-04：正常公告标题几乎都带这些后缀/关键词。
+# 用于判断「标题其实是平台名或栏目名」的兜底规则。
+ANN_TITLE_SUFFIX_RE = re.compile(
+    r"(公告|公示|通知|公告书|招标|采购|磋商|谈判|询价|比选|中标|成交|结果|"
+    r"单一来源|资格预审|邀请|遴选|意向|需求|说明|更正|变更|废标|流标|终止|合同|验收)"
+)
 
-def looks_like_announcement(title, summary, source_name="", project_name=""):
+
+def looks_like_announcement(title, summary, source_name="", project_name="", site_names=None):
     """排除「首页/列表页被当成公告」的噪声。
 
     - 标题等于站点名称（抓到了平台首页）
+    - 标题等于站点的其它别名（site_names，平台名与公司名不一致时用）
     - 标题只是「招标公告」且正文里提取不到项目名
     - 正文开头是导航（登录/注册、首页、资讯中心…）
+    - 标题不含任何公告类后缀且过短（平台名/栏目名残留）
     """
     t = (title or "").strip()
     if not t:
         return False
     if source_name and t == source_name.strip():
         return False
+    # 2026-11-04：平台展示名与配置名不一致时（如 sources.json 配「公诚管理咨询有限公司」，
+    # 站点页面 <title> 是「诚E招电子采购交易平台」），靠 site_names 别名兜底丢弃。
+    for alias in (site_names or []):
+        a = (alias or "").strip()
+        if a and t == a:
+            return False
     if t in GENERIC_TITLES and not (project_name or "").strip():
         return False
     head = (summary or "")[:200]
     nav_markers = ("登录/注册", "用户中心", "退出", "首页", "资讯中心", "交易大厅", "资产所在地")
     if sum(1 for m in nav_markers if m in head) >= 2:
+        return False
+    # 2026-11-04：标题被站点名/栏目名污染后既不含公告后缀、又短得像平台名，
+    # 正常公告标题几乎都带「公告/公示/通知/公告」等后缀，这里做兜底排除。
+    if len(t) < 12 and not ANN_TITLE_SUFFIX_RE.search(t):
         return False
     return True
 
@@ -626,7 +691,6 @@ GD_CHANNEL = "fca71be5-fc0c-45db-96af-f513e9abda9d,95ff31f3-a1af-4bc4-b1a2-54c89
 # 潮州区划码：445101市本级 445102湘桥 445103潮安 445122饶平
 GD_CITY_CODES = ("4451",)
 
-
 def _gd_json(path, params):
     q = dict(params)
     q["_t"] = int(time.time() * 1000)
@@ -866,7 +930,7 @@ def build_record(title, summary, source_url, pub_date, deadline="", bid_open="",
                  buyer="", agency="", budget="", project_code="", contact="",
                  contacts=None,
                  ann_type="招标公告", fund_source="", extra_text="",
-                 purchase_method="", source_name=""):
+                 purchase_method="", source_name="", site_names=None):
     """组装公告记录（字段见 PRD 招标公告展示）。返回 None 表示未通过过滤。
 
     contacts: 结构化联系方式对象 {purchaser:{name,address,person,phone},
@@ -881,7 +945,14 @@ def build_record(title, summary, source_url, pub_date, deadline="", bid_open="",
     # 否则「城市列表里出现潮州」的全国页面也会被误收。
     if not city_filter(title, project_name, buyer, (summary or "")[:1500]):
         return None
-    if not looks_like_announcement(title, summary, source_name, project_name):
+    # 2026-11-04：全国性平台（深圳能源/诚E招等）的公告常在正文里顺带提到潮州区县
+    # （例如「潮安厂、湘桥厂」的联合采购包件清单），主体采购人却在外地。
+    # 这类站点必须由「标题 / 项目名 / 采购人」命中潮州词才算潮州公告，
+    # 仅仅正文出现潮州词不足以判定。
+    if not strong_city_evidence(title, project_name, buyer):
+        return None
+    if not looks_like_announcement(title, summary, source_name, project_name,
+                                  site_names=site_names):
         return None
     blob = " ".join([title, (summary or "")[:3000], buyer, agency])
     kws = match_keywords(blob)
@@ -1166,6 +1237,34 @@ SOURCES_JSON = os.path.join(BASE, "collector", "sources.json")
 # 首页抓公告链接 → 详情页用通用正则抠字段 → 走 build_record 过滤
 ANN_LINK_HREF_RE = re.compile(r"""<a[^>]+href=["']([^"']+)["'][^>]*>([^<]{8,120})</a>""", re.I)
 ZB_KEYWORD_RE = re.compile(r"(招标|采购|公告|中标|询价|磋商|谈判|投标|资格预审|中标候选人|变更|更正|单一来源|废标|流标|成交|遴选|邀请招标|定点)", re.I)
+# 2026-11-04：栏目页/列表页的 URL 特征（这些页面本身不是公告）。
+# 诚E招的栏目页形如 /cms/categories/业务公告/项目公告/；
+# 通用平台常见 /list /lists /index /category /channel 等目录名。
+LIST_PAGE_PATH_RE = re.compile(
+    r"/(categories|category|channels?|lists?|listing|column|columns|folder|nav|menu)(/|$|\?)",
+    re.I,
+)
+
+
+def is_list_page_url(url):
+    """判断 URL 是否指向栏目页/列表页（而非具体公告详情页）。
+
+    2026-11-04：只按目录名判断，不按 index.html 判断——
+    「xxgg/index.html」这类既可能是栏目页也可能是详情页，
+    误杀正常公告的代价远高于漏收一条列表页（列表页另有标题/别名兜底）。
+    """
+    try:
+        path = urllib.parse.urlparse(url or "").path or ""
+    except Exception:
+        return False
+    if LIST_PAGE_PATH_RE.search(path):
+        return True
+    # 路径以 / 结尾且末段是纯栏目词，也算列表页
+    tail = path.rstrip("/").rsplit("/", 1)[-1]
+    if tail and re.fullmatch(r"(list|more|channel|category)", tail, re.I):
+        return True
+    return False
+
 DATE_RE = re.compile(r"(\d{4}[-/年]\d{1,2}[-/月]\d{1,2}日?)\s*(\d{1,2}:\d{2})?")
 DATE_META_RE = re.compile(r"发布(?:时间|日期)[:：]?[^>]*>[^<]*<[^>]*>(\d{4}[-/年]\d{1,2}[-/月]\d{1,2})")
 
@@ -1185,20 +1284,54 @@ def _guess_ann_type(title, html):
     return "采购公告"
 
 def _parse_date(html):
-    m = DATE_META_RE.search(html or "")
-    raw = m.group(1) if m else ""
-    if not raw:
-        for m2 in DATE_RE.finditer(html or ""):
-            raw = m2.group(1); break
-        else: return ""
-    raw = raw.replace("年","-").replace("月","-").replace("日","").replace("/","-")
-    parts = [p for p in raw.split("-") if p]
-    if len(parts) >= 3:
+    """从 HTML 抽取发布日期。
+
+    2026-11-04：页面第一个日期未必是发布日期（列表页里可能是「原投标截止时间」，
+    变更公告里也可能是未来的截止日）。这里改为遍历所有候选日期，
+    优先取「今天及之前」的那个；全部都是未来日期才回退到第一个候选。
+    """
+    cands = _date_candidates(html)
+    if not cands:
+        return ""
+    today = dt.date.today()
+    for raw in cands:
+        parsed = _normalize_date(raw)
+        if not parsed:
+            continue
         try:
-            y, mo, d = int(parts[0]), int(parts[1]), int(parts[2])
-            if 2020 <= y <= 2040 and 1 <= mo <= 12 and 1 <= d <= 31:
-                return f"{y}-{mo:02d}-{d:02d}"
-        except: pass
+            if dt.date.fromisoformat(parsed) <= today:
+                return parsed
+        except ValueError:
+            continue
+    # 全是未来日期：返回第一个候选，交由调用方的未来日期校验兜底丢弃
+    return _normalize_date(cands[0]) or ""
+
+
+def _date_candidates(html):
+    """按出现顺序返回页面中所有候选日期字符串。"""
+    out = []
+    m = DATE_META_RE.search(html or "")
+    if m and m.group(1):
+        out.append(m.group(1))
+    for m2 in DATE_RE.finditer(html or ""):
+        raw = m2.group(1)
+        if raw not in out:
+            out.append(raw)
+    return out
+
+
+def _normalize_date(raw):
+    """把 2026年11月5日 / 2026-11-05 / 2026/11/5 统一成 2026-11-05。"""
+    raw = (raw or "").replace("年", "-").replace("月", "-").replace("日", "").replace("/", "-")
+    parts = [p for p in raw.split("-") if p]
+    if len(parts) < 3:
+        return ""
+    try:
+        y, mo, d = int(parts[0]), int(parts[1]), int(parts[2])
+        if 2020 <= y <= 2040 and 1 <= mo <= 12 and 1 <= d <= 31:
+            return f"{y}-{mo:02d}-{d:02d}"
+    except Exception:
+        pass
     return ""
 
 def _parse_deadline(html):
@@ -1340,6 +1473,9 @@ def run_generic(site, days=30):
 
     url = site["url"].rstrip("/")
     name = site["name"]
+    # 2026-11-04：站点的其它展示名（页面 <title> 常与配置名不一致），
+    # 命中即视为抓到平台首页/列表页而非具体公告。
+    site_names = [name] + list(site.get("siteNames") or [])
     results = []
     try:
         data, ct = http_get(url, timeout=15)
@@ -1353,6 +1489,9 @@ def run_generic(site, days=30):
         if not href.startswith("http"): href = urljoin(url + "/", href)
         href = _encode_url(href)
         if any(x in href for x in [".jpg", ".png", ".gif", ".css", ".js", "#", "javascript:", "mailto:"]):
+            continue
+        # 2026-11-04：栏目/列表页不是公告，直接排除（诚E招的 /cms/categories/… 就是这类）
+        if is_list_page_url(href):
             continue
         if not ZB_KEYWORD_RE.search(txt): continue
         anchors.append((href, txt))
@@ -1376,6 +1515,8 @@ def run_generic(site, days=30):
         try:
             pd = dt.date.fromisoformat(pub_date)
             if pd < cutoff: continue
+            # 2026-11-04：发布日期不可能在未来（列表页常把「投标截止时间」排在最前）
+            if pd > dt.date.today(): continue
         except: pass
         fields = _parse_detail_fields(h2)
         if not fields["title"]: continue
@@ -1389,6 +1530,7 @@ def run_generic(site, days=30):
             extra_text=(md_body or strip_tags(h2))[:5000],
             purchase_method=fields["purchase_method"],
             source_name=name,
+            site_names=site_names,
         )
         if rec: results.append(rec)
     log(f"  {name}: {len(anchors)} 候选 → {len(results)} 条通过")
