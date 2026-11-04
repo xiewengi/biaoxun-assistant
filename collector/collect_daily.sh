@@ -4,7 +4,9 @@
 set -u
 
 BASE="/Users/yyym/Desktop/学习文档/标讯助手"
-PY="/Users/yyym/.dsh/dsh-runtimes/dsh-primary-runtime/dependencies/python/bin/python3"
+# 2026-10-23 切换到 venv Python：系统 pip 装的 wheel 在 macOS 26 上有 Team ID 签名
+# 校验问题，venv 内 python + 包同源，天然兼容
+PY="$BASE/.venv/bin/python"
 LOG_DIR="$BASE/collector/logs"
 DAYS="${1:-30}"          # 时间窗（天），可带参覆盖
 SOURCES="${2:-all}"      # 数据源，可带参覆盖
@@ -15,7 +17,8 @@ LOG="$LOG_DIR/collect_$(date +%Y%m%d_%H%M).log"
 {
   echo "===== $(date '+%F %T') 开始采集 days=${DAYS} source=${SOURCES} ====="
   cd "$BASE" || { echo "!! 进入 $BASE 失败"; exit 1; }
-  PYTHONPATH="$BASE/pylibs" "$PY" collector/collect.py --days "$DAYS" --source "$SOURCES"
+  # venv 已经自带所有包（trafilatura / pypdf / Pillow），不需要额外 PYTHONPATH
+  "$PY" collector/collect.py --days "$DAYS" --source "$SOURCES"
   rc=$?
   echo "===== 结束 exit=$rc ====="
 } >> "$LOG" 2>&1
