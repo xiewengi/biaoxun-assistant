@@ -4,6 +4,7 @@
 - 待分配 → admin-assign（urgent）
 - 已分配 → sales-follow（按 next_follow_up 距今天数分 urgent / warn / info）
 - 已确认 → 不生成提醒
+- 已逻辑删除（is_deleted=1）→ 一律不生成提醒（与公告列表口径一致）
 """
 from __future__ import annotations
 
@@ -108,7 +109,11 @@ def list_reminders(
         security.require_permission(user, "announcements:assign", "查看所有提醒")
 
     district = (district or "").strip()
-    sql = "SELECT * FROM announcements WHERE progress != '已确认'"
+    # 2026-11-06：必须排除已逻辑删除的公告。
+    # 线上 11-04 从招标公告删掉的 3 条「诚E招」列表页假公告（is_deleted=1、
+    # progress 仍是待分配）曾继续出现在任务提醒里，且前端批量分配弹窗按
+    # targetId 去公告列表（已过滤软删）找不到对应项而渲染为空 → 无法批量分配。
+    sql = "SELECT * FROM announcements WHERE progress != '已确认' AND is_deleted = 0"
     params: List[Any] = []
     if district:
         sql += " AND district = ?"

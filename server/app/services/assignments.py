@@ -34,6 +34,11 @@ def assign_one(
     ann = _fetch_ann(conn, ann_id)
     if not ann:
         return False, "公告不存在"
+    # 2026-11-06：已逻辑删除的公告不允许被重新分配（含从任务提醒页绕过前端
+    # 直接打接口的场景）。软删公告在公告列表/详情里都已不可见，若还能分配会
+    # 造成"幽灵数据"重新带上处理人、进度等状态。
+    if ann.get("is_deleted"):
+        return False, "公告不存在"
     if ann["progress"] == "已确认":
         return False, "已确认公告不可再分配"
     group = _fetch_group(conn, group_name)

@@ -30,12 +30,13 @@ def _insert_ann(
     handler: str = "",
     next_follow_up: str = "",
     created_at: str = "",
+    is_deleted: int = 0,
 ) -> None:
     db.execute(
         """INSERT INTO announcements
            (id, title, project_name, district, progress, current_handler,
-            handler_group, next_follow_up, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            handler_group, next_follow_up, created_at, is_deleted, deleted_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             ann_id,
             project_name + "招标公告",
@@ -46,6 +47,8 @@ def _insert_ann(
             "潮安" if progress == "已分配" else "",
             next_follow_up,
             created_at or date.today().isoformat(),
+            is_deleted,
+            "2026-11-04 16:55:58" if is_deleted else "",
         ),
     )
 
@@ -236,6 +239,94 @@ def test_reminders_batch_assign_permissions(client, admin_headers, member_header
     )
     assert r.status_code == 404
     assert "小组不存在" in r.json()["detail"]
+
+
+# ------------------------------- 2026-11-06 回归：软删公告不产生提醒 / 不可分配
+#
+# 线上事故：11-04 从招标公告逻辑删除 3 条「诚E招」列表页假公告
+# （is_deleted=1、progress 仍为待分配），它们仍出现在 sheshujuan 的任务提醒里，
+# 且前端批量分配弹窗按 targetId 去公告列表（已过滤软删）找不到对应项 → 弹窗空白，
+# 表现为「3 条待办没法批量分配」。
+
+
+def test_deleted_announcement_not_in_reminders(client, admin_headers):
+    """软删公告：待分配 / 已分配两种状态都不进提醒列表。"""
+    _wipe_announcements()
+    _insert_ann("LIVE1", project_name="正常待分配")
+    _insert_ann("DEL1", project_name="已删待分配", is_deleted=1)
+    _insert_ann(
+        "DEL2", project_name="已删已分配", progress="已分配",
+        handler="佘淑娟", next_follow_up=_iso(0), is_deleted=1,
+    )
+
+    # all 视图：只剩正常待分配那一条；两条软删（含已分配态）都不出现
+    r = client.get("/api/reminders?scope=all", headers=admin_headers)
+    assert r.status_code == 200, r.text
+    assert [i["id"] for i in r.json()["items"]] == ["admin-LIVE1"]
+    assert r.json()["total"] == 1
+    assert r.json()["counts"] == {"urgent": 1, "warn": 0, "info": 0}
+
+    # me 视图（佘淑娟）：软删的 DEL2 本来 handler 是她，修复前会漏出跟进提醒
+    r = client.get("/api/reminders?scope=me", headers=admin_headers)
+    assert r.status_code == 200, r.text
+    assert r.json()["items"] == []
+    assert r.json()["total"] == 0
+
+
+def test_deleted_announcement_not_assignable(client, admin_headers):
+    """纵深防御：即便绕过前端直接打接口，软删公告也不能被重新分配。"""
+    _wipe_announcements()
+    _insert_ann("LIVE1", project_name="正常待分配")
+    _insert_ann("DEL1", project_name="已删假公告", is_deleted=1)
+
+    # 任务提醒页批量分配
+    r = client.post(
+        "/api/reminders/batch-assign",
+        json={"ids": ["LIVE1", "DEL1"], "group": "潮安"},
+        headers=admin_headers,
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["updated"] == 1
+    assert [i["id"] for i in r.json()["items"]] == ["LIVE1"]
+    skipped = {s["id"]: s["reason"] for s in r.json()["skipped"]}
+    assert skipped == {"DEL1": "不存在"}
+
+    # 公告页批量分配（同一服务层，另一条入口）
+    _wipe_announcements()
+    _insert_ann("LIVE2", project_name="正常待分配2")
+    _insert_ann("DEL2", project_name="已删假公告2", is_deleted=1)
+    r = client.post(
+        "/api/announcements/batch-assign",
+        json={"ids": ["LIVE2", "DEL2"], "group": "潮安"},
+        headers=admin_headers,
+    )
+    assert r.status_code == 200, r.text
+    assert r.json()["updated"] == 1
+    assert {s["id"]: s["reason"] for s in r.json()["skipped"]} == {"DEL2": "不存在"}
+
+    # 软删公告原始状态未被改动（没有偷偷带上处理人/进度）
+    row = db.query_one("SELECT * FROM announcements WHERE id = 'DEL2'")
+    assert row["is_deleted"] == 1
+    assert row["progress"] == "待分配"
+    assert row["current_handler"] == ""
+    assert row["handler_group"] == ""
+    assert row["next_follow_up"] == ""
+    for table in ("assignment_records", "progress_records"):
+        assert db.query_one(
+            "SELECT COUNT(*) AS c FROM {} WHERE ann_id = 'DEL2'".format(table)
+        )["c"] == 0
+
+
+def test_deleted_announcement_still_hidden_in_list_and_detail(client, admin_headers):
+    """软删公告不出现在公告列表/详情（原有口径，确认未被本次改动破坏）。"""
+    _wipe_announcements()
+    _insert_ann("LIVE1", project_name="正常公告")
+    _insert_ann("DEL1", project_name="已删公告", is_deleted=1)
+
+    r = client.get("/api/announcements", headers=admin_headers)
+    assert r.status_code == 200, r.text
+    assert [a["id"] for a in r.json()["items"]] == ["LIVE1"]
+    assert client.get("/api/announcements/DEL1", headers=admin_headers).status_code == 404
 
 
 # ---------------------------------------------------------------- 团队

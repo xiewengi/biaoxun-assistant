@@ -76,6 +76,7 @@ body `{ids:[...], group, receiver?}` → `{updated:int, skipped:[{id,reason}], i
 ### GET `/api/reminders?district=&scope=me|all`
 由公告实时计算（不落库）：
 - 跳过 `progress=='已确认'`。
+- 跳过 `is_deleted=1`（已逻辑删除的公告不产生任何提醒，与公告列表口径一致；2026-11-06 补）。
 - `progress=='待分配'` → `{id:"admin-"+ann_id, type:"admin-assign", label:"管理员分派", level:"urgent",
   title:"项目「{projectName或title前30}...」已入库 {N} 天未分配", targetId, time:createdAt, district,
   annTitle, annProgress, annCurrentHandler}`
